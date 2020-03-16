@@ -16,8 +16,10 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         color: (Theme.of(context).brightness != Brightness.dark)
-            ? new Color(0xfff8faf8)
+            ? Colors.white
             : Colors.black,
+        elevation: 0.2,
+        
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
