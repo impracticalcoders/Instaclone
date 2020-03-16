@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Loxhibit',
+      title: 'InstaClone',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Loxhibit'),
+      home: MyHomePage(title: 'InstaClone'),
     );
   }
 }
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: new Color(0xfff8faf8),
               elevation: 3.0,
               centerTitle: true,
-              title: Text("Loxhibit",style:TextStyle(color: Colors.black)),
+              title: Text("InstaClone",style:TextStyle(color: Colors.black)),
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(
