@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'components/postcardwidget.dart';
-
+import 'package:http/http.dart' as http;
+import 'components/post.dart';
+import 'dart:convert';
+import 'dart:async';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -23,15 +26,38 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Future<Post> posts;
+  
+  Future<Post> fetchPosts() async {
+  final response = await http.get('https://insta-clone-backend.now.sh/feed');
 
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Post.fromJson(json.decode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load post');
+  }
+}
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    posts=fetchPosts();
+    print(posts);
+  }
   @override
   Widget build(BuildContext context) {
+    
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
@@ -69,7 +95,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               ],
             ),
-            SliverGrid.count(
+            SliverList(
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+      // To convert this infinite list to a list with three items,
+      // uncomment the following line:
+      if (index > 2) return null;
+      return FutureBuilder<Post>(
+            future: posts,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data.username);
+                return Text(snapshot.data.username);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              // By default, show a loading spinner.
+              return CircularProgressIndicator();
+            },
+          );
+    },),
+            )
+           /* SliverGrid.count(
               crossAxisCount: 1,
               children: <Widget>[
                 PostCard(
@@ -93,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   profilename: "Verge",
                 ),
               ],
-            )
+            )*/
           ],
         ),
       ),
@@ -130,3 +177,91 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+ 
+/*
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<Album> fetchAlbum() async {
+  final response =
+      await http.get('https://jsonplaceholder.typicode.com/albums/1');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Album.fromJson(json.decode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  Album({this.userId, this.id, this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+Future<Album> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchAlbum();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Fetch Data Example'),
+        ),
+        body: Center(
+          child: FutureBuilder<Album>(
+            future: futureAlbum,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data.title);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              // By default, show a loading spinner.
+              return CircularProgressIndicator();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
