@@ -21,7 +21,7 @@ class PostCard extends StatelessWidget {
   
   _likepostreq() async {
   // set up POST request arguments
-  String url = ' https://insta-clone-backend.now.sh/likes';
+  String url = 'https://insta-clone-backend.now.sh/likes';
   Map<String, String> headers = {"Content-type": "application/json"};
   String json = '{"id": "${id}", "oper": "+"}';
   // make POST request
