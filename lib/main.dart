@@ -1,12 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'components/postcardwidget.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,6 +11,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
       home: MyHomePage(title: 'InstaClone'),
     );
   }
@@ -30,34 +29,45 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
- 
+
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
+    Color dynamicuicolor =
+        (!isDarkMode) ? Colors.white : Color.fromRGBO(35, 35, 35, 1.0);
+
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        //backgroundcolor
+        color: (!isDarkMode) ? Colors.white : Colors.black,
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               pinned: true,
-              backgroundColor: new Color(0xfff8faf8),
+              backgroundColor: dynamicuicolor,
               elevation: 3.0,
               centerTitle: true,
-              title: Text("InstaClone",style:TextStyle(color: Colors.black,fontFamily:'Billabong')),
-              
+              title: Text("InstaClone",
+                  style: TextStyle(
+                      color: (!isDarkMode) ? Colors.black : Colors.white)),
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(
                     Icons.camera_alt,
-                    color: Colors.black,
+                    color: dynamiciconcolor,
                   ),
                   //onPressed: () => Scaffold.of(context).openDrawer(),
-                  onPressed: (){},
+                  onPressed: () {},
                 ),
               ),
-            actions: <Widget>[
-              IconButton(icon: Icon(Icons.send),color: Colors.black87,onPressed: (){},)
-            ],
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.send),
+                  color: dynamiciconcolor,
+                  onPressed: () {},
+                )
+              ],
             ),
             SliverGrid.count(
               crossAxisCount: 1,
@@ -83,6 +93,35 @@ class _MyHomePageState extends State<MyHomePage> {
                   profilename: "Verge",
                 ),
               ],
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: dynamicuicolor,
+        notchMargin: 5.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.add_box),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.favorite),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.account_box),
+              onPressed: () {},
             )
           ],
         ),
