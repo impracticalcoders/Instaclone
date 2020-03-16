@@ -42,7 +42,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
 assets:
-  - assets/loxhibit_logo.png
+  - assets/logo.png
   
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -56,10 +56,10 @@ assets:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+fonts:
+   - family: Billabong
+     fonts:
+       - asset: fonts/Billabong.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

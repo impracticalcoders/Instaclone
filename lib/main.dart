@@ -43,16 +43,21 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: new Color(0xfff8faf8),
               elevation: 3.0,
               centerTitle: true,
-              title: Text("InstaClone",style:TextStyle(color: Colors.black)),
+              title: Text("InstaClone",style:TextStyle(color: Colors.black,fontFamily:'Billabong')),
+              
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(
-                    Icons.menu,
+                    Icons.camera_alt,
                     color: Colors.black,
                   ),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  //onPressed: () => Scaffold.of(context).openDrawer(),
+                  onPressed: (){},
                 ),
               ),
+            actions: <Widget>[
+              IconButton(icon: Icon(Icons.send),color: Colors.black87,onPressed: (){},)
+            ],
             ),
             SliverGrid.count(
               crossAxisCount: 1,
@@ -82,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      drawer: Drawer(),
+      //drawer: Drawer(),
     );
   }
 }
