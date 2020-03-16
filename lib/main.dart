@@ -40,9 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      list = (json.decode(response.body) as List)
+      setState(() {
+        this.list = (json.decode(response.body) as List)
           .map((data) => new Post.fromJson(data))
           .toList();
+      });
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
