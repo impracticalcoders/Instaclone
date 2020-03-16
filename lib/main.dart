@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Post> list = List();
-  Future<Post> posts;
+  
   Future<Post> fetchPosts() async {
     final response = await http.get('https://insta-clone-backend.now.sh/feed');
 
@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
       throw Exception('Failed to load post');
     }
   }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -115,6 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   profilename: list[index].profile_name,
                   //profileimageurl: list[index].post_pic,
                   postimageurl: list[index].post_pic,
+                  likes: list[index].likes,
+                  id:list[index].id,
                 );
               }, childCount: list.length),
             )

@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 class PostCard extends StatelessWidget {
   final String postimageurl;
   final String profileimageurl;
   final String profilename;
+  int likes;
+  final String id;
 
   PostCard({
     @required this.profilename,
     this.profileimageurl,
     this.postimageurl,
+    this.likes,
+    this.id,
   });
+
+  
+  _likepostreq() async {
+  // set up POST request arguments
+  String url = ' https://insta-clone-backend.now.sh/likes';
+  Map<String, String> headers = {"Content-type": "application/json"};
+  String json = '{"id": "${id}", "oper": "+"}';
+  // make POST request
+  final response = await http.post(url, headers: headers, body: json);
+  // check the status code for the result
+  int statusCode = response.statusCode;
+  print("POST req response ${statusCode}");
+  
+  }
+
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
   @override
@@ -75,121 +97,44 @@ class PostCard extends StatelessWidget {
                         child: Icon(Icons.error_outline)),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(1.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        new Icon(
-                          Icons.favorite_border,
-                        ),
-                        new SizedBox(
-                          width: 16.0,
-                        ),
-                        new Icon(
-                          Icons.mode_comment,
-                        ),
-                        new SizedBox(
-                          width: 16.0,
-                        ),
-                        new Icon(Icons.share),
+                        
+                          new IconButton(
+                           
+                            icon: Icon(Icons.favorite_border),
+                            
+                          onPressed: (){
+                            _likepostreq();
+                          },
+                          ),
+                       
+                        new IconButton(
+                          icon : Icon( Icons.comment),
+                          onPressed: (){
+                            
+                          },
+                          ),
+                        
+                        new IconButton(
+                          icon : Icon( Icons.share),
+                          onPressed: (){
+                           
+                          },
+                          ),
                       ],
                     ),
                     new Icon(Icons.bookmark_border)
                   ],
                 ),
               ),
+            Text("  Liked by ${likes} users"),
 
-/*
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      height: 40.0,
-                      width: 40.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      
-                      image:DecorationImage(image:  new NetworkImage(profileimageurl != null
-                          ? 
-                              profileimageurl
-                              
-                            
-                          :  
-                              'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png',
-                            
-                            )
-                          ,
-                          )
-                          ,
-                    ),
-                    ),
-                    SizedBox(width: 10.0),
-                    Text(
-                      profilename,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {},
-                )
-              ]),
-        ),
-        Container(
-          child: (postimageurl != null)
-              ? Image.network(
-                  postimageurl,
-                  //fit: BoxFit.cover,
-                )
-              :SizedBox(width: 200, height: 200,child:Icon(Icons.error_outline)),
-        ),
-        Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: () {},
-                  ),
-                  //SizedBox(width: 16.0),
-                  IconButton(
-                    icon: Icon(Icons.mode_comment),
-                    onPressed: () {},
-                  ),
-                  //SizedBox(width: 16.0),
-                  IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              IconButton(
-                icon: Icon(Icons.bookmark_border),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-      ],
-    )
-*/
             ]));
   }
 }
