@@ -1,3 +1,4 @@
+import 'package:Instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
 import 'components/activitypage.dart';
 import 'components/mainfeed.dart';
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _pageOptions = [
       MyFeedPage(),
       SearchPage(),
+      CreatePost(),
       MyActivityPage(),
       LoginPage(),
     ];
@@ -75,10 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.search,color:dynamiciconcolor),
               title: Text("Search"),
             ),
-            /*BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.add_box),
-              
-            ),*/
+              title:Text("Add post")  
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite,color:dynamiciconcolor ,),
              
