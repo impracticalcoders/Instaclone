@@ -1,7 +1,12 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:random_string/random_string.dart';
+
+import 'mainfeed.dart';
 
 
 class CreatePost extends StatefulWidget {
@@ -13,37 +18,86 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
   File _image;
-  String imageID="";
+  String imageUrl = "";
+  bool isImageUploading = false;
+  bool isPosting = false;
+  TextEditingController captionController = TextEditingController();
+  
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery,imageQuality: 50,maxHeight: 500, maxWidth: 500);
 
     setState(() {
       this._image = image;
     });
+    _uploadImage();
   }
 
   _createPostRequest() async{
+  
+  if(!this.isImageUploading ){
     
+    setState(() {
+      this.isPosting = true;
+    });
+
+    final response = await http.post("https://insta-clone-backend.now.sh/feed",
+      headers:{
+        "Content-type": "application/json"
+      },
+      body:'{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","username":"dummy","profile_name":"dummy"}'
+    );
+
+    print("Status code ${response.statusCode}");
+
+    if(response.statusCode==200){
+        var snackbar = new SnackBar(content: new Text("Posted!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+    }
+    else {
+      var snackbar = new SnackBar(content: new Text("Please try again later!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+    }
+    setState(() {
+      this.isPosting= false;
+    });
+    
+  }
+  else{
+    var snackbar = new SnackBar(content: new Text("Please wait while the image is uploading!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+  
   }
 
   _uploadImage() async{
+      setState(() {
+        this.isImageUploading = true;
+        
+      });
+      String randomString = randomAlphaNumeric(10);
     
-    Dio dio = new Dio();
-
-    FormData data = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        this._image.path,
-        filename: "createFeed",
-      ),
-   });
-     await dio.post("https://73ed7582.ngrok.io/images", data: data).then((response) => print(response));
+      StorageReference ref = FirebaseStorage.instance.ref().child('images/'+randomString+'.png');
+      StorageUploadTask task =  ref.putFile(this._image);
+      StorageTaskSnapshot downloadUrl = (await task.onComplete);
+      String url = (await downloadUrl.ref.getDownloadURL());
       
-     }
+      setState(() {
+        this.imageUrl = url;
+        this.isImageUploading = false;
+      });
+
+      print(url);
+    }
   
   @override
   Widget build(BuildContext context) {
     
     return Scaffold(
+      key:_scaffoldKey,
+      
       appBar: AppBar(title: Text("create new post"),),
       body:  Container(
           padding: EdgeInsets.all(20.0),
@@ -54,6 +108,7 @@ class _CreatePostState extends State<CreatePost> {
                   TextFormField(
                     decoration: InputDecoration(labelText: "Caption"),
                     autocorrect: false,
+                    controller:captionController ,
                   ),
                   RaisedButton(
                     onPressed: getImage,
@@ -65,9 +120,11 @@ class _CreatePostState extends State<CreatePost> {
                       : Image.file(_image,height: 300,),),
                   RaisedButton(
                     child:Text("Post"),
-                    onPressed:_uploadImage
-                     ,),
-                  
+                    onPressed:this.isPosting?(){}:_createPostRequest,
+                    
+                     ),
+                  Container(
+                    child:this.isPosting?CircularProgressIndicator():Text(""),)                  
                 ],),
             ),
           ),)
