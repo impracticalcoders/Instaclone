@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   int _cIndex = 0;
-  bool isNew;
+  
 
   void _incrementTab(index) {
     setState(() {
@@ -45,28 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
-  void initState() {
-    isNew=true;
-    getUser().then((user) {
-      if(user!=null){
-        isNew=false;
 
-        print('Already logged in as '+user.displayName);
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-      }
-      else {
-        isNew=true;
-        print("Not logged in");
-        
-      }
-    });
-
-    super.initState();
-  }
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
-  }
 
   final _pageOptions = [
       MyFeedPage(),
@@ -85,15 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
 
     return Scaffold(
-      body:
-      (isNew)?LoginPage() :_pageOptions[_cIndex] ,
-      
+      body:_pageOptions[_cIndex] ,
       bottomNavigationBar:BottomAppBar(
         color: dynamicuicolor,
         
         notchMargin: 8.0,
-          child: (!isNew)?
-           Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
             IconButton(
@@ -133,37 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ],
        
-      )
-      :Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-            IconButton(
-            
-              icon: Icon(Icons.vpn_key,color:dynamiciconcolor,size: 30),
-              onPressed:(){ 
-                // Sanitizer
-               }
-              
-            ),
-            IconButton(
-            
-              icon: Icon(Icons.arrow_forward_ios,color:dynamiciconcolor,size: 30),
-              onPressed:(){ 
-                
-                setState(() {
-                 isNew=false;
-
-                });
-               }
-               
-              
-            ),
-            ],
-
-      )
-      
-
-      ),
+      ),),
       //drawer: Drawer(),
     );
   }
