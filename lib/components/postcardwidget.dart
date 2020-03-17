@@ -7,6 +7,7 @@ class PostCard extends StatelessWidget {
   final String postimageurl;
   final String profileimageurl;
   final String profilename;
+  final String caption;
   int likes;
   final String id;
 
@@ -16,6 +17,7 @@ class PostCard extends StatelessWidget {
     this.postimageurl,
     this.likes,
     this.id,
+    this.caption,
   });
 
   
@@ -136,7 +138,8 @@ class PostCard extends StatelessWidget {
                 ),
               ),
             Text("  Liked by ${likes} users"),
-
+            SizedBox(height: 10,),
+            Text("@${profilename} - \t\t${caption}")
             ]));
   }
 }

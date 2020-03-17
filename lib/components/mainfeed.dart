@@ -100,6 +100,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   postimageurl: list[index].post_pic,
                   likes: list[index].likes,
                   id:list[index].id,
+                  caption: list[index].caption,
                 );
               }, childCount: list.length),
             )
