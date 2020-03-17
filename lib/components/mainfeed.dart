@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'postcardwidget.dart';
 import 'package:http/http.dart' as http;
 import 'post.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -81,7 +82,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
               ),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon:  Icon(FontAwesomeIcons.paperPlane),
                   color: dynamiciconcolor,
                   onPressed: () {},
                 )

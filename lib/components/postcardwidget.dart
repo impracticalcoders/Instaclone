@@ -113,7 +113,7 @@ class PostCard extends StatelessWidget {
                         
                           new IconButton(
                            
-                            icon: Icon(Icons.favorite_border),
+                            icon: Icon(Icons.favorite_border,size: 28,),
                             
                           onPressed: (){
                             _likepostreq();
@@ -121,7 +121,7 @@ class PostCard extends StatelessWidget {
                           ),
                        
                         new IconButton(
-                          icon : Icon( Icons.comment),
+                          icon : Icon(FontAwesomeIcons.comment),
                           onPressed: (){
                             
                           },
@@ -135,7 +135,7 @@ class PostCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    new Icon(Icons.bookmark_border)
+                    new Icon(Icons.bookmark_border,size: 28,)
                   ],
                 ),
               ),

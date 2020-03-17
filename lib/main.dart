@@ -4,6 +4,7 @@ import 'components/activitypage.dart';
 import 'components/mainfeed.dart';
 import 'components/loginpage.dart';
 import 'components/searchpage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -60,40 +61,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       body:_pageOptions[_cIndex] ,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _cIndex,
+      bottomNavigationBar:BottomAppBar(
+        color: dynamicuicolor,
         
-        
-        
-          items:[
-            BottomNavigationBarItem(
+        notchMargin: 8.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+            IconButton(
             
-              icon: Icon(Icons.home,color:dynamiciconcolor),
-              title: Text("Home"),
+              icon: Icon(Icons.home,color:dynamiciconcolor,size: 30),
+              onPressed:(){ 
+                _incrementTab(0);
+               }
               
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search,color:dynamiciconcolor),
-              title: Text("Search"),
+            IconButton(
+              icon: Icon(FontAwesomeIcons.search,color:dynamiciconcolor),
+              onPressed:(){ 
+                _incrementTab(1);
+               }
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_box),
-              title:Text("Add post")  
+            IconButton(
+              icon: Icon(Icons.add_box,color:dynamiciconcolor ,size: 30),
+              onPressed:(){ 
+                _incrementTab(2);
+               }
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite,color:dynamiciconcolor ,),
+            IconButton(
+              icon: Icon(Icons.favorite_border,color:dynamiciconcolor ,size: 30),
              
-              title: Text("Activity"),
+              onPressed:(){ 
+                _incrementTab(3);
+               }
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box,color:dynamiciconcolor),
-              title: Text("Login"),
+            IconButton(
+              icon: Icon(FontAwesomeIcons.user,color:dynamiciconcolor),
+              onPressed:(){
+                
+            _incrementTab(4);
+            }
+                
             )
           ],
-        onTap: (index){
-            _incrementTab(index);}
-      ),
+       
+      ),),
       //drawer: Drawer(),
     );
   }
