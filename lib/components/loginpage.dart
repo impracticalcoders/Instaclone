@@ -45,6 +45,20 @@ class _LoginPageState extends State<LoginPage> {
                   color: dynamiciconcolor,
                 ),
               ),
+              
+              SizedBox(
+                height: 60,
+              ),
+            FlatButton(
+              child: Image(image: 
+              AssetImage('assets/signin.png')),
+              onPressed: (){
+
+                //HI AAKASH, WASH  UR  HANDS
+
+              },
+            ),
+              /*
               Container(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ]),
-              ),
+              ),*/
               SizedBox(
                 height: 60,
               ),
