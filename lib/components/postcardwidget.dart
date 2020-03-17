@@ -44,7 +44,7 @@ class PostCard extends StatelessWidget {
         color: (Theme.of(context).brightness != Brightness.dark)
             ? Colors.white
             : Colors.black,
-        elevation: 0.2,
+        elevation: 0.0,
         
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -88,12 +88,12 @@ class PostCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
+                
                 child: (postimageurl != null)
                     ? Image.network(
                         postimageurl,
-                        //fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       )
                     : SizedBox(
                         width: 200,
@@ -139,7 +139,12 @@ class PostCard extends StatelessWidget {
               ),
             Text("  Liked by ${likes} users"),
             SizedBox(height: 10,),
-            Text("@${profilename} - \t\t${caption}")
-            ]));
+            Text("@${profilename} - \t\t${caption}"),
+            Divider(
+                height: 35,
+               
+              ),
+            ])
+            );
   }
 }

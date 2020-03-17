@@ -25,12 +25,12 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Text(
-                'InstaClone',
+                'Instaclone',
                 style: TextStyle(
-                  fontFamily: 'Pacifico',
+                  fontFamily: 'Billabong',
                   
-                  fontSize: 30,
-                  color: dynamiciconcolor,
+                  fontSize: 50,
+                  //color: dynamiciconcolor,
                 ),
               ),
               Divider(
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  'New to InstaClone?',
+                                  'New to Instaclone?',
                                   style: TextStyle(
                                     color: dynamiciconcolor,
                                   ),

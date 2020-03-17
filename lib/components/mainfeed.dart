@@ -5,19 +5,14 @@ import 'post.dart';
 import 'dart:convert';
 import 'dart:async';
 
-
-
 class MyFeedPage extends StatefulWidget {
- 
-
-
   @override
   _MyFeedPageState createState() => _MyFeedPageState();
 }
 
 class _MyFeedPageState extends State<MyFeedPage> {
   List<Post> list = List();
-  
+
   Future<Post> fetchPosts() async {
     final response = await http.get('https://insta-clone-backend.now.sh/feed');
 
@@ -26,8 +21,8 @@ class _MyFeedPageState extends State<MyFeedPage> {
       // then parse the JSON.
       setState(() {
         this.list = (json.decode(response.body) as List)
-          .map((data) => new Post.fromJson(data))
-          .toList();
+            .map((data) => new Post.fromJson(data))
+            .toList();
       });
     } else {
       // If the server did not return a 200 OK response,
@@ -35,6 +30,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
       throw Exception('Failed to load post');
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,7 +39,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
     print(list.length);
   }
 
-  void refresh(){
+  void refresh() {
     fetchPosts();
     print(list.length);
   }
@@ -66,9 +62,11 @@ class _MyFeedPageState extends State<MyFeedPage> {
               backgroundColor: dynamicuicolor,
               elevation: 3.0,
               centerTitle: true,
-              title: Text("InstaClone",
+              title: Text("Instaclone",
                   style: TextStyle(
-                      color: (!isDarkMode) ? Colors.black : Colors.white,fontFamily: 'Pacifico')),
+                      color: (!isDarkMode) ? Colors.black : Colors.white,
+                      fontFamily: 'Billabong',
+                      fontSize: 30)),
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(
@@ -76,7 +74,9 @@ class _MyFeedPageState extends State<MyFeedPage> {
                     color: dynamiciconcolor,
                   ),
                   //onPressed: () => Scaffold.of(context).openDrawer(),
-                  onPressed: () {refresh();},
+                  onPressed: () {
+                    refresh();
+                  },
                 ),
               ),
               actions: <Widget>[
@@ -99,7 +99,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   //profileimageurl: list[index].post_pic,
                   postimageurl: list[index].post_pic,
                   likes: list[index].likes,
-                  id:list[index].id,
+                  id: list[index].id,
                   caption: list[index].caption,
                 );
               }, childCount: list.length),
@@ -107,6 +107,6 @@ class _MyFeedPageState extends State<MyFeedPage> {
           ],
         ),
       ),
-          );
+    );
   }
 }
