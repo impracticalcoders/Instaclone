@@ -87,25 +87,31 @@ class _LoginPageState extends State<LoginPage> {
                   height: 35,
                   color: Colors.red[600],
                 ),
-                Text(
-                  'Login to check out your feed!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: dynamiciconcolor,
-                  ),
-                ),
-                Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Email ID',
-                            hintStyle: TextStyle(
-                              fontSize: 15,
-                              color: dynamiciconcolor,
-                            ),
+              
+              
+              SizedBox(
+                height: 60,
+              ),
+            FlatButton(
+              child: Image(image: 
+              AssetImage('assets/signin.png')),
+              onPressed: (){
+
+                //HI AAKASH, WASH  UR  HANDS
+
+              },
+            ),
+              /*
+              Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Username',
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: dynamiciconcolor,
                           ),
                         ),
                         SizedBox(
@@ -181,49 +187,31 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: FlatButton(
-                                    onPressed: null,
-                                    child: Text(
-                                      'SignUp!',
-                                      style: TextStyle(
-                                        color: Colors.red[600],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),*/
+              SizedBox(
+                height: 60,
+              ),
+              Text(
+                'Brought to you by',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'Pacifico',
+                  fontWeight: FontWeight.w300,
+                  color: dynamiciconcolor,
                 ),
-                SizedBox(
-                  height: 60,
                 ),
-                Text(
-                  'Brought to you by',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Pacifico',
-                    fontWeight: FontWeight.w300,
-                    color: dynamiciconcolor,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Image(image: 
-                AssetImage('assets/Team_IC.jpg'),height: 150,width: 150,),
+                Image(image:AssetImage('assets/Team_IC.jpg'),height: 150,width: 150,),
               ],
+              ),
             ),
+          
           ),
         ),
-      ),
+    
     );
   }
 }

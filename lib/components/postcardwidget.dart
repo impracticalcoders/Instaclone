@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -40,19 +41,23 @@ class PostCard extends StatelessWidget {
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return/*  Container(
         color: (Theme.of(context).brightness != Brightness.dark)
             ? Colors.white
             : Colors.black,
-        elevation: 0.0,
-        
-        child: Column(
+        //elevation: 0.0, */
+      
+        //child:\
+        Column(
+          
+          
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
+                padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -88,20 +93,17 @@ class PostCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
-                
-                child: (postimageurl != null)
-                    ? Image.network(
+              
+                Container(
+                 // height: 250,
+                  child:                    Image.network(
                         postimageurl,
                         fit: BoxFit.contain,
-                      )
-                    : SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: Icon(Icons.error_outline)),
-              ),
+                      ),
+                ),      
+              
               Padding(
-                padding: const EdgeInsets.all(1.0),
+                padding: const EdgeInsets.all(2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -126,7 +128,7 @@ class PostCard extends StatelessWidget {
                           ),
                         
                         new IconButton(
-                          icon : Icon( Icons.share),
+                          icon : Icon(FontAwesomeIcons.paperPlane),
                           onPressed: (){
                            
                           },
@@ -139,12 +141,13 @@ class PostCard extends StatelessWidget {
               ),
             Text("  Liked by ${likes} users"),
             SizedBox(height: 10,),
-            Text("@${profilename} - \t\t${caption}"),
+            Text("  @${profilename} - \t\t${caption}"),
             Divider(
-                height: 35,
+                height: 30,
                
               ),
-            ])
+            ]
+            //)
             );
   }
 }

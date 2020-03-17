@@ -34,6 +34,8 @@ dev_dependencies:
   random_string: ^2.0.1
   firebase_auth: ^0.15.5+2
   google_sign_in: ^4.1.1
+  font_awesome_flutter: ^8.7.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -49,6 +51,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/Team_IC.jpg
+    - assets/signin.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
