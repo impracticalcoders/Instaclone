@@ -42,7 +42,7 @@ class _CreatePostState extends State<CreatePost> {
       });
 
       final response = await http.post(
-          "https://insta-clone-backend.now.sh/feed",
+          "https://insta-clone-backend.now.sh/feed " ,
           headers: {"Content-type": "application/json"},
           body:
               '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","username":"dummy","profile_name":"dummy"}');
