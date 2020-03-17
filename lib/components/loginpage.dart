@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Image(image: 
               AssetImage('assets/signin.png')),
               onPressed: (){
-
+                  signIn();
                 //HI AAKASH, WASH  UR  HANDS
 
               },
