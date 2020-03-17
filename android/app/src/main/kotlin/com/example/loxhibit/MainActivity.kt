@@ -1,4 +1,4 @@
-package com.example.loxhibit
+package com.example.InstaClone
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

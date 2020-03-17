@@ -1,20 +1,23 @@
-
-
+import 'package:Instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
-import 'components/postcardwidget.dart';
+import 'components/activitypage.dart';
+import 'components/mainfeed.dart';
+import 'components/loginpage.dart';
+import 'components/searchpage.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Loxhibit',
+      title: 'InstaClone',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
-      home: MyHomePage(title: 'Loxhibit'),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
+      home: MyHomePage(title: 'InstaClone'),
     );
   }
 }
@@ -29,60 +32,69 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
- 
+  int _cIndex = 0;
+
+  void _incrementTab(index) {
+    setState(() {
+      _cIndex = index;
+    });
+  }
+
   @override
+
+  final _pageOptions = [
+      MyFeedPage(),
+      SearchPage(),
+      CreatePost(),
+      MyActivityPage(),
+      LoginPage(),
+    ];
+
+
+
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: new Color(0xfff8faf8),
-              elevation: 3.0,
-              centerTitle: true,
-              title: Text("Loxhibit",style:TextStyle(color: Colors.black)),
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: new Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                  ),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-              ),
+      body:_pageOptions[_cIndex] ,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _cIndex,
+        
+        
+        
+          items:[
+            BottomNavigationBarItem(
+            
+              icon: Icon(Icons.home,color:dynamiciconcolor),
+              title: Text("Home"),
+              
             ),
-            SliverGrid.count(
-              crossAxisCount: 1,
-              children: <Widget>[
-                PostCard(
-                  profilename: "MKBHD",
-                  postimageurl:
-                      'https://magic-mark.com/wp-content/uploads/2019/10/mkbhd-intro2019-thumbnail3.jpg',
-                  profileimageurl:
-                      'https://pbs.twimg.com/profile_images/1212149592403382281/cI0-xyss_400x400.jpg',
-                ),
-                PostCard(
-                  profilename: "Verge",
-                ),
-                PostCard(
-                  profilename: "MKBHD",
-                  postimageurl:
-                      'https://magic-mark.com/wp-content/uploads/2019/10/mkbhd-intro2019-thumbnail3.jpg',
-                  profileimageurl:
-                      'https://pbs.twimg.com/profile_images/1212149592403382281/cI0-xyss_400x400.jpg',
-                ),
-                PostCard(
-                  profilename: "Verge",
-                ),
-              ],
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search,color:dynamiciconcolor),
+              title: Text("Search"),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add_box),
+              title:Text("Add post")  
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite,color:dynamiciconcolor ,),
+             
+              title: Text("Activity"),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box,color:dynamiciconcolor),
+              title: Text("Login"),
             )
           ],
-        ),
+        onTap: (index){
+            _incrementTab(index);}
       ),
-      drawer: Drawer(),
+      //drawer: Drawer(),
     );
   }
 }
