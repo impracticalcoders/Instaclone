@@ -12,6 +12,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(title: Text("Search"),),
       body: Center(child: Text("Search")),
-    );
+      final TextEditingController _filter = new TextEditingController();
+     String _searchText = "";
+     List names = new List(); // names we get from API
+      List filteredNames = new List(); // names filtered by search text
+      Icon _searchIcon = new Icon(Icons.search); 
+      Widget _appBarTitle = new Text( 'Search...' );)
+    ;
   }
 }
