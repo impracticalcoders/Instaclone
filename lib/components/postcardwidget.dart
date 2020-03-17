@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -127,7 +128,7 @@ class PostCard extends StatelessWidget {
                           ),
                         
                         new IconButton(
-                          icon : Icon( Icons.share),
+                          icon : Icon(FontAwesomeIcons.paperPlane),
                           onPressed: (){
                            
                           },
