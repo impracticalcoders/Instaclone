@@ -1,41 +1,44 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
-  @override
-  _SearchPageState createState() => _SearchPageState();
+class SearchAppBar extends StatefulWidget {
+@override
+_SearchAppBarState createState() => new _SearchAppBarState();
 }
 
-class _SearchPageState extends State<SearchPage> {
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(title: Text("Search"),),
-      body: Center(child: Text("Search")),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  final void Function(String) onTextChange;
-
-  SearchBar({ this.onTextChange });
-
+class _SearchAppBarState extends State<SearchAppBar> {
+  Widget appBarTitle = new Text("AppBar Title");
+  Icon actionIcon = new Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        padding: EdgeInsets.all(8),
-        child: TextField(
-            onChanged: onTextChange,
-            decoration: InputDecoration(
-                fillColor: Colors.black.withOpacity(0.1),
-                filled: true,
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Search something ...',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-                contentPadding: EdgeInsets.zero
-            )
-        )
+    return new Scaffold(
+      appBar: new AppBar(
+          centerTitle: true,
+          title:appBarTitle,
+          actions: <Widget>[
+            new IconButton(icon: actionIcon,onPressed:(){
+              setState(() {
+                if ( this.actionIcon.icon == Icons.search){
+                  this.actionIcon = new Icon(Icons.close);
+                  this.appBarTitle = new TextField(
+                    style: new TextStyle(
+                      color: Colors.white,
+
+                    ),
+                    decoration: new InputDecoration(
+                        prefixIcon: new Icon(Icons.search,color: Colors.white),
+                        hintText: "Search...",
+                        hintStyle: new TextStyle(color: Colors.white)
+                    ),
+                  );}
+                else {
+                  this.actionIcon = new Icon(Icons.search);
+                  this.appBarTitle = new Text("AppBar Title");
+                }
+
+
+              });
+            } ,),]
+      ),
     );
   }
 }
