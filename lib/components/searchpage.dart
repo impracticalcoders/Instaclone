@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
                   );}
                 else {
                   this.actionIcon = new Icon(Icons.search);
-                  this.appBarTitle = new Text("AppBar Title");
+                  this.appBarTitle = new Text("Search...");
                 }
 
 
