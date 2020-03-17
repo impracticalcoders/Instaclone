@@ -87,10 +87,10 @@ class _MyFeedPageState extends State<MyFeedPage> {
                 )
               ],
             ),
-            SliverGrid(
+            SliverList(/*
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
-              ),
+              ),*/
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 if (index > list.length - 1) return null;

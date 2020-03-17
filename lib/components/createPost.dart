@@ -52,17 +52,15 @@ class _CreatePostState extends State<CreatePost> {
       if (response.statusCode == 200) {
         var snackbar = new SnackBar(content: new Text("Posted!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
-      } else if (response.statusCode == 400 ){
+      } else if (response.statusCode == 400) {
         var snackbar =
             new SnackBar(content: new Text("Image/Caption not added"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
-      }
-      else
-      {
-var snackbar =
-            new SnackBar(content: new Text("There has been a problem uploading your post . Try again later"));
+      } else {
+        var snackbar = new SnackBar(
+            content: new Text(
+                "There has been a problem uploading your post . Try again later"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
-
       }
       setState(() {
         this.isPosting = false;
@@ -111,7 +109,7 @@ var snackbar =
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
-               Divider(
+              Divider(
                 height: 35,
                 color: Colors.red[600],
               ),
