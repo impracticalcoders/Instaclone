@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       print('signed in as '+user.displayName);
 
       final response = await http.post(
-          "https://a575f071.ngrok.io/auth",
+          "https://insta-clone-backend.now.sh/auth",
           headers: {"Content-type": "application/json"},
           body:'{"uid":"${user.uid}"}');
 
