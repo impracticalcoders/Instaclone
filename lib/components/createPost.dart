@@ -43,7 +43,7 @@ class _CreatePostState extends State<CreatePost> {
       this.isPosting = true;
     });
 
-    final response = await http.post("https://7dc58b6c.ngrok.io/feed",
+    final response = await http.post("https://insta-clone-backend.now.sh//feed",
       headers:{
         "Content-type": "application/json"
       },
