@@ -60,7 +60,7 @@ class _CreatePostState extends State<CreatePost> {
       });
 //https://insta-clone-backend.now.sh
       final response = await http.post(
-          "https://09e91a2f.ngrok.io/feed" ,
+          "https://insta-clone-backend.now.sh/feed" ,
           headers: {"Content-type": "application/json"},
           body:
               '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
