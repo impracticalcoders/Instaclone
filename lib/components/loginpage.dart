@@ -1,6 +1,7 @@
 import 'package:Instaclone/components/mainfeed.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 class LoginPage extends StatefulWidget {
   @override
@@ -18,7 +19,9 @@ class _LoginPageState extends State<LoginPage> {
     getUser().then((user) {
       if(user!=null){
         print('already logged in as '+user.displayName);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyFeedPage() ));
+      }
+      else {
+        print("not logged in");
       }
     });
 
@@ -40,6 +43,17 @@ class _LoginPageState extends State<LoginPage> {
       
       print('signed in as '+user.displayName);
 
+      final response = await http.post(
+          "https://a575f071.ngrok.io/auth",
+          headers: {"Content-type": "application/json"},
+          body:'{"uid":"${user.uid}"}');
+
+        int status = response.statusCode;
+        print(status);
+        //207 if the user login's for the first time
+        //208 if its an existing user
+        //400 if the uid is empty
+      
       }
     catch(err){
       print(err);
@@ -95,11 +109,15 @@ class _LoginPageState extends State<LoginPage> {
             FlatButton(
               child: Image(image: 
               AssetImage('assets/signin.png')),
+<<<<<<< HEAD
               onPressed: (){
                   signIn();
                 //HI AAKASH, WASH  UR  HANDS
+=======
+              onPressed: signIn
+              //HI AAKASH, WASH  UR  HANDS : SURE CAP! lol
+>>>>>>> 076fec77354fae46bb9e13089dd1c077bb2c28bb
 
-              },
             ),
               /*
               Container(
