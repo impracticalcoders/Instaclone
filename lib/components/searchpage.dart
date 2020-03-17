@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SearchAppBar extends StatefulWidget {
+class SearchPage extends StatefulWidget {
 @override
-_SearchAppBarState createState() => new _SearchAppBarState();
+_SearchAppBarState createState() => new _SearchAppBaState();
 }
 
-class _SearchAppBarState extends State<SearchAppBar> {
+class _SearchAppBarState extends State<SearchPage> {
   Widget appBarTitle = new Text("AppBar Title");
   Icon actionIcon = new Icon(Icons.search);
   @override
