@@ -68,7 +68,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
               centerTitle: true,
               title: Text("InstaClone",
                   style: TextStyle(
-                      color: (!isDarkMode) ? Colors.black : Colors.white)),
+                      color: (!isDarkMode) ? Colors.black : Colors.white,fontFamily: 'Pacifico')),
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(

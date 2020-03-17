@@ -6,6 +6,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  
+  @override
+
+
+  @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
@@ -22,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 'InstaClone',
                 style: TextStyle(
-                  //fontFamily: 'Pacifico',
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Pacifico',
+                  
                   fontSize: 30,
                   color: dynamiciconcolor,
                 ),
@@ -154,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                 'Brought to you by',
                 style: TextStyle(
                   fontSize: 12,
-                  //fontFamily: 'Pacifico',
+                  fontFamily: 'Pacifico',
                   fontWeight: FontWeight.w300,
                   color: dynamiciconcolor,
                 ),
@@ -162,7 +167,8 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 10,
               ),
-              //AssetImage('assets/Team_IC.jpg'),
+              Image(image: 
+              AssetImage('assets/Team_IC.jpg'),height: 150,width: 150,),
             ],
           ),
         ),
