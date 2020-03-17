@@ -32,6 +32,8 @@ dev_dependencies:
   dio: ^3.0.9
   firebase_storage: ^3.1.3
   random_string: ^2.0.1
+  firebase_auth: ^0.15.5+2
+  google_sign_in: ^4.1.1
   font_awesome_flutter: ^8.7.0
 
 
