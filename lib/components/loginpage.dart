@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:Instaclone/main.dart';
+
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -18,10 +21,12 @@ class _LoginPageState extends State<LoginPage> {
 
     getUser().then((user) {
       if(user!=null){
-        print('already logged in as '+user.displayName);
+        print('Already logged in as '+user.displayName);
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
       }
       else {
-        print("not logged in");
+        print("Not logged in");
+
       }
     });
 
@@ -82,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       key:_scaffoldKey,
       //no need of appbar for this page
-      body: SingleChildScrollView(
+      body: Center(
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 120, 30, 0),
           child: Center(
@@ -109,14 +114,8 @@ class _LoginPageState extends State<LoginPage> {
             FlatButton(
               child: Image(image: 
               AssetImage('assets/signin.png')),
-<<<<<<< HEAD
-              onPressed: (){
-                  signIn();
-                //HI AAKASH, WASH  UR  HANDS
-=======
               onPressed: signIn
               //HI AAKASH, WASH  UR  HANDS : SURE CAP! lol
->>>>>>> 076fec77354fae46bb9e13089dd1c077bb2c28bb
 
             ),
               /*
