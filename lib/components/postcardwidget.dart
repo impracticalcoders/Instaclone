@@ -140,7 +140,7 @@ class _PostCardState extends State<PostCard> {
                         
                           new IconButton(
                            
-                            icon: Icon(Icons.favorite_border),
+                            icon: Icon(Icons.favorite_border,size:28),
                             color: widget.liked?Colors.red:Colors.black,
                           onPressed: (){
                             _likepostreq();
@@ -148,7 +148,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                        
                         new IconButton(
-                          icon : Icon( Icons.comment),
+                          icon : Icon(FontAwesomeIcons.comment),
                           onPressed: (){
                             
                           },
@@ -162,7 +162,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                       ],
                     ),
-                    new Icon(Icons.bookmark_border)
+                    new Icon(Icons.bookmark_border,size: 28,)
                   ],
                 ),
               ),

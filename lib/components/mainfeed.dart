@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'postcardwidget.dart';
 import 'package:http/http.dart' as http;
 import 'post.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'loginpage.dart';
+
 
 class MyFeedPage extends StatefulWidget {
   @override
@@ -18,6 +21,12 @@ class _MyFeedPageState extends State<MyFeedPage> {
 
  Future<FirebaseUser> getUser() async {
     return auth.currentUser();
+  }
+
+  Future<void> signOut() async{
+    await auth.signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+
   }
 
   Future<Post> fetchPosts() async {
@@ -104,10 +113,16 @@ class _MyFeedPageState extends State<MyFeedPage> {
               ),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon:  Icon(FontAwesomeIcons.paperPlane),
                   color: dynamiciconcolor,
                   onPressed: () {},
-                )
+                ),
+                IconButton(
+                  icon:  Icon(Icons.exit_to_app),
+                  color: dynamiciconcolor,
+                  onPressed:signOut,
+                ),
+
               ],
             ),
             SliverList(/*
