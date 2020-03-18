@@ -46,9 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white70;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white;
     Color dynamicuicolor =
-        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
 
     return Scaffold(
       body:_pageOptions[_cIndex] ,

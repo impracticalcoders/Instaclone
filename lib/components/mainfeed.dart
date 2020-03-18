@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'postcardwidget.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +31,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
 
   }
 
-  Future<Post> fetchPosts() async {
+  Future<Void> fetchPosts() async {
     final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -48,7 +50,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
    
     getUser().then((user) {
@@ -81,7 +83,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
-        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
 
     return Scaffold(
       body: Container(
@@ -117,18 +119,11 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   color: dynamiciconcolor,
                   onPressed: () {},
                 ),
-                IconButton(
-                  icon:  Icon(Icons.exit_to_app),
-                  color: dynamiciconcolor,
-                  onPressed:signOut,
-                ),
+                
 
               ],
             ),
-            SliverList(/*
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-              ),*/
+            SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 if (index > list.length - 1) return null;
@@ -140,7 +135,8 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   id: list[index].id,
                   caption: list[index].caption,
                   user:this.user,
-                  liked : list[index].liked
+                  liked : list[index].liked,
+                  username: list[index].username,
                 );
               }, childCount: list.length),
             )

@@ -15,9 +15,11 @@ class PostCard extends StatefulWidget {
   final String id;
   final user;
   bool liked = false;
+  final String username;
 
   PostCard(
       {@required this.profilename,
+      this.username,
       this.profileimageurl,
       this.postimageurl,
       this.likes,
@@ -65,22 +67,22 @@ class _PostCardState extends State<PostCard> {
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
 
+  
+
   @override
   Widget build(BuildContext context) {
-    return /*  Container(
-        color: (Theme.of(context).brightness != Brightness.dark)
-            ? Colors.white
-            : Colors.black,
-        //elevation: 0.0, */
-
-        //child:\
+     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+    return 
         Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+            padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -132,8 +134,8 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               Container(
-                //width: double.infinity,
-                
+                width: double.infinity,
+                height: 200,
                 child: Center(
                   child: SizedBox(
                     width: 80,
@@ -158,7 +160,7 @@ class _PostCardState extends State<PostCard> {
                   children: <Widget>[
                     new IconButton(
                       icon: widget.liked?Icon(Icons.favorite, size:28):Icon(Icons.favorite_border, size: 28),
-                      color: widget.liked ? Colors.red : Colors.black,
+                      color: widget.liked ? Colors.red : (isDarkMode)?Colors.white :Colors.black,
                       onPressed: () {
                         _likepostreq();
                       },
@@ -184,7 +186,7 @@ class _PostCardState extends State<PostCard> {
           SizedBox(
             height: 10,
           ),
-          Text("  @${widget.profilename} - \t\t${widget.caption}"),
+          Text("  @${widget.username} - \t\t${widget.caption}"),
           Divider(
             height: 30,
           ),
