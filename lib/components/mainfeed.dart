@@ -5,6 +5,7 @@ import 'post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'loginpage.dart';
 
 
@@ -15,10 +16,21 @@ class MyFeedPage extends StatefulWidget {
 
 class _MyFeedPageState extends State<MyFeedPage> {
   List<Post> list = List();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser user ;
+
+ Future<FirebaseUser> getUser() async {
+    return auth.currentUser();
+  }
+
+  Future<void> signOut() async{
+    await auth.signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+
+  }
 
   Future<Post> fetchPosts() async {
-    final response = await http.get('https://insta-clone-backend.now.sh/feed');
-
+    final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -38,8 +50,25 @@ class _MyFeedPageState extends State<MyFeedPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchPosts();
+   
+    getUser().then((user) {
+      if(user!=null){
+        setState(() {
+          this.user = user;
+        });
+        print('already logged in as '+user.displayName);
+
+      fetchPosts();
+
     print(list.length);
+      }
+      else {
+        print("not logged in");
+      }
+
+    });
+ 
+
   }
 
   void refresh() {
@@ -91,11 +120,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                 IconButton(
                   icon:  Icon(Icons.exit_to_app),
                   color: dynamiciconcolor,
-                  onPressed: () {
-                    logout();
-                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                  
-                  },
+                  onPressed:signOut,
                 ),
 
               ],
@@ -114,6 +139,8 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   likes: list[index].likes,
                   id: list[index].id,
                   caption: list[index].caption,
+                  user:this.user,
+                  liked : list[index].liked
                 );
               }, childCount: list.length),
             )

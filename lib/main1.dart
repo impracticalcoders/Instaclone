@@ -19,14 +19,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
   }
-
+  @override
+  void initState() { 
+    super.initState();
+    
+  }
 
 
   final _pageOptions = [

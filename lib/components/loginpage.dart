@@ -33,8 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-
-
   Future<void> signIn() async {
     try {
       final GoogleSignInAccount googleSignInAccount =
@@ -149,26 +147,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Function logout(){
-  final FirebaseAuth auth = FirebaseAuth.instance;
-   auth.signOut();
-   print("Logged out");
+// Function logout(){
+//   final FirebaseAuth auth = FirebaseAuth.instance;
+//    auth.signOut();
+   
+//    print("Logged out");
     
     
-  }
+//   }
 
-class AuthService{
-final FirebaseAuth auth = FirebaseAuth.instance;
+// class AuthService{
+// final FirebaseAuth auth = FirebaseAuth.instance;
   
- Future<bool> loginstat() async {
+//  Future<bool> loginstat() async {
     
-      if(auth.currentUser()==null)
-      return false;
-      else 
-      return true;
-    }
+//       if(auth.currentUser()==null)
+//       return false;
+//       else 
+//       return true;
+//     }
     
-  }
+//   }
 
   
 
@@ -176,25 +175,25 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 
 
 
-/* 
-class AuthService {
-  // Login
-  Future<bool> login() async {
-    // Simulate a future for response after 2 second.
-    return await new Future<bool>.delayed(
-      new Duration(
-        seconds: 2
-      ), () => new Random().nextBool()
-    );
-  }
+// /* 
+// class AuthService {
+//   // Login
+//   Future<bool> login() async {
+//     // Simulate a future for response after 2 second.
+//     return await new Future<bool>.delayed(
+//       new Duration(
+//         seconds: 2
+//       ), () => new Random().nextBool()
+//     );
+//   }
 
-  // Logout
-  Future<void> logout() async {
-    // Simulate a future for response after 1 second.
-    return await new Future<void>.delayed(
-      new Duration(
-        seconds: 1
-      )
-    );
-  }
-} */
+//   // Logout
+//   Future<void> logout() async {
+//     // Simulate a future for response after 1 second.
+//     return await new Future<void>.delayed(
+//       new Duration(
+//         seconds: 1
+//       )
+//     );
+//   }
+// } */

@@ -1,31 +1,30 @@
 import 'package:Instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
-import 'components/activitypage.dart';
-import 'components/mainfeed.dart';
-import 'components/profilePage.dart';
-import 'components/searchpage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'components/profilePage.dart';
+
 import 'main1.dart';
 import 'components/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
-AuthService appAuth = new AuthService();
+// AuthService appAuth = new AuthService();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // Set default home.
-  Widget _defaultHome = new LoginPage();
+    WidgetsFlutterBinding.ensureInitialized();
 
-  // Get result of the login function.
-  bool _result;// doesn't work at the moment
-  if(await appAuth.loginstat()!=null)
-  _result = await appAuth.loginstat();
-  else
-  _result = false;
-  if (_result) {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser user = await auth.currentUser();
+
+  // WidgetsFlutterBinding.ensureInitialized();
+  // Set default home.
+  Widget _defaultHome;
+
+  if(user==null){
+    _defaultHome =  new LoginPage();
+  }
+  else {
     _defaultHome = new MyHomePage();
   }
+ 
 // Run app!
   runApp(new MaterialApp(
     title: 'App',
