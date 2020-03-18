@@ -7,8 +7,9 @@ class Post {
   final String caption;
   final int likes;
   final String id;
+  bool liked;
 
-  Post({this.post_pic, this.profile_name, this.username,this.likes,this.id,this.caption});
+  Post({this.post_pic, this.profile_name, this.username,this.likes,this.id,this.caption,this.liked});
 
   factory Post.fromJson(Map<String,dynamic> json) {
     return Post(
@@ -18,6 +19,7 @@ class Post {
       username: json['username'],
       likes: json['likes'],
       caption: json['caption'],
+      liked: json['liked']
     );
   }
 }

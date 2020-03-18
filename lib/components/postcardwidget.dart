@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final String postimageurl;
   final String profileimageurl;
   final String profilename;
@@ -12,6 +12,7 @@ class PostCard extends StatelessWidget {
   int likes;
   final String id;
   final user;
+  bool liked= false;
   
   PostCard({
     @required this.profilename,
@@ -20,31 +21,51 @@ class PostCard extends StatelessWidget {
     this.likes,
     this.id,
     this.caption,
-    @required this.user
+    @required this.user,
+    this.liked
   });
 
-  //'https://insta-clone-backend.now.sh/likes'; DON'T TOUCH
+  @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
 
 
   _likepostreq() async {
+    //toggling like button
+    if(widget.liked){
+      setState(() {
+        widget.likes= widget.likes-1;
+        widget.liked = !widget.liked;
+      });
+    }
+    else{
+      setState(() {
+        widget.likes= widget.likes+1;
+        widget.liked = !widget.liked;
+      });
+    }
+
     // set up POST request arguments
-    String url = 'https://31a2fe7d.ngrok.io/likes';
+    String url = 'http://fd8d89f0.ngrok.io/likes';
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"id": "${id}", "oper": "+", "uid" : "${this.user.uid}"}';
+    String json = '{"id": "${widget.id}","uid" : "${this.widget.user.uid}"}';
     // make POST request
     final response = await http.post(url, headers: headers, body: json);
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST req response ${statusCode}");
-    // 203 - if the user is liking the post 
-    // 204 - if the user disliking the post (PS. don't know what say for unliking XD)
+
+    //no need to handle them
+    // 203 - if the user has liked the post 
+    // 204 - if the user has disliked the post (PS. don't know what say for unliking XD)
   
   }
-  
-  
 
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+
   @override
   Widget build(BuildContext context) {
     return/*  Container(
@@ -76,8 +97,8 @@ class PostCard extends StatelessWidget {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               image: new NetworkImage(
-                                profileimageurl != null
-                                    ? profileimageurl
+                                widget.profileimageurl != null
+                                    ? widget.profileimageurl
                                     : profiledefault,
                               ),
                             ),
@@ -87,7 +108,7 @@ class PostCard extends StatelessWidget {
                           width: 10.0,
                         ),
                         new Text(
-                          profilename,
+                          widget.profilename,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       ],
@@ -103,7 +124,7 @@ class PostCard extends StatelessWidget {
                 Container(
                  // height: 250,
                   child:                    Image.network(
-                        postimageurl,
+                        widget.postimageurl,
                         fit: BoxFit.contain,
                       ),
                 ),      
@@ -120,7 +141,7 @@ class PostCard extends StatelessWidget {
                           new IconButton(
                            
                             icon: Icon(Icons.favorite_border),
-                            
+                            color: widget.liked?Colors.red:Colors.black,
                           onPressed: (){
                             _likepostreq();
                           },
@@ -145,9 +166,9 @@ class PostCard extends StatelessWidget {
                   ],
                 ),
               ),
-            Text("  Liked by ${likes} users"),
+            Text("  Liked by ${widget.likes} users"),
             SizedBox(height: 10,),
-            Text("  @${profilename} - \t\t${caption}"),
+            Text("  @${widget.profilename} - \t\t${widget.caption}"),
             Divider(
                 height: 30,
                

@@ -42,7 +42,7 @@ class _CreatePostState extends State<CreatePost> {
     else{
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 50,
+        imageQuality: 100,
         maxHeight: 500,
         maxWidth: 500);
 

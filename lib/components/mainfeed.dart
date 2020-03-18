@@ -21,8 +21,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
   }
 
   Future<Post> fetchPosts() async {
-    final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
-
+    final response = await http.get('http://fd8d89f0.ngrok.io/feed?uid=${this.user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -51,6 +50,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
         print('already logged in as '+user.displayName);
 
       fetchPosts();
+
     print(list.length);
       }
       else {
@@ -124,7 +124,8 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   likes: list[index].likes,
                   id: list[index].id,
                   caption: list[index].caption,
-                  user:this.user
+                  user:this.user,
+                  liked : list[index].liked
                 );
               }, childCount: list.length),
             )
