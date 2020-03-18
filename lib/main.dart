@@ -5,31 +5,27 @@ import 'main1.dart';
 import 'components/loginpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 // AuthService appAuth = new AuthService();
 
 void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user = await auth.currentUser();
 
-  // WidgetsFlutterBinding.ensureInitialized();
   // Set default home.
   Widget _defaultHome;
 
-  if(user==null){
-    _defaultHome =  new LoginPage();
-  }
-  else {
-    _defaultHome = new MyHomePage();
-  }
- 
 // Run app!
   runApp(new MaterialApp(
-    title: 'App',
+    title: 'Instaclone',
     debugShowCheckedModeBanner: false,
-    home: _defaultHome,
+    home: user == null ? LoginPage() : MyHomePage(),
+    theme: ThemeData(
+      primarySwatch: Colors.grey
+    ),
+    darkTheme:
+        ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
     routes: <String, WidgetBuilder>{
       // Set routes for using the Navigator.
       '/home': (BuildContext context) => new MyHomePage(),

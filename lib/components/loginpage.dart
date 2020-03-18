@@ -7,6 +7,7 @@ import 'package:Instaclone/main.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:Instaclone/main1.dart';
+import 'Signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -89,15 +90,171 @@ class _LoginPageState extends State<LoginPage> {
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+    Color dynamicbgcolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Colors.black;
+    
 
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: dynamicbgcolor,
       //no need of appbar for this page
+<<<<<<< HEAD
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(30, 120, 30, 0),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Text(
+                'InstaClone',
+                style: TextStyle(
+                  //fontFamily: 'Pacifico',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: dynamiciconcolor,
+                ),
+              ),
+              Divider(
+                height: 35,
+                color: Colors.red[600],
+              ),
+              Text(
+                'Login to check out your feed!',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: dynamiciconcolor,
+                ),
+              ),
+              Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Username',
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: dynamiciconcolor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: dynamiciconcolor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              color: Colors.red[600],
+                              child: FlatButton(
+                                onPressed: null,
+                                child: Text(
+                                  'Login!',
+                                  style: TextStyle(
+                                    color: dynamiciconcolor,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: FlatButton(
+                                  onPressed: null,
+                                  child: Text(
+                                    'Forgot password or username',
+                                    style: TextStyle(
+                                      color: Colors.red[600],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'New to InstaClone?',
+                                  style: TextStyle(
+                                    color: dynamiciconcolor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  onPressed: null,
+                                  child: Text(
+                                    'SignUp!',
+                                    style: TextStyle(
+                                      color: Colors.red[600],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),
+              SizedBox(
+                height: 60,
+              ),
+              Text(
+                'Brought to you by',
+                style: TextStyle(
+                  fontSize: 12,
+                  //fontFamily: 'Pacifico',
+                  fontWeight: FontWeight.w300,
+                  color: dynamiciconcolor,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              //AssetImage('assets/Team_IC.jpg'),
+            ],
+=======
       body: Center(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(30, 120, 30, 0),
+          padding: EdgeInsets.fromLTRB(30, 100, 30, 0),
           child: Center(
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 Text(
                   'Instaclone',
@@ -107,16 +264,41 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 50,
                     //color: dynamiciconcolor,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 Divider(
                   height: 35,
                   color: Colors.red[600],
                 ),
-                SizedBox(
-                  height: 60,
+                
+                 Text(
+                  'Hey there, welcome to Instaclone , a limited feature and working remake of Instagram .',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Pacifico',
+                    fontWeight: FontWeight.w300,
+                    color: dynamiciconcolor,
+                    
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+                Text(
+                  '\nTo continue,\nPlease login with ur Google Account',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Pacifico',
+                    fontWeight: FontWeight.w300,
+                    color: dynamiciconcolor,
+                    
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+               
                 FlatButton(
-                    child: Image(image: AssetImage('assets/signin.png')),
+                    child: Image(image: AssetImage('assets/signin.png'),height: 50,),
                     onPressed: signIn
                     //HI AAKASH, WASH  UR  HANDS : SURE CAP! lol
 
@@ -127,19 +309,27 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Brought to you by',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 15,
                     fontFamily: 'Pacifico',
                     fontWeight: FontWeight.w300,
                     color: dynamiciconcolor,
                   ),
+                   textAlign: TextAlign.center,
                 ),
                 Image(
-                  image: AssetImage('assets/Team_IC.jpg'),
+                  image: AssetImage('assets/logo_dark.jpg'),
                   height: 150,
                   width: 150,
                 ),
+                /*RaisedButton(
+                  child: Text("Signup page - soundarya"),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                  },
+                )*/
               ],
             ),
+>>>>>>> b6846a5fa11ebb6ae8526476f19bcb86d611c138
           ),
         ),
       ),
