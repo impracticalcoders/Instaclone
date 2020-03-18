@@ -56,7 +56,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
         setState(() {
           this.user = user;
         });
-        print('already logged in as '+user.displayName);
+        print('Accessing main feed as '+user.displayName);
 
       fetchPosts();
 
