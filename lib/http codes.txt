@@ -1,0 +1,10 @@
+200 - Successfully added new post
+400 - incomplete information given by the user
+500 - backend server error
+
+custom codes
+203 - user is linking the post
+204 - user is disliking the post
+207 - user login's for the first time
+208 - existing user
+401 - uid is empty

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:random_string/random_string.dart';
@@ -19,10 +20,26 @@ class _CreatePostState extends State<CreatePost> {
   bool isImageUploading = false;
   bool isPosting = false;
   TextEditingController captionController = TextEditingController();
-
+  FirebaseUser user;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  Future<FirebaseUser> getUser() async {
+    return FirebaseAuth.instance.currentUser();
+  }
+
+  @override
+  void initState() { 
+    super.initState();
+    getUser().then((user) =>setState((){this.user =user;}) );
+  }
   Future getImage() async {
+    FirebaseUser user = await getUser();
+    if(user==null){
+      var snackbar = new SnackBar(content: new Text("Please Login/Signup before posting!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+        
+    }
+    else{
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 50,
@@ -33,6 +50,7 @@ class _CreatePostState extends State<CreatePost> {
       this._image = image;
     });
     _uploadImage();
+    }
   }
 
   _createPostRequest() async {
@@ -40,18 +58,20 @@ class _CreatePostState extends State<CreatePost> {
       setState(() {
         this.isPosting = true;
       });
-
+//https://insta-clone-backend.now.sh
       final response = await http.post(
-          "https://insta-clone-backend.now.sh/feed " ,
+          "https://insta-clone-backend.now.sh/feed" ,
           headers: {"Content-type": "application/json"},
           body:
-              '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","username":"dummy","profile_name":"dummy"}');
+              '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
 
       print("Status code ${response.statusCode}");
 
       if (response.statusCode == 200) {
+
         var snackbar = new SnackBar(content: new Text("Posted!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
+        
       } else if (response.statusCode == 400) {
         var snackbar =
             new SnackBar(content: new Text("Image/Caption not added"));

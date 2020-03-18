@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'post.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyFeedPage extends StatefulWidget {
   @override
@@ -12,9 +13,15 @@ class MyFeedPage extends StatefulWidget {
 
 class _MyFeedPageState extends State<MyFeedPage> {
   List<Post> list = List();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser user ;
+
+ Future<FirebaseUser> getUser() async {
+    return auth.currentUser();
+  }
 
   Future<Post> fetchPosts() async {
-    final response = await http.get('https://insta-clone-backend.now.sh/feed');
+    final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -35,8 +42,24 @@ class _MyFeedPageState extends State<MyFeedPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchPosts();
+   
+    getUser().then((user) {
+      if(user!=null){
+        setState(() {
+          this.user = user;
+        });
+        print('already logged in as '+user.displayName);
+
+      fetchPosts();
     print(list.length);
+      }
+      else {
+        print("not logged in");
+      }
+
+    });
+ 
+
   }
 
   void refresh() {
@@ -101,6 +124,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   likes: list[index].likes,
                   id: list[index].id,
                   caption: list[index].caption,
+                  user:this.user
                 );
               }, childCount: list.length),
             )

@@ -11,7 +11,8 @@ class PostCard extends StatelessWidget {
   final String caption;
   int likes;
   final String id;
-
+  final user;
+  
   PostCard({
     @required this.profilename,
     this.profileimageurl,
@@ -19,19 +20,24 @@ class PostCard extends StatelessWidget {
     this.likes,
     this.id,
     this.caption,
+    @required this.user
   });
 
-  
+  //'https://insta-clone-backend.now.sh/likes'; DON'T TOUCH
+
+
   _likepostreq() async {
-  // set up POST request arguments
-  String url = 'https://insta-clone-backend.now.sh/likes';
-  Map<String, String> headers = {"Content-type": "application/json"};
-  String json = '{"id": "${id}", "oper": "+"}';
-  // make POST request
-  final response = await http.post(url, headers: headers, body: json);
-  // check the status code for the result
-  int statusCode = response.statusCode;
-  print("POST req response ${statusCode}");
+    // set up POST request arguments
+    String url = 'https://31a2fe7d.ngrok.io/likes';
+    Map<String, String> headers = {"Content-type": "application/json"};
+    String json = '{"id": "${id}", "oper": "+", "uid" : "${this.user.uid}"}';
+    // make POST request
+    final response = await http.post(url, headers: headers, body: json);
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    print("POST req response ${statusCode}");
+    // 203 - if the user is liking the post 
+    // 204 - if the user disliking the post (PS. don't know what say for unliking XD)
   
   }
   
