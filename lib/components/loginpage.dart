@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
         print(status);
         //207 if the user login's for the first time
         //208 if its an existing user
-        //400 if the uid is empty
+        //401 if the uid is empty
       
       }
     catch(err){
