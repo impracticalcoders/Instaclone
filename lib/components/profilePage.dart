@@ -2,7 +2,8 @@ import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'loginpage.dart';
-
+import 'Signup.dart';
+import 'credits.dart';
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -68,10 +69,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: (!isDarkMode) ? Colors.black : Colors.white)),
                   actions: <Widget>[
                     IconButton(
+                      icon: Icon(Icons.info),
+                      color: dynamiciconcolor,
+                      onPressed: (){
+                        Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CreditsPage()));
+                      },
+                    ),
+                    
+                    IconButton(
                       icon: Icon(Icons.exit_to_app),
                       color: dynamiciconcolor,
                       onPressed: signOut,
                     ),
+                    
                   ]),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -186,13 +197,18 @@ class UserProfilePage extends StatelessWidget {
               child: Text(
                 "Edit Profile",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w400),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+
+            },
           ),
         ),
+      
       ],
+
     );
   }
 }

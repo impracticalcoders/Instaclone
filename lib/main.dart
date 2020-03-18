@@ -18,14 +18,14 @@ void main() async {
 
 // Run app!
   runApp(new MaterialApp(
-    title: 'App',
+    title: 'Instaclone',
     debugShowCheckedModeBanner: false,
     home: user == null ? LoginPage() : MyHomePage(),
     theme: ThemeData(
-      primarySwatch: Colors.grey,
+      primarySwatch: Colors.grey
     ),
     darkTheme:
-        ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
+        ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
     routes: <String, WidgetBuilder>{
       // Set routes for using the Navigator.
       '/home': (BuildContext context) => new MyHomePage(),
