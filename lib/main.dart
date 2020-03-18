@@ -2,12 +2,12 @@ import 'package:Instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
 import 'components/activitypage.dart';
 import 'components/mainfeed.dart';
-import 'components/loginpage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'components/profilePage.dart';
 import 'components/searchpage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/profilePage.dart';
 import 'main1.dart';
+import 'components/loginpage.dart';
 
 
 AuthService appAuth = new AuthService();
