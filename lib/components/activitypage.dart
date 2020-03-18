@@ -29,12 +29,18 @@ class _MyActivityPageState extends State<MyActivityPage> {
                       color: (!isDarkMode) ? Colors.black : Colors.white)),
             ),
             
-            SliverGrid.count(
-              crossAxisCount: 1,
-              children: <Widget>[
-                customcontainer(profilename: "Zelda",)
-              ],
-            )    
+           SliverList(/*
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+              ),*/
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                if (index > 1) return null;
+                return customcontainer(
+                  profilename: "Zelda ",
+                );
+              }, childCount: 1),
+            )   
               
             
           ],

@@ -1,77 +1,184 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:random_string/random_string.dart';
 
+import 'mainfeed.dart';
 
 class CreatePost extends StatefulWidget {
-
-
   @override
   _CreatePostState createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreatePost> {
   File _image;
-  String imageID="";
+  String imageUrl = "";
+  bool isImageUploading = false;
+  bool isPosting = false;
+  TextEditingController captionController = TextEditingController();
+  FirebaseUser user;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  Future<FirebaseUser> getUser() async {
+    return FirebaseAuth.instance.currentUser();
+  }
+
+  @override
+  void initState() { 
+    super.initState();
+    getUser().then((user) =>setState((){this.user =user;}) );
+  }
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery,imageQuality: 50,maxHeight: 500, maxWidth: 500);
+    FirebaseUser user = await getUser();
+    if(user==null){
+      var snackbar = new SnackBar(content: new Text("Please Login/Signup before posting!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+        
+    }
+    else{
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+        maxHeight: 500,
+        maxWidth: 500);
 
     setState(() {
       this._image = image;
     });
+    _uploadImage();
+    }
   }
 
-  _createPostRequest() async{
-    
+  _createPostRequest() async {
+    if (!this.isImageUploading) {
+      setState(() {
+        this.isPosting = true;
+      });
+//https://insta-clone-backend.now.sh
+      final response = await http.post(
+          "https://insta-clone-backend.now.sh/feed" ,
+          headers: {"Content-type": "application/json"},
+          body:
+              '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
+
+      print("Status code ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+
+        var snackbar = new SnackBar(content: new Text("Posted!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+        
+      } else if (response.statusCode == 400) {
+        var snackbar =
+            new SnackBar(content: new Text("Image/Caption not added"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+      } else {
+        var snackbar = new SnackBar(
+            content: new Text(
+                "There has been a problem uploading your post . Try again later"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+      }
+      setState(() {
+        this.isPosting = false;
+      });
+    } else {
+      var snackbar = new SnackBar(
+          content: new Text("Please wait while the image is uploading!"));
+      _scaffoldKey.currentState.showSnackBar(snackbar);
+    }
   }
 
-  _uploadImage() async{
-    
-    Dio dio = new Dio();
+  _uploadImage() async {
+    setState(() {
+      this.isImageUploading = true;
+    });
+    String randomString = randomAlphaNumeric(10);
 
-    FormData data = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        this._image.path,
-        filename: "createFeed",
-      ),
-   });
-     await dio.post("https://73ed7582.ngrok.io/images", data: data).then((response) => print(response));
-      
-     }
-  
+    StorageReference ref =
+        FirebaseStorage.instance.ref().child('images/' + randomString + '.png');
+    StorageUploadTask task = ref.putFile(this._image);
+    StorageTaskSnapshot downloadUrl = (await task.onComplete);
+    String url = (await downloadUrl.ref.getDownloadURL());
+
+    setState(() {
+      this.imageUrl = url;
+      this.isImageUploading = false;
+    });
+
+    print(url);
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      appBar: AppBar(title: Text("create new post"),),
-      body:  Container(
-          padding: EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Form(
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "Caption"),
-                    autocorrect: false,
+        key: _scaffoldKey,
+        body: SafeArea(
+          child: ListView(
+            children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "New Post",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Divider(
+                height: 35,
+                color: Colors.red[600],
+              ),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          child: _image == null
+                              ? FlatButton(
+                                  onPressed: getImage,
+                                  child: SizedBox(
+                                    height: 300,
+                                    width: 300,
+                                    child: Icon(Icons.add_a_photo),
+                                  ),
+                                )
+                              : Image.file(
+                                  _image,
+                                  height: 300,
+                                ),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: "Caption"),
+                          autocorrect: false,
+                          controller: captionController,
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        RaisedButton(
+                          child: Text("Post"),
+                          onPressed:
+                              this.isPosting ? () {} : _createPostRequest,
+                        ),
+                        Container(
+                          child: this.isPosting
+                              ? CircularProgressIndicator()
+                              : Text(""),
+                        )
+                      ],
+                    ),
                   ),
-                  RaisedButton(
-                    onPressed: getImage,
-                    child: Icon(Icons.add_a_photo),
-                  ),
-                  Container(
-                    child:_image == null
-                      ? Text('No image selected.')
-                      : Image.file(_image,height: 300,),),
-                  RaisedButton(
-                    child:Text("Post"),
-                    onPressed:_uploadImage
-                     ,),
-                  
-                ],),
-            ),
-          ),)
-      );
-
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
