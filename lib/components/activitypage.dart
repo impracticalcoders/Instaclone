@@ -6,6 +6,9 @@ class MyActivityPage extends StatefulWidget {
 }
 
 class _MyActivityPageState extends State<MyActivityPage> {
+
+  /// the url should be https://insta-clone-backend.now.sh/activity?uid=${user.uid}
+  /// user.uid to be got from firebaseUser
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
