@@ -5,7 +5,6 @@ import 'components/mainfeed.dart';
 import 'components/profilePage.dart';
 import 'components/searchpage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'components/profilePage.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,7 +33,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
@@ -98,10 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 _incrementTab(3);
                }
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box,color:dynamiciconcolor),
-              title: Text("My Profile"),
-            )
+            IconButton(
+              icon: Icon(Icons.account_box,color:dynamiciconcolor ,size: 30),
+             
+              onPressed:(){ 
+                _incrementTab(4);
+               }
+            ),
+           
           ],
        
       ),),
