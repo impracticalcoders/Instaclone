@@ -18,18 +18,20 @@ void main() async {
   // Set default home.
   Widget _defaultHome;
 
-  if(user==null){
-    _defaultHome =  new LoginPage();
-  }
-  else {
-    _defaultHome = new MyHomePage();
-  }
- 
+  
 // Run app!
   runApp(new MaterialApp(
     title: 'App',
     debugShowCheckedModeBanner: false,
-    home: _defaultHome,
+    home:user==null?
+    LoginPage():MyHomePage(),
+  
+ 
+    theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
     routes: <String, WidgetBuilder>{
       // Set routes for using the Navigator.
       '/home': (BuildContext context) => new MyHomePage(),
