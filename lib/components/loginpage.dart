@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 100, 30, 0),
           child: Center(
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 Text(
                   'Instaclone',
@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 50,
                     //color: dynamiciconcolor,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 Divider(
                   height: 35,
@@ -161,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.w300,
                     color: dynamiciconcolor,
                   ),
+                   textAlign: TextAlign.center,
                 ),
                 Image(
                   image: AssetImage('assets/logo_dark.jpg'),

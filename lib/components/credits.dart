@@ -28,7 +28,7 @@ class _CreditsPageState extends State<CreditsPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: Center(
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 Text(
                   'Instaclone',
@@ -38,6 +38,7 @@ class _CreditsPageState extends State<CreditsPage> {
                     fontSize: 50,
                     //color: dynamiciconcolor,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 Divider(
                   height: 25,
@@ -85,15 +86,7 @@ class _CreditsPageState extends State<CreditsPage> {
                 SizedBox(
                   height: 60,
                 ),
-                Text(
-                  'Brought to you by',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'Pacifico',
-                    fontWeight: FontWeight.w300,
-                    color: dynamiciconcolor,
-                  ),
-                ),
+                
                 Image(
                   image: AssetImage('assets/logo_dark.jpg'),
                   height: 150,
