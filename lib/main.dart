@@ -2,7 +2,7 @@ import 'package:Instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
 import 'components/activitypage.dart';
 import 'components/mainfeed.dart';
-import 'components/loginpage.dart';
+import 'components/profilePage.dart';
 import 'components/searchpage.dart';
 
 void main() => runApp(MyApp());
@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
       SearchPage(),
       CreatePost(),
       MyActivityPage(),
-      LoginPage(),
+      ProfilePage(),
     ];
 
 
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_box,color:dynamiciconcolor),
-              title: Text("Login"),
+              title: Text("My Profile"),
             )
           ],
         onTap: (index){
