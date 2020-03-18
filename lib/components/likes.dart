@@ -12,7 +12,7 @@ class Like {
     return Like(
       activity_text: json['activity_text'],
       post_pic: json['post_pic'],
-      uid: json['id'],
+      uid: json['uid'],
     );
   }
 }

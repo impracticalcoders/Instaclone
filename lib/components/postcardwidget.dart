@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
+import 'package:advanced_share/advanced_share.dart';
 
 class PostCard extends StatefulWidget {
   final String postimageurl;
@@ -33,6 +34,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final FlareControls flareControls = FlareControls();
 
   _likepostreq() async {
@@ -67,7 +69,21 @@ class _PostCardState extends State<PostCard> {
 
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-
+    void handleResponse(response, {String appName}) {
+    if (response == 0) {
+      print("failed.");
+    } else if (response == 1) {
+      print("success");
+    } else if (response == 2) {
+      print("application isn't installed");
+      if (appName != null) {
+        scaffoldKey.currentState.showSnackBar(new SnackBar(
+          content: new Text("${appName} isn't installed."),
+          duration: new Duration(seconds: 4),
+        ));
+      }
+    }
+  }
   
 
   @override
@@ -172,7 +188,13 @@ class _PostCardState extends State<PostCard> {
                     ),
                     new IconButton(
                       icon: Icon(FontAwesomeIcons.paperPlane),
-                      onPressed: () {},
+                      onPressed: () {
+                         AdvancedShare.whatsapp(msg: "It's okay :)")
+	.then((response) {
+    print("hey");
+      handleResponse(response, appName: "Whatsapp");
+    });
+                      },
                     ),
                   ],
                 ),
