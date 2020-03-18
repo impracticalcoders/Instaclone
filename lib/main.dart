@@ -37,8 +37,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   int _cIndex = 0;
-  
-
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
@@ -54,6 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
       MyActivityPage(),
       ProfilePage(),
     ];
+
+  
 
   @override
 
@@ -102,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               icon: Icon(FontAwesomeIcons.user,color:dynamiciconcolor),
               onPressed:(){
-                
             _incrementTab(4);
             }
                 
