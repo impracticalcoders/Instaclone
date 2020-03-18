@@ -5,6 +5,8 @@ import 'post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'loginpage.dart';
+
 
 class MyFeedPage extends StatefulWidget {
   @override
@@ -85,7 +87,17 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   icon:  Icon(FontAwesomeIcons.paperPlane),
                   color: dynamiciconcolor,
                   onPressed: () {},
-                )
+                ),
+                IconButton(
+                  icon:  Icon(Icons.exit_to_app),
+                  color: dynamiciconcolor,
+                  onPressed: () {
+                    logout();
+                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                  
+                  },
+                ),
+
               ],
             ),
             SliverList(/*
