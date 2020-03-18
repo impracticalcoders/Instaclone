@@ -7,6 +7,7 @@ import 'package:Instaclone/main.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:Instaclone/main1.dart';
+import 'Signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -138,6 +139,12 @@ class _LoginPageState extends State<LoginPage> {
                   height: 150,
                   width: 150,
                 ),
+                RaisedButton(
+                  child: Text("Signup page - soundarya"),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                  },
+                )
               ],
             ),
           ),

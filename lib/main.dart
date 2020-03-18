@@ -30,6 +30,11 @@ void main() async {
     title: 'App',
     debugShowCheckedModeBanner: false,
     home: _defaultHome,
+    theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
     routes: <String, WidgetBuilder>{
       // Set routes for using the Navigator.
       '/home': (BuildContext context) => new MyHomePage(),
