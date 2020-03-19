@@ -141,7 +141,7 @@ List<Post> userlist=List();
                   if (index > this.newlength) return null;
                  // if(list[index].profile_name!=user.displayName) return Container(child: null,);
                 return Container(
-                  child:Image(image: NetworkImage(userlist[index].post_pic),)
+                  child:Image(image: NetworkImage(userlist[index].post_pic),fit: BoxFit.cover,)
                 );
               }, childCount: userlist.length,
                   ),
