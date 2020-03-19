@@ -13,37 +13,46 @@ class MyActivityPage extends StatefulWidget {
 
 class _MyActivityPageState extends State<MyActivityPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+    var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   List<Like> list = List();
   FirebaseUser user;
   @override
-  void initState() {
+  void initState ()  {
     super.initState();
-    getUser().then((user) {
-      if (user != null) {
-        setState(() {
-          this.user = user;
-        });
-        print('Accessing activity page as ' + user.displayName);
+    
+   initialize();
+ 
+  }
+  void initialize() async{
+  var user = await getUser();
+  
+    if (user != null) {
+      setState(() {
+        this.user = user;
+      });
+      print('Accessing activity page as ' + user.displayName);
 
-        fetchLikes();
+      fetchActivities();
 
-        print(list.length);
-      } else {
-        print("not logged in");
-      }
-    });
+      print(list.length);
+    } else {
+      print("not logged in");
+    }
   }
 
+  
   Future<FirebaseUser> getUser() async {
     return auth.currentUser();
   }
 
-  Future<Void> fetchLikes() async {
+  Future<Void> fetchActivities() async {
     final response = await http
         .get('https://insta-clone-backend.now.sh/activity?uid=${user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
+      
       setState(() {
         this.list = (json.decode(response.body) as List)
             .map((data) => new Like.fromJson(data))
@@ -71,6 +80,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
     final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
     return Scaffold(
+      key:_scaffoldKey,
       body: Container(
         //backgroundcolor
         color: (!isDarkMode) ? Colors.white : Colors.black,
@@ -89,8 +99,8 @@ class _MyActivityPageState extends State<MyActivityPage> {
              
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
-                if (index > this.list.length) return null;
-                if(this.list[index].uid==user.uid) return null;
+                // if (index > this.list.length) return null;
+                if(this.list[index].uid==this.user.uid) return Text("");
                 if(index==0) return Text("Likes");
                 return customcontainer(
                   activity_text: this.list[index].activity_text,

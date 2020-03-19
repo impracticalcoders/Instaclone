@@ -62,8 +62,10 @@ class _LoginPageState extends State<LoginPage> {
       print(status);
       //207 if the user login's for the first time
       //208 if its an existing user
-      if(response.statusCode==207||response.statusCode==208)
-         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      if(response.statusCode==207)
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      else if(response.statusCode==208)
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignupPage()));
 
       //400 if the uid is empty
 
