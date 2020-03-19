@@ -95,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           : user.photoUrl);
                 }, childCount: 1),
               )
+
             ],
           )),
     );
@@ -206,6 +207,21 @@ class UserProfilePage extends StatelessWidget {
             },
           ),
         ),
+          Container(
+           child: CustomScrollView(
+            slivers: <Widget>[
+               SliverList(
+                 delegate:
+                 SliverChildBuilderDelegate((BuildContext context,int index){
+                   if(index > 8)
+                   return null;
+                   return Container(color:Colors.white,height:150.0);
+                 },
+                 )                        
+                   ),
+            ],
+           ),
+        )
       
       ],
 
