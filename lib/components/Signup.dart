@@ -30,9 +30,9 @@ void initState() {
   _updateProfileRequest() async{
 
      // set up POST request arguments
-    String url = 'https://insta-clone-backend.now.sh/likes';
+    String url = 'https://insta-clone-backend.now.sh/profile_update';
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}}';
+    String json = '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}"}';
     // make POST request
     final response = await http.post(url, headers: headers, body: json);
   
@@ -41,6 +41,7 @@ void initState() {
   }
   else if(response.statusCode==200){
     print("success");
+    Navigator.pop(context);
   }
   }
 
@@ -86,7 +87,7 @@ void initState() {
                             fontSize: 15,
                           ),
                         ),
-                        controller: usernameController,
+                        controller: profileNameController,
                       ),
                       SizedBox(
                         height: 10,
@@ -121,7 +122,7 @@ void initState() {
                             child: Container(
                               color: Colors.red[600],
                               child: FlatButton(
-                                onPressed: null,
+                                onPressed: _updateProfileRequest,
                                 child: Text(
                                   'Done',
                                 ),

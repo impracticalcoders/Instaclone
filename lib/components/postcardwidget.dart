@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
-// import 'package:advanced_share/advanced_share.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 
 class PostCard extends StatefulWidget {
   final String postimageurl;
@@ -36,6 +42,58 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final FlareControls flareControls = FlareControls();
+  @override
+  void _onImageSaveButtonPressed() async {
+    File _image;
+
+    // _onLoading(true);
+    print("button");
+    var response = await http.get('${widget.postimageurl}');
+
+    var filePath =
+        await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
+    //_onLoading(false);
+
+    print(filePath);
+    String BASE64_IMAGE = filePath;
+
+    final ByteData bytes = await rootBundle.load(BASE64_IMAGE);
+    await Share.file(
+        'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
+        text: 'My optional text.');
+  }
+
+  Future<void> _shareImage() async {
+    try {
+      final ByteData bytes = await rootBundle.load('assets/logo_dark.jpg');
+      await Share.file(
+          'esys image', 'esys.jpg', bytes.buffer.asUint8List(), 'image/jpg',
+          text: 'My optional text.');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _shareText() async {
+    try {
+      Share.text('my text title',
+          'This is my text to share with other applications.', 'text/plain');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _shareImageFromUrl() async {
+    try {
+      var request =
+          await HttpClient().getUrl(Uri.parse('${widget.postimageurl}'));
+      var response = await request.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+      await Share.file('InstaClone ${widget.profilename}', 'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',text: 'Check out ${widget.profilename}\'s post on Instaclone');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
 
   _likepostreq() async {
     //toggling like button
@@ -69,35 +127,18 @@ class _PostCardState extends State<PostCard> {
 
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-    void handleResponse(response, {String appName}) {
-    if (response == 0) {
-      print("failed.");
-    } else if (response == 1) {
-      print("success");
-    } else if (response == 2) {
-      print("application isn't installed");
-      if (appName != null) {
-        scaffoldKey.currentState.showSnackBar(new SnackBar(
-          content: new Text("${appName} isn't installed."),
-          duration: new Duration(seconds: 4),
-        ));
-      }
-    }
-  }
-  
 
   @override
   Widget build(BuildContext context) {
-     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
-    return 
-        Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 4.0),
             child: Row(
@@ -136,37 +177,37 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
           GestureDetector(
-          onDoubleTap: () {
-            _likepostreq();
-            flareControls.play("like");
-          },
-          child:
-          Stack(
-            children: <Widget>[
-              Container(
-                // height: 250,
-                child: Image.network(
-                  widget.postimageurl,
-                  fit: BoxFit.contain,
+            onDoubleTap: () {
+              _likepostreq();
+              flareControls.play("like");
+            },
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  // height: 250,
+                  child: Image.network(
+                    widget.postimageurl,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 200,
-                child: Center(
-                  child: SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: FlareActor(
-                      'assets/instagram_like.flr',
-                      controller: flareControls,
-                      animation: 'idle',
+                Container(
+                  width: double.infinity,
+                  height: 200,
+                  child: Center(
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: FlareActor(
+                        'assets/instagram_like.flr',
+                        controller: flareControls,
+                        animation: 'idle',
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(2.0),
             child: Row(
@@ -176,8 +217,12 @@ class _PostCardState extends State<PostCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     new IconButton(
-                      icon: widget.liked?Icon(Icons.favorite, size:28):Icon(Icons.favorite_border, size: 28),
-                      color: widget.liked ? Colors.red : (isDarkMode)?Colors.white :Colors.black,
+                      icon: widget.liked
+                          ? Icon(Icons.favorite, size: 28)
+                          : Icon(Icons.favorite_border, size: 28),
+                      color: widget.liked
+                          ? Colors.red
+                          : (isDarkMode) ? Colors.white : Colors.black,
                       onPressed: () {
                         _likepostreq();
                       },
@@ -186,16 +231,9 @@ class _PostCardState extends State<PostCard> {
                       icon: Icon(FontAwesomeIcons.comment),
                       onPressed: () {},
                     ),
-  //                   new IconButton(
-  //                     icon: Icon(FontAwesomeIcons.paperPlane),
-  //                     onPressed: () {
-  //                        AdvancedShare.whatsapp(msg: "It's okay :)")
-	// .then((response) {
-  //   print("hey");
-  //     handleResponse(response, appName: "Whatsapp");
-  //   });
-  //                     },
-  //                   ),
+                    new IconButton(
+                        icon: Icon(FontAwesomeIcons.paperPlane),
+                        onPressed: () async => await _shareImageFromUrl()),
                   ],
                 ),
                 new Icon(
@@ -214,7 +252,7 @@ class _PostCardState extends State<PostCard> {
             height: 30,
           ),
         ]
-            //)
-            );
+        //)
+        );
   }
 }

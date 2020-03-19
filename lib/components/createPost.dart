@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:random_string/random_string.dart';
+import 'package:Instaclone/main1.dart';
 
 import 'mainfeed.dart';
 
@@ -71,6 +72,7 @@ class _CreatePostState extends State<CreatePost> {
 
         var snackbar = new SnackBar(content: new Text("Posted!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
         
       } else if (response.statusCode == 400) {
         var snackbar =
