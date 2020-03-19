@@ -1,9 +1,15 @@
+import 'dart:ffi';//for future<void>
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'loginpage.dart';
 import 'Signup.dart';
 import 'credits.dart';
+import 'mainfeed.dart';
+import 'post.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -12,11 +18,45 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user;
+  int newlength;
+List<Post> list = List();
+List<Post> userlist=List();
+  
+  
 
-  Future<FirebaseUser> getUser() async {
+ Future<FirebaseUser> getUser() async {
     return auth.currentUser();
   }
 
+
+  Future<Void> fetchPosts() async {
+    final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      setState(() {
+        this.list = (json.decode(response.body) as List)
+            .map((data) => new Post.fromJson(data))
+            .toList();
+            this.newlength=list.length;
+        for(int i=0;i<list.length;i++){
+          if(list[i].profile_name==user.displayName) 
+{
+  this.userlist.add(list[i]);
+  print("${i}th post deleted");
+  this.newlength--;
+  
+}
+        }
+      });
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load posts');
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     await auth.signOut();
     Navigator.pushReplacement(
@@ -27,17 +67,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-
+  MyFeedPage obj=new MyFeedPage();
   @override
   void initState() {
     super.initState();
-
     getUser().then((user) {
       if (user != null) {
         setState(() {
           this.user = user;
           profilename = user.displayName;
         });
+        fetchPosts();
       } else {
         setState(() {
           this.profilename = 'Instagrammer';
@@ -94,7 +134,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           ? profiledefault
                           : user.photoUrl);
                 }, childCount: 1),
-              )
+              ),SliverGrid(
+                gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:3,mainAxisSpacing:6,crossAxisSpacing:6),
+                  delegate:SliverChildBuilderDelegate((BuildContext context,int index){
+                  if (index > this.newlength) return null;
+                 // if(list[index].profile_name!=user.displayName) return Container(child: null,);
+                return Container(
+                  child:Image(image: NetworkImage(userlist[index].post_pic),)
+                );
+              }, childCount: userlist.length,
+                  ),
+
+              ),
 
             ],
           )),
@@ -108,7 +160,7 @@ class UserProfilePage extends StatelessWidget {
   final String bio = "Software developer";
   final String followers = "173";
   final String following = "200";
-  final String posts = "11";
+  final int postcount = 15;
 
   UserProfilePage({
     @required this.profilename,
@@ -153,7 +205,7 @@ class UserProfilePage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(posts, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("${postcount}", style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Posts"),
                 ],
               ),
@@ -207,21 +259,6 @@ class UserProfilePage extends StatelessWidget {
             },
           ),
         ),
-          Container(
-           child: CustomScrollView(
-            slivers: <Widget>[
-               SliverList(
-                 delegate:
-                 SliverChildBuilderDelegate((BuildContext context,int index){
-                   if(index > 8)
-                   return null;
-                   return Container(color:Colors.white,height:150.0);
-                 },
-                 )                        
-                   ),
-            ],
-           ),
-        )
       
       ],
 

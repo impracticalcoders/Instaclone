@@ -8,3 +8,4 @@ custom codes
 207 - user login's for the first time
 208 - existing user
 401 - uid is empty
+405 - no posts found

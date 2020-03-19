@@ -143,7 +143,7 @@ class customcontainer extends StatelessWidget {
             height: 40.0,
             width: 40.0,
             decoration: new BoxDecoration(
-              shape: BoxShape.circle,
+              shape: BoxShape.rectangle,
               image: DecorationImage(
                 image: new NetworkImage(
                   postimageurl != null ? postimageurl : profiledefault,

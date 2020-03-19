@@ -25,11 +25,6 @@ class _MyFeedPageState extends State<MyFeedPage> {
     return auth.currentUser();
   }
 
-  Future<void> signOut() async{
-    await auth.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-
-  }
 
   Future<Void> fetchPosts() async {
     final response = await http.get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
