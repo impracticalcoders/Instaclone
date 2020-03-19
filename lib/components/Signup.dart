@@ -1,3 +1,4 @@
+import 'package:Instaclone/main1.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,7 +42,7 @@ void initState() {
   }
   else if(response.statusCode==200){
     print("success");
-    Navigator.pop(context);
+    Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context)=> new MyHomePage()));
   }
   }
 
