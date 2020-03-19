@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
-import 'package:advanced_share/advanced_share.dart';
+// import 'package:advanced_share/advanced_share.dart';
 
 class PostCard extends StatefulWidget {
   final String postimageurl;
@@ -186,16 +186,16 @@ class _PostCardState extends State<PostCard> {
                       icon: Icon(FontAwesomeIcons.comment),
                       onPressed: () {},
                     ),
-                    new IconButton(
-                      icon: Icon(FontAwesomeIcons.paperPlane),
-                      onPressed: () {
-                         AdvancedShare.whatsapp(msg: "It's okay :)")
-	.then((response) {
-    print("hey");
-      handleResponse(response, appName: "Whatsapp");
-    });
-                      },
-                    ),
+  //                   new IconButton(
+  //                     icon: Icon(FontAwesomeIcons.paperPlane),
+  //                     onPressed: () {
+  //                        AdvancedShare.whatsapp(msg: "It's okay :)")
+	// .then((response) {
+  //   print("hey");
+  //     handleResponse(response, appName: "Whatsapp");
+  //   });
+  //                     },
+  //                   ),
                   ],
                 ),
                 new Icon(
