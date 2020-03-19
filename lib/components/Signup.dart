@@ -1,13 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
+
   @override
   _SignupPageState createState() => new _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+    FirebaseUser user;
+
   Widget appBarTitle = new Text("AppBar Title");
   Icon actionIcon = new Icon(Icons.search);
+  TextEditingController profileNameController = new TextEditingController(); 
+  TextEditingController usernameController = new TextEditingController(); 
+  TextEditingController bioController = new TextEditingController(); 
+
+@override
+void initState() { 
+  super.initState();
+  getUser().then((user) =>setState((){this.user =user;}) );
+
+}
+ Future<FirebaseUser> getUser() async {
+    return FirebaseAuth.instance.currentUser();
+  }
+
+  _updateProfileRequest() async{
+
+     // set up POST request arguments
+    String url = 'https://insta-clone-backend.now.sh/profile_update';
+    Map<String, String> headers = {"Content-type": "application/json"};
+    String json = '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}"}';
+    // make POST request
+    final response = await http.post(url, headers: headers, body: json);
+  
+  if(response.statusCode==400){
+    print("fill in all the fields");
+  }
+  else if(response.statusCode==200){
+    print("success");
+    Navigator.pop(context);
+  }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -50,6 +87,7 @@ class _SignupPageState extends State<SignupPage> {
                             fontSize: 15,
                           ),
                         ),
+                        controller: profileNameController,
                       ),
                       SizedBox(
                         height: 10,
@@ -61,6 +99,7 @@ class _SignupPageState extends State<SignupPage> {
                             fontSize: 15,
                           ),
                         ),
+                        controller: usernameController,
                       ),
                       SizedBox(
                         height: 10,
@@ -72,6 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                             fontSize: 15,
                           ),
                         ),
+                        controller: bioController,
                       ),
                       SizedBox(
                         height: 10,
@@ -82,7 +122,7 @@ class _SignupPageState extends State<SignupPage> {
                             child: Container(
                               color: Colors.red[600],
                               child: FlatButton(
-                                onPressed: null,
+                                onPressed: _updateProfileRequest,
                                 child: Text(
                                   'Done',
                                 ),
