@@ -12,6 +12,7 @@ class _CreditsPageState extends State<CreditsPage> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    String logourl=(isDarkMode)?'assets/TeamIC1.png':'assets/TeamIC2.png';
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicbgcolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Colors.black;
@@ -24,11 +25,11 @@ class _CreditsPageState extends State<CreditsPage> {
       
       backgroundColor: dynamicbgcolor,
       //no need of appbar for this page
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: Center(
-            child: ListView(
+            child: Column(
               children: <Widget>[
                 Text(
                   'Instaclone',
@@ -88,16 +89,10 @@ class _CreditsPageState extends State<CreditsPage> {
                 ),
                 
                 Image(
-                  image: AssetImage('assets/logo_dark.jpg'),
+                  image: AssetImage(logourl),
                   height: 150,
                   width: 150,
                 ),
-                /*RaisedButton(
-                  child: Text("Signup page - soundarya"),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
-                )*/
               ],
             ),
           ),

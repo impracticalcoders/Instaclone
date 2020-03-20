@@ -48,6 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
             
           }
         }
+        this.postcount=userlist.length;
         print(userlist.length);
       });
     } else {
@@ -152,6 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   if (index > 1) return null;
                   return UserProfilePage(
                       profilename: profilename,
+                      postcount: postcount,
                       profileimageurl: (user == null || user.photoUrl == null)
                           ? profiledefault
                           : user.photoUrl);
@@ -182,13 +184,14 @@ class UserProfilePage extends StatelessWidget {
   final String profileimageurl;
   final String profilename;
   final String bio = "Software developer";
-  final String followers = "173";
-  final String following = "200";
-  final int postcount = 15;
+  final String followers = "169";
+  final String following = "269";
+  final int postcount ;
 
   UserProfilePage({
     @required this.profilename,
     this.profileimageurl,
+    this.postcount,
   });
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
@@ -219,10 +222,7 @@ class UserProfilePage extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(90.0),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2.0,
-                  ),
+                  
                 ),
               ),
               new SizedBox(

@@ -11,6 +11,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
     FirebaseUser user;
+    String profileimageurl;
 
   Widget appBarTitle = new Text("Edit Profile");
   Icon actionIcon = new Icon(Icons.search);
@@ -21,7 +22,8 @@ class _SignupPageState extends State<SignupPage> {
 @override
 void initState() { 
   super.initState();
-  getUser().then((user) =>setState((){this.user =user;}) );
+  getUser().then((user) =>setState((){this.user =user;
+  this.profileimageurl=user.photoUrl;}) );
 
 }
  Future<FirebaseUser> getUser() async {
@@ -47,9 +49,12 @@ void initState() {
     Navigator.pushReplacementNamed(context, '/home');
   }
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    final String profiledefault =
+      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,
@@ -60,12 +65,18 @@ void initState() {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                'InstaClone',
-                style: TextStyle(
-                  fontFamily: 'Billabong',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+              Container(
+                //  alignment:Alignment.topLeft,
+                height: 90,
+                width: 90,
+                decoration: new BoxDecoration(
+                  color: Colors.grey,
+                  image: DecorationImage(
+                    image: new NetworkImage(profileimageurl != null ? profileimageurl : profiledefault),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(90.0),
+                  
                 ),
               ),
               Divider(

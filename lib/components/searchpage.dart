@@ -65,14 +65,14 @@ class _SearchPageState extends State<SearchPage> {
                     onChanged: (text){_searchUsers(text);},
                     decoration: new InputDecoration(
                         prefixIcon: new Icon(Icons.search,color: Colors.white),
-                        hintText: "Search...",
+                        hintText: "Etner a username",
                         hintStyle: new TextStyle(color: Colors.white),
                         
                     ),
                   );}
                 else {
                   this.actionIcon = new Icon(Icons.search);
-                  this.appBarTitle = new Text("Search...");
+                  this.appBarTitle = new Text("Search");
                 }
 
               });
@@ -111,9 +111,10 @@ class customcontainer extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return Container(
-      height: 20,
+      height: 30,
+      padding:EdgeInsets.all(5.0) ,
         child:ListTile(
-        title:  Text(this.username),
+        title:  ListTile(title:Text("@${this.username}")),
         )
         );
   }
