@@ -104,8 +104,9 @@ class _MyActivityPageState extends State<MyActivityPage> {
                 if(index==0) return Container();
                 return customcontainer(
                   activity_text: this.list[index].activity_text,
-                  profileimageurl:user.photoUrl,
+                  profileimageurl:this.list[index].profile_pic,
                   postimageurl: this.list[index].post_pic,
+                  
                 );
               }, childCount: this.list.length),
             )
@@ -141,7 +142,7 @@ class customcontainer extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: new NetworkImage(
-                  profileimageurl != null ? profiledefault : profiledefault,
+                  profileimageurl != null ? profileimageurl : profiledefault,
                 ),
               ),
             ),
