@@ -26,7 +26,6 @@ dependencies:
   http: ^0.12.0+4
   esys_flutter_share: ^1.0.2
   image_picker: ^0.6.3+4
-  image_picker_saver: ^0.3.0
   path_provider: ^1.6.5
 
 dev_dependencies:

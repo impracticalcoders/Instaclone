@@ -7,7 +7,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -43,36 +42,7 @@ class _PostCardState extends State<PostCard> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final FlareControls flareControls = FlareControls();
   @override
-  void _onImageSaveButtonPressed() async {
-    File _image;
-
-    // _onLoading(true);
-    print("button");
-    var response = await http.get('${widget.postimageurl}');
-
-    var filePath =
-        await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
-    //_onLoading(false);
-
-    print(filePath);
-    String BASE64_IMAGE = filePath;
-
-    final ByteData bytes = await rootBundle.load(BASE64_IMAGE);
-    await Share.file(
-        'esys image', 'esys.png', bytes.buffer.asUint8List(), 'image/png',
-        text: 'My optional text.');
-  }
-
-  Future<void> _shareImage() async {
-    try {
-      final ByteData bytes = await rootBundle.load('assets/logo_dark.jpg');
-      await Share.file(
-          'esys image', 'esys.jpg', bytes.buffer.asUint8List(), 'image/jpg',
-          text: 'My optional text.');
-    } catch (e) {
-      print('error: $e');
-    }
-  }
+  
 
   Future<void> _shareText() async {
     try {
