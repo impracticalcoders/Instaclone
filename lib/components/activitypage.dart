@@ -100,8 +100,8 @@ class _MyActivityPageState extends State<MyActivityPage> {
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 // if (index > this.list.length) return null;
-                if(this.list[index].uid==this.user.uid) return Text("");
-                if(index==0) return Text("Likes");
+                if(this.list[index].uid==this.user.uid) return Container();
+                if(index==0) return Container();
                 return customcontainer(
                   activity_text: this.list[index].activity_text,
                   profileimageurl:user.photoUrl,
