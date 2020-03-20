@@ -133,23 +133,22 @@ class customcontainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-          new Container(
+        child:ListTile(
+          leading:Container(
             height: 40.0,
             width: 40.0,
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: new NetworkImage(
-                  profileimageurl != null ? profileimageurl : profiledefault,
+                  profileimageurl != null ? profiledefault : profiledefault,
                 ),
               ),
             ),
           ),
-          Text(activity_text),
-          new Container(
+          //contentPadding: EdgeInsets.all(16.0),
+          
+          trailing:  Container(
             height: 40.0,
             width: 40.0,
             decoration: new BoxDecoration(
@@ -161,6 +160,8 @@ class customcontainer extends StatelessWidget {
               ),
             ),
           ),
-        ]));
+        title: Text(activity_text),
+        )
+        );
   }
 }
