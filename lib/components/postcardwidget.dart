@@ -153,11 +153,13 @@ class _PostCardState extends State<PostCard> {
             },
             child: Stack(
               children: <Widget>[
-                Container(
-                  // height: 250,
-                  child: Image.network(
-                    widget.postimageurl,
-                    fit: BoxFit.contain,
+                Center(
+                  child: Container(
+                    // height: 250,
+                    child: Image.network(
+                      widget.postimageurl,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Container(
