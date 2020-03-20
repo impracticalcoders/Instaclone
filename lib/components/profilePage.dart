@@ -28,8 +28,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<Void> fetchPosts() async {
+    print("function called");
     final response = await http
         .get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
+    print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -37,14 +39,16 @@ class _ProfilePageState extends State<ProfilePage> {
         this.list = (json.decode(response.body) as List)
             .map((data) => new Post.fromJson(data))
             .toList();
-        this.newlength = list.length;
+        
         for (int i = 0; i < list.length; i++) {
-          if (list[i].profile_name == user.displayName) {
+          if (list[i].uid == user.uid) {
             this.userlist.add(list[i]);
-            print("${i}th post deleted");
-            this.newlength--;
+            
+            print("${i}th post filtered");
+            
           }
         }
+        print(userlist.length);
       });
     } else {
       // If the server did not return a 200 OK response,
@@ -61,6 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   String profilename;
+  String bio;
+  int postcount;
 
   final String profiledefault =
       'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
@@ -72,6 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (user != null) {
         setState(() {
           this.user = user;
+          print("State set");
           profilename = user.displayName;
         });
         fetchPosts();
@@ -91,10 +98,10 @@ class _ProfilePageState extends State<ProfilePage> {
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
       final condensedview = new SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, mainAxisSpacing: 6, crossAxisSpacing: 6),
+                    crossAxisCount: 3, mainAxisSpacing: 4, crossAxisSpacing: 4),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    if (index > this.newlength) return null;
+                    if (index > userlist.length) return null;
                     // if(list[index].profile_name!=user.displayName) return Container(child: null,);
                     return Container(
                         child: Image(
@@ -151,17 +158,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 }, childCount: 1),
               ),
               
-              SliverToBoxAdapter(child:Row(
+              SliverToBoxAdapter(child:Container(
+          width: double.infinity,color:dynamicuicolor,
+          child:Row(
+                
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   IconButton(icon:Icon( Icons.grid_on),onPressed: (){},),
                   IconButton(icon:Icon( Icons.view_list),onPressed: (){},),
                 ],
-              ), ),
-              SliverToBoxAdapter(child:Divider() ),
+              ),), ),
+              SliverToBoxAdapter(child:Divider(height: 0,) ),
               condensedview,
               
-              //condensedview,
+              
             ],
           )),
     );
@@ -245,14 +255,18 @@ class UserProfilePage extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
+        Container(
+          width: double.infinity,
+          color: dynamicuicolor,
           padding: EdgeInsets.only(left: 16.0, bottom: 10),
           child: Text(
             "${profilename}",
             style: TextStyle(backgroundColor:  dynamicuicolor,fontWeight: FontWeight.bold),
           ),
         ),
-        Padding(
+        Container(
+          width: double.infinity,
+          color: dynamicuicolor,
           padding: EdgeInsets.only(left: 16.0, bottom: 10),
           child: Text(
             "${bio}",
@@ -260,11 +274,15 @@ class UserProfilePage extends StatelessWidget {
           ),
         ),
         Container(
+          color: dynamicuicolor,
           alignment: Alignment.center,
           padding: EdgeInsets.only(top: 16.0, bottom: 10),
           child: RaisedButton(
+            
+            
             child: SizedBox(
-              width: MediaQuery.of(context).size.width / 1.2,
+              width: MediaQuery.of(context).size.width / 1.15,
+                
               child: Text(
                 "Edit Profile",
                 textAlign: TextAlign.center,

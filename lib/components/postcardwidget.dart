@@ -219,7 +219,9 @@ class _PostCardState extends State<PostCard> {
           SizedBox(
             height: 10,
           ),
-          Text("  @${widget.username} - \t\t${widget.caption}"),
+          Row(children: <Widget>[          Text("  @${widget.username}",style: TextStyle(fontWeight: FontWeight.bold),),
+          Text("\t${widget.caption}"),],),
+
           Divider(
             height: 30,
           ),
