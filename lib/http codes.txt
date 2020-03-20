@@ -9,3 +9,4 @@ custom codes
 208 - existing user
 401 - uid is empty
 419 - no posts found
+405 - if post doesn't belong to current user

@@ -1,4 +1,6 @@
 import 'dart:ffi'; //for future<void>
+import 'package:flutter/cupertino.dart';
+import 'package:Instaclone/components/privatepostcardwidget.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,10 +8,11 @@ import 'loginpage.dart';
 import 'Signup.dart';
 import 'credits.dart';
 import 'mainfeed.dart';
-import 'post.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'userdetails.dart';
+import 'privatepostcardwidget.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -20,8 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user;
   int newlength;
-  List<Post> list = List();
-  List<Post> userlist = List();
+  Userdetails userdata;
 
   Future<FirebaseUser> getUser() async {
     return auth.currentUser();
@@ -30,26 +32,19 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<Void> fetchPosts() async {
     print("function called");
     final response = await http
-        .get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
+        .get('https://insta-clone-backend.now.sh/user_details?uid=${user.uid}');
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       setState(() {
-        this.list = (json.decode(response.body) as List)
-            .map((data) => new Post.fromJson(data))
-            .toList();
-        
-        for (int i = 0; i < list.length; i++) {
-          if (list[i].uid == user.uid) {
-            this.userlist.add(list[i]);
-            
-            print("${i}th post filtered");
-            
-          }
-        }
-        this.postcount=userlist.length;
-        print(userlist.length);
+        this.userdata =
+            Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
+        //.dynamic((data) => new Userdetails.fromJson(data))
+        ;
+        profilename = userdata.profile_name;
+        bio = userdata.bio;
+        // print(userdata.posts.length);
       });
     } else {
       // If the server did not return a 200 OK response,
@@ -70,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
   int postcount;
 
   final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
   MyFeedPage obj = new MyFeedPage();
   @override
   void initState() {
@@ -81,6 +76,13 @@ class _ProfilePageState extends State<ProfilePage> {
           this.user = user;
           print("State set");
           profilename = user.displayName;
+          userdata = new Userdetails(
+              'Loading...',
+              'Instagrammer',
+              'username',
+              null,
+              'uid',
+              [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
         });
         fetchPosts();
       } else {
@@ -91,121 +93,197 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  int _viewmode = 0;
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
-      final condensedview = new SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, mainAxisSpacing: 4, crossAxisSpacing: 4),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index > userlist.length) return null;
-                    // if(list[index].profile_name!=user.displayName) return Container(child: null,);
-                    return Container(
-                        child: Image(
-                      image: NetworkImage(userlist[index].post_pic),
-                      fit: BoxFit.cover,
-                    ));
-                  },
-                  childCount: userlist.length,
-                ),
-              );
-    
+    SliverGrid condensedview;
+    if (userdata != null)
+      condensedview = new SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, mainAxisSpacing: 4, crossAxisSpacing: 4),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            if (index > userdata.posts.length) return null;
+            // if(list[index].profile_name!=user.displayName) return Container(child: null,);
+            return Container(
+                child: Image(
+              image: NetworkImage(userdata.posts[index].post_pic),
+              fit: BoxFit.cover,
+            ));
+          },
+          childCount: userdata.posts.length,
+        ),
+      );
+    SliverList postlistview;
+    if (userdata != null)
+      postlistview = new SliverList(
+        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+          if (index > userdata.posts.length - 1) return null;
+          return PrivatePostCard(
+            profilename: userdata.profile_name,
+            //profileimageurl: userdata.posts[index].post_pic,
+            postimageurl: userdata.posts[index].post_pic,
+            likes: userdata.posts[index].likes,
+            //id: userdata.posts[index].id,
+            caption: userdata.posts[index].caption,
+            user: this.user,
 
-    return Scaffold(
-      body: Container(
-          //backgroundcolor
-          color: (!isDarkMode) ? Colors.white : Colors.black,
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                  pinned: true,
-                  backgroundColor: dynamicuicolor,
-                  elevation: 3.0,
-                  title: Text(
-                      //"${profilename}",
-                      "Profile",
-                      style: TextStyle(
-                          color: (!isDarkMode) ? Colors.black : Colors.white)),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.info),
-                      color: dynamiciconcolor,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreditsPage()));
-                      },
+            username: userdata.username,
+            profileimageurl: userdata.profile_pic,
+          );
+        }, childCount: userdata.posts.length),
+      );
+    if (userdata != null) {
+      return Scaffold(
+        body: Container(
+            //backgroundcolor
+            color: (!isDarkMode) ? Colors.white : Colors.black,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                    pinned: true,
+                    backgroundColor: dynamicuicolor,
+                    elevation: 3.0,
+                    title: Text("@${userdata.username}",
+                        //"Profile",
+                        style: TextStyle(
+                            color:
+                                (!isDarkMode) ? Colors.black : Colors.white)),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.info),
+                        color: dynamiciconcolor,
+                        onPressed: () {
+                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CreditsPage()));
+                         
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.exit_to_app),
+                        color: dynamiciconcolor,
+                        onPressed: (){
+                         showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  CupertinoActionSheet(
+                                    title: Text("Logout"),
+                                    message:
+                                        const Text('Do you want to proceed?'),
+                                    actions: <Widget>[
+                                      CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
+                                        child: const Text('Yes'),
+                                        onPressed: () {
+                                         signOut();
+                                        },
+                                      ),
+                                    ],
+                                    cancelButton: CupertinoActionSheetAction(
+                                      child: const Text('Cancel'),
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                                    ),
+                                  ));
+                        }
+                       ,
+                      ),
+                    ]),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    if (index > 1) return null;
+                    return UserProfilePage(
+                        profilename: profilename,
+                        postcount: userdata.posts.length,
+                        bio: bio,
+                        profileimageurl: (userdata.profile_pic == null)
+                            ? profiledefault
+                            : userdata.profile_pic);
+                  }, childCount: 1),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    width: double.infinity,
+                    color: dynamicuicolor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.grid_on,color: (_viewmode==0)?Colors.red :dynamiciconcolor ,),
+                          onPressed: () {
+                            setState(() {
+                              _viewmode = 0;
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.view_list,color: (_viewmode==1)?Colors.red :dynamiciconcolor ,),
+                          onPressed: () {
+                            setState(() {
+                              _viewmode = 1;
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(Icons.exit_to_app),
-                      color: dynamiciconcolor,
-                      onPressed: signOut,
-                    ),
-                  ]),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  if (index > 1) return null;
-                  return UserProfilePage(
-                      profilename: profilename,
-                      postcount: postcount,
-                      profileimageurl: (user == null || user.photoUrl == null)
-                          ? profiledefault
-                          : user.photoUrl);
-                }, childCount: 1),
-              ),
-              
-              SliverToBoxAdapter(child:Container(
-          width: double.infinity,color:dynamicuicolor,
-          child:Row(
-                
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  IconButton(icon:Icon( Icons.grid_on),onPressed: (){},),
-                  IconButton(icon:Icon( Icons.view_list),onPressed: (){},),
-                ],
-              ),), ),
-              SliverToBoxAdapter(child:Divider(height: 0,) ),
-              condensedview,
-              
-              
-            ],
-          )),
-    );
+                  ),
+                ),
+                SliverToBoxAdapter(
+                    child: Divider(
+                  height: 0,
+                )),
+                if (_viewmode == 0)
+                  condensedview
+                else if (_viewmode == 1)
+                  postlistview
+              ],
+            )),
+      );
+    } else
+      return Center(
+        child: Text("Loading"),
+      );
   }
 }
 
 class UserProfilePage extends StatelessWidget {
   final String profileimageurl;
   final String profilename;
-  final String bio = "Software developer";
+  final String bio;
   final String followers = "169";
   final String following = "269";
-  final int postcount ;
+  final int postcount;
 
-  UserProfilePage({
-    @required this.profilename,
-    this.profileimageurl,
-    this.postcount,
-  });
+  UserProfilePage(
+      {@required this.profilename,
+      this.profileimageurl,
+      this.postcount,
+      this.bio});
   final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
   @override
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-     Color dynamicuicolor =
+    Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
     return Column(
       //mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(color: dynamicuicolor,
+        Container(
+          color: dynamicuicolor,
           // child: Align(
           //   alignment:Alignment.topCenter,
           child: Row(
@@ -222,7 +300,6 @@ class UserProfilePage extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(90.0),
-                  
                 ),
               ),
               new SizedBox(
@@ -261,7 +338,8 @@ class UserProfilePage extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.0, bottom: 10),
           child: Text(
             "${profilename}",
-            style: TextStyle(backgroundColor:  dynamicuicolor,fontWeight: FontWeight.bold),
+            style: TextStyle(
+                backgroundColor: dynamicuicolor, fontWeight: FontWeight.bold),
           ),
         ),
         Container(
@@ -270,7 +348,8 @@ class UserProfilePage extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.0, bottom: 10),
           child: Text(
             "${bio}",
-            style: TextStyle(fontWeight: FontWeight.w400,backgroundColor:  dynamicuicolor),
+            style: TextStyle(
+                fontWeight: FontWeight.w400, backgroundColor: dynamicuicolor),
           ),
         ),
         Container(
@@ -278,11 +357,8 @@ class UserProfilePage extends StatelessWidget {
           alignment: Alignment.center,
           padding: EdgeInsets.only(top: 16.0, bottom: 10),
           child: RaisedButton(
-            
-            
             child: SizedBox(
               width: MediaQuery.of(context).size.width / 1.15,
-                
               child: Text(
                 "Edit Profile",
                 textAlign: TextAlign.center,
@@ -299,25 +375,3 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 }
-
-/*
-
-   Widget _buildCoverImage(Size screenSize){
-     return Container(
-
-          height: screenSize.height /3,
-          decoration:BoxDecoration(
-            image:DecorationImage(
-              image:AssetImage('assets/Team_IC.jpg'),
-                  fit:BoxFit.cover,
-            ),
-          ),
-        );
-  
-  }
-
-  @override 
-  Widget build(Buildcontext Context) {
-    size screenSize= MediaQuery.of(context).size.height;
-    return Scaffold
-  }*/

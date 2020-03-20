@@ -54,7 +54,7 @@ void initState() {
   @override
   Widget build(BuildContext context) {
     final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,

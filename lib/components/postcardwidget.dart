@@ -96,7 +96,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +225,7 @@ class _PostCardState extends State<PostCard> {
           Divider(
             height: 30,
           ),
-        ]
+        ],
         //)
         );
   }

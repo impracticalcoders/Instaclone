@@ -30,11 +30,12 @@ class _MyActivityPageState extends State<MyActivityPage> {
     if (user != null) {
       setState(() {
         this.user = user;
+        likeactivitycount=0;
       });
       print('Accessing activity page as ' + user.displayName);
 
       fetchActivities();
-
+      
       print(list.length);
     } else {
       print("not logged in");
@@ -66,6 +67,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
       throw Exception('Failed to load likes');
     }
   }
+  int likeactivitycount;
   
 
   /// the url should be https://insta-clone-backend.now.sh/activity?uid=${user.uid}
@@ -78,7 +80,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
     Color dynamictextcolor =
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
     return Scaffold(
       key:_scaffoldKey,
       body: Container(
@@ -102,6 +104,11 @@ class _MyActivityPageState extends State<MyActivityPage> {
                 // if (index > this.list.length) return null;
                 if(this.list[index].uid==this.user.uid) return Container();
                 if(index==0) return Container();
+
+                //if there is a like
+                setState(() {
+                 likeactivitycount++; 
+                });
                 return customcontainer(
                   activity_text: this.list[index].activity_text,
                   profileimageurl:this.list[index].profile_pic,
@@ -109,6 +116,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
                   
                 );
               }, childCount: this.list.length),
+              //(likeactivitycount==0)?
             )
           ],
         ),
@@ -129,7 +137,7 @@ class customcontainer extends StatelessWidget {
   });
   
   final String profiledefault =
-      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
   @override
   Widget build(BuildContext context) {
     return Container(
