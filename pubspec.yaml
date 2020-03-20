@@ -38,7 +38,8 @@ dev_dependencies:
   google_sign_in: ^4.1.1
   font_awesome_flutter: ^8.7.0
   flare_flutter: ^2.0.1
-  
+  trie: ^1.0.2
+
 
 
 # For information on the generic Dart part of this file, see the
