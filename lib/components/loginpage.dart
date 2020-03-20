@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    String logourl=(isDarkMode)?'assets/TeamIC1.png':'assets/TeamIC2.png';
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
@@ -103,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 100, 30, 0),
-          child: Center(
-            child: ListView(
+          child: SingleChildScrollView(
+            child: Column(
               children: <Widget>[
                 Text(
                   'Instaclone',
@@ -167,16 +168,10 @@ class _LoginPageState extends State<LoginPage> {
                    textAlign: TextAlign.center,
                 ),
                 Image(
-                  image: AssetImage('assets/logo_dark.jpg'),
+                  image: AssetImage(logourl),
                   height: 150,
                   width: 150,
                 ),
-                /*RaisedButton(
-                  child: Text("Signup page - soundarya"),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
-                )*/
               ],
             ),
           ),
@@ -185,54 +180,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// Function logout(){
-//   final FirebaseAuth auth = FirebaseAuth.instance;
-//    auth.signOut();
-   
-//    print("Logged out");
-    
-    
-//   }
-
-// class AuthService{
-// final FirebaseAuth auth = FirebaseAuth.instance;
-  
-//  Future<bool> loginstat() async {
-    
-//       if(auth.currentUser()==null)
-//       return false;
-//       else 
-//       return true;
-//     }
-    
-//   }
-
-  
-
-
-
-
-
-// /* 
-// class AuthService {
-//   // Login
-//   Future<bool> login() async {
-//     // Simulate a future for response after 2 second.
-//     return await new Future<bool>.delayed(
-//       new Duration(
-//         seconds: 2
-//       ), () => new Random().nextBool()
-//     );
-//   }
-
-//   // Logout
-//   Future<void> logout() async {
-//     // Simulate a future for response after 1 second.
-//     return await new Future<void>.delayed(
-//       new Duration(
-//         seconds: 1
-//       )
-//     );
-//   }
-// } */

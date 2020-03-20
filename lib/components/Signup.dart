@@ -11,8 +11,9 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
     FirebaseUser user;
+    String profileimageurl;
 
-  Widget appBarTitle = new Text("AppBar Title");
+  Widget appBarTitle = new Text("Edit Profile");
   Icon actionIcon = new Icon(Icons.search);
   TextEditingController profileNameController = new TextEditingController(); 
   TextEditingController usernameController = new TextEditingController(); 
@@ -21,7 +22,8 @@ class _SignupPageState extends State<SignupPage> {
 @override
 void initState() { 
   super.initState();
-  getUser().then((user) =>setState((){this.user =user;}) );
+  getUser().then((user) =>setState((){this.user =user;
+  this.profileimageurl=user.photoUrl;}) );
 
 }
  Future<FirebaseUser> getUser() async {
@@ -42,28 +44,39 @@ void initState() {
   }
   else if(response.statusCode==200){
     print("success");
-    Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context)=> new MyHomePage()));
+    
+    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, '/home');
   }
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    final String profiledefault =
+      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,
         title: appBarTitle,
       ),
-      body: Padding(
+      body:SingleChildScrollView(child: Padding(
         padding: EdgeInsets.fromLTRB(30, 80, 30, 0),
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                'InstaClone',
-                style: TextStyle(
-                  fontFamily: 'Billabong',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+              Container(
+                //  alignment:Alignment.topLeft,
+                height: 90,
+                width: 90,
+                decoration: new BoxDecoration(
+                  color: Colors.grey,
+                  image: DecorationImage(
+                    image: new NetworkImage(profileimageurl != null ? profileimageurl : profiledefault),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(90.0),
+                  
                 ),
               ),
               Divider(
@@ -71,61 +84,62 @@ void initState() {
                 color: Colors.red[600],
               ),
               Text(
-                'Sign up to check out your feed!',
+                'Please add your new details',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),
+
               Container(
+                padding: EdgeInsets.only(top: 20),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Text("Name",style: TextStyle(fontWeight: FontWeight.w300),),
                       TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Name',
-                          hintStyle: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
+                        
                         controller: profileNameController,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
+                      Text("Username",style: TextStyle(fontWeight: FontWeight.w300),),
                       TextField(
-                        decoration: InputDecoration(
+                        /*decoration: InputDecoration(
                           hintText: 'Username',
                           hintStyle: TextStyle(
                             fontSize: 15,
                           ),
-                        ),
+                        ),*/
                         controller: usernameController,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
+                      Text("Bio",style: TextStyle(fontWeight: FontWeight.w300),),
                       TextField(
-                        decoration: InputDecoration(
+                        /*decoration: InputDecoration(
                           hintText: 'Bio',
                           hintStyle: TextStyle(
                             fontSize: 15,
                           ),
-                        ),
+                        ),*/
+                        
                         controller: bioController,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
                       Row(
                         children: <Widget>[
                           Expanded(
                             child: Container(
-                              color: Colors.red[600],
+                              color: Colors.red[500],
                               child: FlatButton(
                                 onPressed: _updateProfileRequest,
                                 child: Text(
-                                  'Done',
+                                  'Save Changes',
                                 ),
                               ),
                             ),
@@ -140,7 +154,7 @@ void initState() {
             ],
           ),
         ),
-      ),
+      ),),
     );
   }
 }

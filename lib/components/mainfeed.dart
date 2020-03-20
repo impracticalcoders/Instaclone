@@ -132,6 +132,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   user:this.user,
                   liked : list[index].liked,
                   username: list[index].username,
+                  profileimageurl: list[index].profile_pic,
                 );
               }, childCount: list.length),
             )
