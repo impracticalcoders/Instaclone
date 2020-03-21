@@ -161,10 +161,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                               CupertinoActionSheetAction(
                                 isDestructiveAction: true,
                                 child: const Text('Delete Post'),
-                                onPressed: () {
-                                  _deletepostreq();
-                                  setState(() {});
-                                },
+                                onPressed:_deletepostreq,
                               ),
                             ],
 
