@@ -103,6 +103,9 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST delete req response ${statusCode}");
+    if(response.statusCode==200){
+      Navigator.pop(context);
+    }
   }
 
   final String profiledefault =
