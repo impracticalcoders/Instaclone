@@ -119,6 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
           childCount: userdata.posts.length,
         ),
       );
+      
     SliverList postlistview;
     if (userdata != null)
       postlistview = new SliverList(
@@ -129,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
             //profileimageurl: userdata.posts[index].post_pic,
             postimageurl: userdata.posts[index].post_pic,
             likes: userdata.posts[index].likes,
-            //id: userdata.posts[index].id,
+            id: userdata.posts[index].id,//passing post id here
             caption: userdata.posts[index].caption,
             user: this.user,
 
@@ -207,6 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         profilename: profilename,
                         postcount: userdata.posts.length,
                         bio: bio,
+
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
                             : userdata.profile_pic);

@@ -4,13 +4,14 @@ class Post {
   final String post_pic;
   final String caption;
   final int likes;
-  Post({this.post_pic,this.likes,this.caption});
+  final String id;
+  Post({this.post_pic,this.likes,this.caption,this.id});
 
   factory Post.fromJson(Map<String,dynamic> json) {
     return Post(
   
       post_pic: json['post_pic'],
-
+      id:json['post_id'],//check this
       likes: json['likes'],
       caption: json['caption'],
 
@@ -43,7 +44,14 @@ class Userdetails {
         _posts
       );
     } 
+  else{//if there are no posts
+    return Userdetails(
+        json['bio'] as String,json['profile_name'] as String,json['username'] as String,json['profile_pic'] as String,json['uid'] as String,
+        
+      );
 
+
+  }
 
 /*
     return Userdetails(

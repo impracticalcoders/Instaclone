@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:flare_flutter/flare_actor.dart';
+//import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
@@ -56,6 +56,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
       print('error: $e');
     }
   }
+
 /*
   _likepostreq() async {
     //toggling like button
@@ -86,6 +87,23 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     // 203 - if the user has liked the post
     // 204 - if the user has disliked the post (PS. don't know what say for unliking XD)
   }*/
+
+  _deletepostreq() async {
+    //https://insta-clone-backend.now.sh
+
+    // set up POST request arguments
+    String url = 'https://insta-clone-backend.now.sh/delete_post';
+    Map<String, String> headers = {"Content-type": "application/json"};
+    print(
+        "Delete requested for post_id${this.widget.id} by Uid: ${this.widget.user.uid}");
+    String json =
+        '{"post_id": "${this.widget.id}","uid" : "${this.widget.user.uid}"}';
+    // make POST request
+    final response = await http.post(url, headers: headers, body: json);
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    print("POST delete req response ${statusCode}");
+  }
 
   final String profiledefault =
       'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
@@ -135,30 +153,29 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                 icon: Icon(Icons.more_vert),
                 onPressed: () {
                   showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) => CupertinoActionSheet(
-                        title: Text("More Options"),
-                        //message: const Text(''),
-                        actions: <Widget>[
-                          CupertinoActionSheetAction(
-                            isDestructiveAction: true,
-          child: const Text('Delete Post'),
-          onPressed: () {
-            Navigator.pop(context, 'Yes');
-          },
-        ),
-                        ],
-                        
-                        cancelButton: CupertinoActionSheetAction(            
+                      context: context,
+                      builder: (BuildContext context) => CupertinoActionSheet(
+                            title: Text("More Options"),
+                            //message: const Text(''),
+                            actions: <Widget>[
+                              CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                child: const Text('Delete Post'),
+                                onPressed: () {
+                                  _deletepostreq();
+                                  setState(() {});
+                                },
+                              ),
+                            ],
 
-child: const Text('Cancel'),            
-isDefaultAction: true,            
-onPressed: () {              
-Navigator.pop(context, 'Cancel');            
-},          
- 
-                        ),
-                  ));
+                            cancelButton: CupertinoActionSheetAction(
+                              child: const Text('Cancel'),
+                              isDefaultAction: true,
+                              onPressed: () {
+                                Navigator.pop(context, 'Cancel');
+                              },
+                            ),
+                          ));
                 },
               )
             ],
