@@ -81,6 +81,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
       'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+    if(user!=null){
     return Scaffold(
       key:_scaffoldKey,
       body: Container(
@@ -116,7 +117,9 @@ class _MyActivityPageState extends State<MyActivityPage> {
           ],
         ),
       ),
-    );
+    );}
+    else
+    return Scaffold(body: CircularProgressIndicator(),);
   }
 }
 

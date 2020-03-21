@@ -105,6 +105,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     print("POST delete req response ${statusCode}");
     if(response.statusCode==200){
       Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
