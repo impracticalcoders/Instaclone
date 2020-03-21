@@ -30,7 +30,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
     if (user != null) {
       setState(() {
         this.user = user;
-        likeactivitycount=0;
+       
       });
       print('Accessing activity page as ' + user.displayName);
 
@@ -67,7 +67,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
       throw Exception('Failed to load likes');
     }
   }
-  int likeactivitycount;
+  
   
 
   /// the url should be https://insta-clone-backend.now.sh/activity?uid=${user.uid}

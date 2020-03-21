@@ -12,7 +12,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   List<User> users;
-  Widget appBarTitle = new Text("AppBar Title");
+  Widget appBarTitle = new Text("Search for users");
   Icon actionIcon = new Icon(Icons.search);
   List<String> usernames = [];
   List<String> uidlist = [];
