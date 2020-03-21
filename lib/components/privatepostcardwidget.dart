@@ -1,3 +1,4 @@
+import 'package:Instaclone/components/profilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -161,10 +162,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                               CupertinoActionSheetAction(
                                 isDestructiveAction: true,
                                 child: const Text('Delete Post'),
-                                onPressed: () {
-                                  _deletepostreq();
-                                  setState(() {});
-                                },
+                                onPressed:_deletepostreq
                               ),
                             ],
 
