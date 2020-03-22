@@ -106,9 +106,9 @@ class _MyActivityPageState extends State<MyActivityPage> {
                 if(index==0) return Container();
 
                 //if there is a like
-                setState(() {
-                 likeactivitycount++; 
-                });
+                // setState(() {
+                //  likeactivitycount++; 
+                // });
                 return customcontainer(
                   activity_text: this.list[index].activity_text,
                   profileimageurl:this.list[index].profile_pic,

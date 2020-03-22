@@ -39,7 +39,7 @@ dev_dependencies:
   font_awesome_flutter: ^8.7.0
   flare_flutter: ^2.0.1
   trie: ^1.0.2
-
+  dash_chat: ^1.0.16
 
 
 # For information on the generic Dart part of this file, see the
