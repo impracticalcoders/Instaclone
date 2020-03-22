@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:Instaclone/components/myChatPage.dart';
 import 'package:flutter/material.dart';
 import 'postcardwidget.dart';
 import 'package:http/http.dart' as http;
@@ -112,7 +113,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                 IconButton(
                   icon:  Icon(FontAwesomeIcons.paperPlane),
                   color: dynamiciconcolor,
-                  onPressed: () {},
+                  onPressed: () {Navigator.push(context, new MaterialPageRoute(builder: (context)=>MyChatPage()));},
                 ),
                 
 

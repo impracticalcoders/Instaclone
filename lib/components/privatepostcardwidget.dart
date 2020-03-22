@@ -104,6 +104,10 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST delete req response ${statusCode}");
+    if(response.statusCode==200){
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 
   final String profiledefault =
@@ -162,7 +166,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                               CupertinoActionSheetAction(
                                 isDestructiveAction: true,
                                 child: const Text('Delete Post'),
-                                onPressed:_deletepostreq
+                                onPressed:_deletepostreq,
                               ),
                             ],
 
