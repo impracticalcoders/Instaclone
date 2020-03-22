@@ -29,8 +29,8 @@ class _MyChatPageState extends State<MyChatPage> {
       appBar: AppBar(
         title: Text(widget.profileName??"Suraj Kumar"),
         leading: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: CircleAvatar(radius: 20,backgroundImage : NetworkImage(widget.profilePic??"https://avatars3.githubusercontent.com/u/37346450?s=460&v=4")),
+          padding: const EdgeInsets.all(6.0),
+          child: CircleAvatar(radius: 18,backgroundImage : NetworkImage(widget.profilePic??"https://avatars3.githubusercontent.com/u/37346450?s=460&v=4")),
         ),
       ),
       body: StreamBuilder(
@@ -54,18 +54,24 @@ class _MyChatPageState extends State<MyChatPage> {
               showUserAvatar: true,
               messages: this.messages, 
                inputMaxLines: 5,
-
+              messageContainerDecoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.blue,
+              ),
               onSend: (ChatMessage ) {
                 this.channel.sink.add(ChatMessage.text);
 
                 this.messages.add(ChatMessage);
               }, 
-              leading: <Widget>[Container(width: 20,)],
-              
+              timeFormat: DateFormat.Hm(),
+              //leading: <Widget>[Container(width: 20,)],
+              inputToolbarMargin: EdgeInsets.all(15),
               user: ChatUser(name: widget.profileName ?? "Aakash",uid:"10",avatar:widget.profilePic?? "https://media-exp1.licdn.com/dms/image/C5103AQHJ6oyTDlXPUg/profile-displayphoto-shrink_200_200/0?e=1586995200&v=beta&t=ItU48T4oHQ1Qqr5rt1jWysMW134E1Tp2K40RBoBni2M"),
+              inputToolbarPadding: EdgeInsets.only(left:12),
               inputContainerStyle: BoxDecoration(
                 border:Border.all(color: Colors.grey),
-                color: Colors.white,
+                
+                //color: Colors.white,
                 borderRadius:BorderRadius.all(Radius.circular(30)),
               ),
               inputTextStyle:TextStyle(fontSize: 20) 
