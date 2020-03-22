@@ -107,6 +107,9 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/home');
     }
+    else{
+      //TODO: implement usermismatch error
+    }
   }
 
   final String profiledefault =
