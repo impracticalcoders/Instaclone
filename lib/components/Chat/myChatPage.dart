@@ -86,7 +86,7 @@ class _MyChatPageState extends State<MyChatPage> {
               }
 
               return DashChat(
-                  showUserAvatar: true,
+                  //showUserAvatar: true,
                   messages: this.messages,
                   inputMaxLines: 5,
                   showAvatarForEveryMessage: false,
@@ -110,7 +110,7 @@ class _MyChatPageState extends State<MyChatPage> {
                     //color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
-                  
+                  //chatFooterBuilder: , //for the 'typing' message
                   inputTextStyle: TextStyle(fontSize: 15));
             },
           )),
