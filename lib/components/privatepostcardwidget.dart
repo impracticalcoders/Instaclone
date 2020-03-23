@@ -93,7 +93,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://insta-clone-backend.now.sh/delete_post';
+    String url = 'https://instacloneproduction.glitch.me/delete_post';
     Map<String, String> headers = {"Content-type": "application/json"};
     print(
         "Delete requested for post_id${this.widget.id} by Uid: ${this.widget.user.uid}");
