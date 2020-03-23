@@ -67,7 +67,7 @@ class _MyChatPageState extends State<MyChatPage> {
             ),
             backgroundColor: dynamicuicolor,
           ),
-          backgroundColor: Colors.white70,
+          backgroundColor: dynamicuicolor,
       
         body: StreamBuilder(
           stream:this.channel.stream ,
@@ -118,6 +118,7 @@ class _MyChatPageState extends State<MyChatPage> {
                     //color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
+                  
                   //chatFooterBuilder: , //for the 'typing' message
                   inputTextStyle: TextStyle(fontSize: 15));
             },

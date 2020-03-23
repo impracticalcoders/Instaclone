@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       
       children: [
         Scaffold(
+          backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
           body: _pageOptions[_cIndex],
           bottomNavigationBar: BottomAppBar(
             color: dynamicuicolor,

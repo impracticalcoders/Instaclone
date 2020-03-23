@@ -37,6 +37,8 @@ dependencies:
   font_awesome_flutter: ^8.7.0
   flare_flutter: ^2.0.1
   flutter_socket_io: ^0.6.0
+  cached_network_image: ^2.0.0
+  flutter_cache_manager: ^1.1.3
 
 
 dev_dependencies:
@@ -62,6 +64,8 @@ flutter:
     - assets/Team_IC.jpg
     - assets/signin.png
     - assets/
+    - assets/endlight.jpg
+    - assets/enddark.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
