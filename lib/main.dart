@@ -16,6 +16,7 @@ void main() async {
   // Set default home.
   Widget _defaultHome;
 
+
 // Run app!
   runApp(new MaterialApp(
     title: 'Instaclone',
