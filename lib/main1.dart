@@ -8,6 +8,9 @@ import 'components/searchpage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/profilePage.dart';
 import 'components/Chat/chatsPage.dart';
+import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class MyHomePage extends StatefulWidget {
   // MyHomePage({Key key, this.title}) : super(key: key);
@@ -19,6 +22,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
@@ -43,7 +48,40 @@ class _MyHomePageState extends State<MyHomePage> {
         print("not logged in");
       }
     });
-  }
+
+    _fcm.configure(
+      
+          onMessage: (Map<String, dynamic> message) async {
+            print("onMessage: $message ");
+          
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                        content: ListTile(
+                        title: Text(message['notification']['title']),
+                        subtitle: Text(message['notification']['body']),
+                        ),
+                        actions: <Widget>[
+                        FlatButton(
+                            child: Text('Ok'),
+                            onPressed: () => Navigator.of(context).pop(),
+                        ),
+                    ],
+                ),
+            );
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+            print("onLaunch: $message");
+            // TODO optional
+        },
+        onResume: (Map<String, dynamic> message) async {
+            print("onResume: $message");
+            // TODO optional
+        },
+      );
+    }
+
+  
 
    @override
   void dispose() {

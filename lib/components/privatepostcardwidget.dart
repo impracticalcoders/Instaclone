@@ -104,17 +104,16 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST delete req response ${statusCode}");
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/home');
-    }
-    else{
+    } else {
       //TODO: implement usermismatch error
     }
   }
 
   final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +168,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                               CupertinoActionSheetAction(
                                 isDestructiveAction: true,
                                 child: const Text('Delete Post'),
-                                onPressed:_deletepostreq,
+                                onPressed: _deletepostreq,
                               ),
                             ],
 
@@ -256,13 +255,24 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
         SizedBox(
           height: 10,
         ),
-        Row(
+        Wrap(
           children: <Widget>[
-            Text(
-              "  @${widget.username}",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text("\t${widget.caption}"),
+            RichText(
+                text: TextSpan(
+                    // set the default style for the children TextSpans
+                    style: Theme.of(context)
+                        .textTheme
+                        .subhead
+                        .copyWith(fontSize: 15),
+                    children: [
+                  TextSpan(
+                    text: "  @${widget.username}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: "\t${widget.caption}",
+                  ),
+                ])),
           ],
         ),
         Divider(

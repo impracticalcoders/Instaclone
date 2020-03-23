@@ -54,7 +54,7 @@ void initState() {
   @override
   Widget build(BuildContext context) {
     final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,

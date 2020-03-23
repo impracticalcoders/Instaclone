@@ -97,7 +97,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
 
   @override
   Widget build(BuildContext context) {
@@ -106,150 +106,159 @@ class _PostCardState extends State<PostCard> {
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return Card(
-      color: (!isDarkMode) ? Colors.white : Colors.black,
-      elevation: 0.1,
-      child: 
-    Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
+        color: (!isDarkMode) ? Colors.white : Colors.black,
+        elevation: 0.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  new Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: new NetworkImage(
-                          widget.profileimageurl != null
-                              ? widget.profileimageurl
-                              : profiledefault,
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        height: 40.0,
+                        width: 40.0,
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: new NetworkImage(
+                              widget.profileimageurl != null
+                                  ? widget.profileimageurl
+                                  : profiledefault,
+                            ),
+                          ),
+                        ),
+                      ),
+                      new SizedBox(
+                        width: 10.0,
+                      ),
+                      new Text(
+                        widget.profilename,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  new IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: null,
+                  )
+                ],
+              ),
+            ),
+            GestureDetector(
+              onDoubleTap: () {
+                _likepostreq();
+                flareControls.play("like");
+              },
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      // height: 250,
+                      child: Image.network(
+                        widget.postimageurl,
+                        fit: BoxFit.contain,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    //height: 200,
+                    child: Center(
+                      child: SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: FlareActor(
+                          'assets/instagram_like.flr',
+                          controller: flareControls,
+                          animation: 'idle',
                         ),
                       ),
                     ),
                   ),
-                  new SizedBox(
-                    width: 10.0,
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new IconButton(
+                        icon: widget.liked
+                            ? Icon(Icons.favorite, size: 28)
+                            : Icon(Icons.favorite_border, size: 28),
+                        color: widget.liked
+                            ? Colors.red
+                            : (isDarkMode) ? Colors.white : Colors.black,
+                        onPressed: () {
+                          _likepostreq();
+                        },
+                      ),
+                      new IconButton(
+                        icon: Icon(FontAwesomeIcons.comment),
+                        onPressed: () {},
+                      ),
+                      new IconButton(
+                          icon: Icon(FontAwesomeIcons.paperPlane),
+                          onPressed: () async => await _shareImageFromUrl()),
+                    ],
                   ),
-                  new Text(
-                    widget.profilename,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  new Icon(
+                    Icons.bookmark_border,
+                    size: 28,
                   )
                 ],
               ),
-              new IconButton(
-                icon: Icon(Icons.more_vert),
-                onPressed: null,
-              )
-            ],
-          ),
-        ),
-        GestureDetector(
-          onDoubleTap: () {
-            _likepostreq();
-            flareControls.play("like");
-          },
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Container(
-                  // height: 250,
-                  child: Image.network(
-                    widget.postimageurl,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                //height: 200,
-                child: Center(
-                  child: SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: FlareActor(
-                      'assets/instagram_like.flr',
-                      controller: flareControls,
-                      animation: 'idle',
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new IconButton(
-                    icon: widget.liked
-                        ? Icon(Icons.favorite, size: 28)
-                        : Icon(Icons.favorite_border, size: 28),
-                    color: widget.liked
-                        ? Colors.red
-                        : (isDarkMode) ? Colors.white : Colors.black,
-                    onPressed: () {
-                      _likepostreq();
-                    },
-                  ),
-                  new IconButton(
-                    icon: Icon(FontAwesomeIcons.comment),
-                    onPressed: () {},
-                  ),
-                  new IconButton(
-                      icon: Icon(FontAwesomeIcons.paperPlane),
-                      onPressed: () async => await _shareImageFromUrl()),
-                ],
-              ),
-              new Icon(
-                Icons.bookmark_border,
-                size: 28,
-              )
-            ],
-          ),
-        ),
-        Text("  Liked by ${widget.likes} users"),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: <Widget>[
-            Text(
-              "  @${widget.username}",
-              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text("\t${widget.caption}"),
+            Text("  Liked by ${widget.likes} users"),
+            SizedBox(
+              height: 10,
+            ),
+            Wrap(
+              children: <Widget>[
+                RichText(
+                    text: TextSpan(
+                        // set the default style for the children TextSpans
+                        style: Theme.of(context)
+                            .textTheme
+                            .subhead
+                            .copyWith(fontSize: 15),
+                        children: [
+                      TextSpan(
+                        text: "  @${widget.username}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: "\t${widget.caption}",
+                      ),
+                    ])),
+              ],
+            ),
+            Divider(
+              height: 30,
+            ),
           ],
-        ),
-        Divider(
-          height: 30,
-        ),
-      ],
-      )
-    );
+        ));
   }
 }

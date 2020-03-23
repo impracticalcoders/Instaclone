@@ -58,7 +58,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
   int postcount;
 
   final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   MyFeedPage obj = new MyFeedPage();
   @override
   void initState() {
@@ -217,7 +217,7 @@ class UserProfilePage extends StatelessWidget {
       this.postcount,
       this.bio});
   final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
   @override
   Widget build(BuildContext context) {

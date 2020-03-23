@@ -80,7 +80,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
     Color dynamictextcolor =
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
     if(user!=null){
     return Scaffold(
       key:_scaffoldKey,
@@ -135,7 +135,7 @@ class customcontainer extends StatelessWidget {
   });
   
   final String profiledefault =
-      'gs://instaclone-63929.appspot.com/Deafult-Profile-Picture.png';
+      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
   Widget build(BuildContext context) {
     return Container(
