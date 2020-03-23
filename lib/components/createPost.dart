@@ -61,7 +61,7 @@ class _CreatePostState extends State<CreatePost> {
       });
 //https://insta-clone-backend.now.sh
       final response = await http.post(
-          "https://insta-clone-backend.now.sh/feed" ,
+          "https://instacloneproduction.glitch.me/feed" ,
           headers: {"Content-type": "application/json"},
           body:
               '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
