@@ -33,7 +33,7 @@ void initState() {
   _updateProfileRequest() async{
 
      // set up POST request arguments
-    String url = 'https://insta-clone-backend.now.sh/profile_update';
+    String url = 'https://instacloneproduction.glitch.me/profile_update';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}","profile_pic":"${this.user.photoUrl}"}';
     // make POST request

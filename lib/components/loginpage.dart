@@ -51,10 +51,10 @@ class _LoginPageState extends State<LoginPage> {
 
       print('signed in as ' + user.displayName);
 
-//https://insta-clone-backend.now.sh/ DON'T REMOVE
+//https://instacloneproduction.glitch.me/ DON'T REMOVE
 
       final response = await http.post(
-          "https://insta-clone-backend.now.sh/auth",
+          "https://instacloneproduction.glitch.me/auth",
           headers: {"Content-type": "application/json"},
           body: '{"uid":"${user.uid}"}');
 
