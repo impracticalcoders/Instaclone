@@ -37,6 +37,8 @@ class _MyChatPageState extends State<MyChatPage> {
   }
   @override
   Widget build(BuildContext context) {
+      this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
+
     return WillPopScope(
       onWillPop:_onPressBack ,
       child: Scaffold(
@@ -52,20 +54,26 @@ class _MyChatPageState extends State<MyChatPage> {
           stream:this.channel.stream ,
           builder: (context,snapshot){
             if(snapshot.hasData){
-                this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
               print(snapshot.data);
-              var message= json.decode(snapshot.data)["message"];
-              this.messages.add(
-                ChatMessage(
-                  text: message,
-                  user:ChatUser(
-                    name: widget.profileName,
-                    uid:widget.uid,
-                    avatar:widget.profilePic,
-                    ),
-                  ));
-            }
+                var data = json.decode(snapshot.data);
 
+              if((data['type']=="message" && data['in_uid']==widget.uid) || (data['type']=="offline"&& data['dest_uid']==widget.uid)){   
+
+                print(snapshot.data);
+                var message= data["message"];
+                this.messages.add(
+                  ChatMessage(
+                    text: message,
+                    user:ChatUser(
+                      name: widget.profileName,
+                      uid:widget.uid,
+                      avatar:widget.profilePic,
+                      ),
+                    ));
+
+                }
+                
+            }
               return DashChat(
                 
                 showUserAvatar: true,
