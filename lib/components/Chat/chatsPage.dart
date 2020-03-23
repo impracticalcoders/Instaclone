@@ -62,11 +62,15 @@ class _ChatsPageState extends State<ChatsPage> {
   }
   @override
   Widget build(BuildContext context) {
+     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('Direct'),
-        backgroundColor: Colors.white,
+        backgroundColor: dynamicuicolor,
         actions: <Widget>[
           Icon(Icons.message)
         ],
@@ -98,7 +102,7 @@ class _ChatsPageState extends State<ChatsPage> {
                             return ChatWidget(
                               profileName:user['profile_name'] ,
                               profilePic: user['profile_pic'],
-                              subTitle: "text here",
+                              subTitle: "Start a conversation",
                               chatUserUid: user['uid'],
                               user: widget.user,);
                             }
