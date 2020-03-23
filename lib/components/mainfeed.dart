@@ -28,8 +28,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
   }
 
   Future<Void> fetchPosts() async {
-    final response = await http
-        .get('https://insta-clone-backend.now.sh/feed?uid=${this.user.uid}');
+    final response = await http.get('https://instacloneproduction.glitch.me/feed?uid=${this.user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

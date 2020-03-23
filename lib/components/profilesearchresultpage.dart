@@ -32,7 +32,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
   Future<Void> fetchPosts() async {
     print("function called");
     final response = await http.get(
-        'https://insta-clone-backend.now.sh/user_details?uid=${this.widget.uidretrieve}');
+        'https://instacloneproduction.glitch.me/user_details?uid=${this.widget.uidretrieve}');
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

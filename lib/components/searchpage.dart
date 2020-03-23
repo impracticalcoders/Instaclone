@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _loadUsers() async {
-    final response = await http.get('https://insta-clone-backend.now.sh/users');
+    final response = await http.get('https://instacloneproduction.glitch.me/users');
     List<String> usernames = (json.decode(response.body) as List)
         .map<String>((data) => data["username"])
         .toList();

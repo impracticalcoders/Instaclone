@@ -49,7 +49,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
 
   Future<Void> fetchActivities() async {
     final response = await http
-        .get('https://insta-clone-backend.now.sh/activity?uid=${user.uid}');
+        .get('https://instacloneproduction.glitch.me/activity?uid=${user.uid}');
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
