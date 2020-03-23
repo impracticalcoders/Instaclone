@@ -37,6 +37,8 @@ class _MyChatPageState extends State<MyChatPage> {
 
   @override
   Widget build(BuildContext context) {
+      this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
+
      bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
@@ -65,26 +67,32 @@ class _MyChatPageState extends State<MyChatPage> {
             ),
             backgroundColor: dynamicuicolor,
           ),
-          body: StreamBuilder(
-            stream: this.channel.stream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                this
-                    .channel
-                    .sink
-                    .add('{"uid":"${widget.user.uid}","type":"init"}');
+          backgroundColor: Colors.white70,
+      
+        body: StreamBuilder(
+          stream:this.channel.stream ,
+          builder: (context,snapshot){
+            if(snapshot.hasData){
+              print(snapshot.data);
+                var data = json.decode(snapshot.data);
+
+              if((data['type']=="message" && data['in_uid']==widget.uid) || (data['type']=="offline"&& data['dest_uid']==widget.uid)){   
+
                 print(snapshot.data);
-                var message = json.decode(snapshot.data)["message"];
-                this.messages.add(ChatMessage(
-                      text: message,
-                      user: ChatUser(
-                        name: widget.profileName,
-                        uid: widget.uid,
-                        avatar: widget.profilePic,
+                var message= data["message"];
+                this.messages.add(
+                  ChatMessage(
+                    text: message,
+                    user:ChatUser(
+                      name: widget.profileName,
+                      uid:widget.uid,
+                      avatar:widget.profilePic,
                       ),
                     ));
-              }
 
+                }
+                
+            }
               return DashChat(
                   //showUserAvatar: true,
                   messages: this.messages,

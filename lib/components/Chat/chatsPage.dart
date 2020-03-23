@@ -78,9 +78,9 @@ class _ChatsPageState extends State<ChatsPage> {
       body: StreamBuilder(
         stream: _usersController.stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          print('Has error: ${snapshot.hasError}');
-          print('Has data: ${snapshot.hasData}');
-          print('Snapshot Data ${snapshot.data}');
+          // print('Has error: ${snapshot.hasError}');
+          // print('Has data: ${snapshot.hasData}');
+          // print('Snapshot Data ${snapshot.data}');
 
           if (snapshot.hasError) {
             return Text(snapshot.error);
