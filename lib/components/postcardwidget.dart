@@ -81,7 +81,7 @@ class _PostCardState extends State<PostCard> {
 //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://insta-clone-backend.now.sh/likes';
+    String url = 'https://instacloneproduction.glitch.me/likes';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"id": "${widget.id}","uid" : "${this.widget.user.uid}"}';
     // make POST request
