@@ -65,6 +65,7 @@ class _MyChatPageState extends State<MyChatPage> {
               }, 
               timeFormat: DateFormat.Hm(),
               //leading: <Widget>[Container(width: 20,)],
+              
               inputToolbarMargin: EdgeInsets.all(15),
               user: ChatUser(name: widget.profileName ?? "Aakash",uid:"10",avatar:widget.profilePic?? "https://media-exp1.licdn.com/dms/image/C5103AQHJ6oyTDlXPUg/profile-displayphoto-shrink_200_200/0?e=1586995200&v=beta&t=ItU48T4oHQ1Qqr5rt1jWysMW134E1Tp2K40RBoBni2M"),
               inputToolbarPadding: EdgeInsets.only(left:12),
@@ -74,7 +75,7 @@ class _MyChatPageState extends State<MyChatPage> {
                 //color: Colors.white,
                 borderRadius:BorderRadius.all(Radius.circular(30)),
               ),
-              inputTextStyle:TextStyle(fontSize: 20) 
+              //inputTextStyle:TextStyle(fontSize: 20) 
               );
 
          
