@@ -9,8 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/profilePage.dart';
 import 'components/Chat/chatsPage.dart';
 import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 
 class MyHomePage extends StatefulWidget {
   // MyHomePage({Key key, this.title}) : super(key: key);
@@ -22,13 +22,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final FirebaseMessaging _fcm = FirebaseMessaging();
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
+  }
+
+  _launchURL() async {
+    const url = 'https://bit.ly/instaclone1';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -39,56 +47,74 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           this.user = user;
         });
-        
-
-        
-
-      
       } else {
         print("not logged in");
       }
     });
-
+    
     _fcm.configure(
-      
-          onMessage: (Map<String, dynamic> message) async {
-            print("onMessage: $message ");
-          
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                        content: ListTile(
-                        title: Text(message['notification']['title']),
-                        subtitle: Text(message['notification']['body']),
-                        ),
-                        actions: <Widget>[
-                        FlatButton(
-                            child: Text('Ok'),
-                            onPressed: () => Navigator.of(context).pop(),
-                        ),
-                    ],
-                ),
-            );
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-            print("onLaunch: $message");
-            // TODO optional
-        },
-        onResume: (Map<String, dynamic> message) async {
-            print("onResume: $message");
-            // TODO optional
-        },
-      );
-    }
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message ");
 
-  
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0)),
+            title: Text(message['notification']['title']),
+            content: Text(message['notification']['body']),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  if (message['notification']['title']
+                          .toString()
+                          .contains("Update") ||
+                      message['notification']['body']
+                          .toString()
+                          .contains("Update") ||
+                      message['notification']['body']
+                          .toString()
+                          .contains("update")) {
+                    _launchURL();
+                    print("URL launch attempted");
+                    
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+        if (message['notification']['title'].toString().contains("Update") ||
+            message['notification']['body'].toString().contains("Update") ||
+            message['notification']['body'].toString().contains("update")) {
+          _launchURL;
+          print("URL launch attempted");
+        }
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+        if (message['notification']['title'].toString().contains("Update") ||
+            message['notification']['body'].toString().contains("Update") ||
+            message['notification']['body'].toString().contains("update")) {
+          _launchURL;
+          print("URL launch attempted");
+        }
+      },
+    );
+  }
 
-   @override
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user;
@@ -121,8 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return PageView(
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
-      
-      
       children: [
         Scaffold(
           backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
