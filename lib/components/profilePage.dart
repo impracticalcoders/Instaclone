@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'userdetails.dart';
 import 'privatepostcardwidget.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   FirebaseUser user;
   int newlength;
   Userdetails userdata;
+  final GoogleSignIn googleSignIn = new GoogleSignIn(scopes: ['email']);
 
   Future<FirebaseUser> getUser() async {
     return auth.currentUser();
@@ -41,9 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
         this.userdata =
             Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
         //.dynamic((data) => new Userdetails.fromJson(data))
-        ;
-        profilename = userdata.profile_name;
-        bio = userdata.bio;
+        
+        profilename = userdata.profile_name??"";
+        bio = userdata.bio??"";
         // print(userdata.posts.length);
       });
     } else {
@@ -56,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Future<void> signOut() async {
     await auth.signOut();
+    await googleSignIn.signOut();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
@@ -75,12 +78,12 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           this.user = user;
           print("State set");
-          profilename = user.displayName;
+          profilename ="";
           userdata = new Userdetails(
               'Loading...',
               'Instagrammer',
               'username',
-              null,
+              "",
               'uid',
               [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
         });
@@ -161,10 +164,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: dynamiciconcolor,
                         onPressed: () {
                             Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CreditsPage()));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CreditsPage()));
                          
                         },
                       ),
@@ -207,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     return UserProfilePage(
                         profilename: profilename,
                         postcount: userdata.posts.length,
-                        bio: bio,
+                        bio: bio??"",
 
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault

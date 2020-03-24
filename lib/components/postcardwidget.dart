@@ -163,6 +163,7 @@ class _PostCardState extends State<PostCard> {
                       // height: 250,
                       child: Image.network(
                         widget.postimageurl,
+                        // cacheHeight: 1000,
                         fit: BoxFit.contain,
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent loadingProgress) {
