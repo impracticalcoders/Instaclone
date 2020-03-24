@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:Instaclone/main1.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:dash_chat/dash_chat.dart';
 
@@ -20,11 +19,13 @@ class MyChatPage extends StatefulWidget {
 class _MyChatPageState extends State<MyChatPage> {
   int _counter = 0;
   List<ChatMessage> messages = [];
+
   var channel = IOWebSocketChannel.connect(
       'wss://instacloneproduction.glitch.me');
 
   @override
   void initState() {
+   
     super.initState();
   }
 
@@ -40,9 +41,8 @@ class _MyChatPageState extends State<MyChatPage> {
       this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
 
      bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
-    Color dynamicuicolor =
-        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white;
+    Color dynamicuicolor =(!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return WillPopScope(
       onWillPop: _onPressBack,
       child: Scaffold(
