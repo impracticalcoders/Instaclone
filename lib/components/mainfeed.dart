@@ -20,6 +20,8 @@ class MyFeedPage extends StatefulWidget {
 
 class _MyFeedPageState extends State<MyFeedPage> {
   List<Post> list = List();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user;
 
@@ -140,6 +142,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
       ),
     );*/
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
       appBar: AppBar(
         backgroundColor: dynamicuicolor,
@@ -192,6 +195,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   liked : list[index].liked,
                   username: list[index].username,
                   profileimageurl: list[index].profile_pic,
+                  scaffoldKey: this.scaffoldKey
                 );
                 
       },

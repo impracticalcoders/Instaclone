@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:Instaclone/components/Chat/myChatPage.dart';
+import 'package:Instaclone/components/mainfeed.dart';
+import 'package:Instaclone/main1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +23,7 @@ class _ChatsPageState extends State<ChatsPage> {
   void initState() { 
     _usersController = new StreamController();
     loadChats();
+    
     super.initState();
     
   }
@@ -60,13 +63,17 @@ class _ChatsPageState extends State<ChatsPage> {
       return null;
     });
   }
+
+
   @override
   Widget build(BuildContext context) {
+    
      bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return Scaffold(
+      
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('Direct'),

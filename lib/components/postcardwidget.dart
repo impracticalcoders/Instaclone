@@ -23,7 +23,7 @@ class PostCard extends StatefulWidget {
   final user;
   bool liked = false;
   final String username;
-
+  final scaffoldKey;
   PostCard(
       {@required this.profilename,
       this.username,
@@ -33,14 +33,15 @@ class PostCard extends StatefulWidget {
       this.id,
       this.caption,
       @required this.user,
-      this.liked});
+      this.liked,
+      this.scaffoldKey
+      });
 
   @override
   _PostCardState createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final FlareControls flareControls = FlareControls();
   @override
   Future<void> _shareText() async {
@@ -217,7 +218,10 @@ class _PostCardState extends State<PostCard> {
                       ),
                       new IconButton(
                         icon: Icon(FontAwesomeIcons.comment),
-                        onPressed: () {},
+                        onPressed: () {
+                          var snackbar = new SnackBar(content: new Text("This feature isn't available in the current version of the app!"));
+                          widget.scaffoldKey.currentState.showSnackBar(snackbar);
+                        },
                       ),
                       new IconButton(
                           icon: Icon(FontAwesomeIcons.paperPlane),
