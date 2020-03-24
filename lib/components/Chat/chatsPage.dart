@@ -26,7 +26,7 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   fetchUsers() async {
-    final response = await http.get('https://insta-clone-backend.now.sh/users');
+    final response = await http.get('https://instacloneproduction.glitch.me/users');
     // var users = json.decode(response.body) ;
     if(response.statusCode==200){
       return json.decode(response.body);
