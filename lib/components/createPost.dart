@@ -116,25 +116,21 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white;
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
     return Scaffold(
-        key: _scaffoldKey,
-        body: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  "New Post",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Divider(
-                height: 35,
-                color: Colors.red[600],
-              ),
+        
+        backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+        appBar: AppBar(
+    backgroundColor: dynamicuicolor,
+    centerTitle: true,
+    title: Text("New Post"),
+        ),
+        body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child:              
               Container(
                 padding: EdgeInsets.all(20.0),
                 child: SingleChildScrollView(
@@ -179,8 +175,8 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                 ),
               )
-            ],
+            
           ),
-        ));
+        );
   }
 }

@@ -115,10 +115,11 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             if (index > userdata.posts.length) return null;
+            int cindex = userdata.posts.length-1-index;
             // if(list[index].profile_name!=user.displayName) return Container(child: null,);
             return Container(
                 child: Image(
-              image: NetworkImage(userdata.posts[index].post_pic),
+              image: NetworkImage(userdata.posts[cindex].post_pic),
               fit: BoxFit.cover,
             ));
           },
@@ -131,13 +132,14 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
       postlistview = new SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           if (index > userdata.posts.length - 1) return null;
-          return PrivatePostCard(
+          int cindex = userdata.posts.length-1-index;
+           return PrivatePostCard(
             profilename: userdata.profile_name,
             //profileimageurl: userdata.posts[index].post_pic,
-            postimageurl: userdata.posts[index].post_pic,
-            likes: userdata.posts[index].likes,
-            id: userdata.posts[index].id,//passing post id here
-            caption: userdata.posts[index].caption,
+            postimageurl: userdata.posts[cindex].post_pic,
+            likes: userdata.posts[cindex].likes,
+            id: userdata.posts[cindex].id,//passing post id here
+            caption: userdata.posts[cindex].caption,
             user: this.user,
 
             username: userdata.username,

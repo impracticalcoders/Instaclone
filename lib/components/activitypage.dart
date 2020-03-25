@@ -84,25 +84,15 @@ class _MyActivityPageState extends State<MyActivityPage> {
     if(user!=null){
     return Scaffold(
       key:_scaffoldKey,
-      body: Container(
-        //backgroundcolor
-        color: (!isDarkMode) ? Colors.white : Colors.black,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: dynamicuicolor,
-              elevation: 3.0,
-              centerTitle: true,
-              title: Text("Activity",
-                  style: TextStyle(
-                      color: (!isDarkMode) ? Colors.black : Colors.white)),
-            ),
-            SliverList(
-             
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                // if (index > this.list.length) return null;
+      backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+        appBar: AppBar(
+    backgroundColor: dynamicuicolor,
+    centerTitle: true,
+    title: Text("Activity"),
+        ),
+          body:  ListView.builder(
+        itemBuilder: (BuildContext context,int index){
+          // if (index > this.list.length) return null;
                 if(this.list[index].uid==this.user.uid) return Container();
                 if(index==0) return Container();
                 return customcontainer(
@@ -110,14 +100,14 @@ class _MyActivityPageState extends State<MyActivityPage> {
                   profileimageurl:this.list[index].profile_pic,
                   postimageurl: this.list[index].post_pic,
                   
-                );
-              }, childCount: this.list.length),
+                );},
+               itemCount: this.list.length,
+        physics: BouncingScrollPhysics(),
               
             )
-          ],
-        ),
-      ),
-    );}
+    
+        );
+    }
     else
     return Scaffold(body: CircularProgressIndicator(),);
   }

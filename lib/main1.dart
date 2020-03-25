@@ -164,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
             index: _cIndex,
             children:_pageOptions,),
           bottomNavigationBar: BottomNavigationBar(
-            // color: dynamicuicolor,
+            backgroundColor: dynamicuicolor,
             // notchMargin: 8.0,
             type: BottomNavigationBarType.fixed,
 
