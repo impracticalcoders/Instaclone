@@ -19,11 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   Trie trieusername = new Trie.list([]);
 
   TextEditingController searchController = new TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    _loadUsers();
-  }
+
 
   _loadUsers() async {
     final response = await http.get('https://instacloneproduction.glitch.me/users');
@@ -47,16 +43,20 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       this.trieusername = new Trie.list(usernames);
     });
-    print(users.length);
+    print(this.users.length??0);
   }
 
   _searchUsers(text) {
-    trieusername.getAllWordsWithPrefix("T").toString();
     setState(() {
       this.usernames = this.trieusername.getAllWordsWithPrefix(text);
     });
   }
+  @override
+  void initState() {
+    _loadUsers();
 
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -103,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 String resultuid;
-                for(int i=0;i<this.users.length;i++){
+                for(int i=0;i<this.users.length??0;i++){
                   if (this.users[i].username == this.usernames[index]) {
                     print(this.users[i].uid);
                     resultuid = users[i].uid;
@@ -113,7 +113,7 @@ class _SearchPageState extends State<SearchPage> {
                   username: this.usernames[index],
                   uid: resultuid,
                 );
-              }, childCount: this.usernames.length),
+              }, childCount: this.usernames.length??0),
             )
           ],
         ),
