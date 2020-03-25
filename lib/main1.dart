@@ -21,13 +21,23 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMixin  {
+  @override
+  bool get wantKeepAlive => true;
+  
   final FirebaseMessaging _fcm = FirebaseMessaging();
+    List<Widget> pageList = List<Widget>();
+
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
+    pageList.addAll([ MyFeedPage(),
+    SearchPage(),
+    CreatePost(),
+    MyActivityPage(),
+    ProfilePage(),]);
   }
 
   _launchURL() async {
@@ -150,46 +160,50 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         Scaffold(
           backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-          body: _pageOptions[_cIndex],
-          bottomNavigationBar: BottomAppBar(
-            color: dynamicuicolor,
-            notchMargin: 8.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.home, color: dynamiciconcolor, size: 30),
-                    onPressed: () {
-                      _incrementTab(0);
-                    }),
-                IconButton(
+          body: IndexedStack(
+            index: _cIndex,
+            children:_pageOptions,),
+          bottomNavigationBar: BottomNavigationBar(
+            // color: dynamicuicolor,
+            // notchMargin: 8.0,
+            type: BottomNavigationBarType.fixed,
+
+            currentIndex: _cIndex,
+            onTap: _incrementTab,
+            // child: Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              items: [
+                BottomNavigationBarItem(
+                  icon:Icon(Icons.home, color: dynamiciconcolor, size: 30),
+                  title: Container()
+                   ),
+                BottomNavigationBarItem(
                     icon:
                         Icon(FontAwesomeIcons.search, color: dynamiciconcolor),
-                    onPressed: () {
-                      _incrementTab(1);
-                    }),
-                IconButton(
+                    title: Container()
+                    ),
+                BottomNavigationBarItem(
                     icon:
                         Icon(Icons.add_box, color: dynamiciconcolor, size: 30),
-                    onPressed: () {
-                      _incrementTab(2);
-                    }),
-                IconButton(
+                    title: Container()
+
+                   ),
+                BottomNavigationBarItem(
                     icon: Icon(Icons.favorite_border,
                         color: dynamiciconcolor, size: 30),
-                    onPressed: () {
-                      _incrementTab(3);
-                    }),
-                IconButton(
+                        title: Container()
+
+                    ),
+                BottomNavigationBarItem(
                     icon: Icon(FontAwesomeIcons.user, color: dynamiciconcolor),
-                    onPressed: () {
-                      _incrementTab(4);
-                    })
+                    title: Container()
+
+                    )
               ],
             ),
           ),
           //drawer: Drawer(),
-        ),
+        // ),
         ChatsPage(user),
       ],
     );

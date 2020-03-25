@@ -42,6 +42,7 @@ dependencies:
   firebase_core: ^0.4.0
   websocket_manager: ^0.2.2
   url_launcher: ^5.4.2
+  splashscreen: ^1.2.0
 
 
 dev_dependencies:

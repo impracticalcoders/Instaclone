@@ -19,10 +19,10 @@ class MyChatPage extends StatefulWidget {
 class _MyChatPageState extends State<MyChatPage> {
   int _counter = 0;
   List<ChatMessage> messages = [];
+var channel = IOWebSocketChannel.connect(
+      'wss://aakash9518-instaclone-backend.glitch.me');
 
-  var channel = IOWebSocketChannel.connect(
-      'wss://instacloneproduction.glitch.me');
-
+  
   @override
   void initState() {
    
