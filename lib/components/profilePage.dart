@@ -135,7 +135,6 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           int cindex = userdata.posts.length-1-index;
            return PrivatePostCard(
             profilename: userdata.profile_name,
-            //profileimageurl: userdata.posts[index].post_pic,
             postimageurl: userdata.posts[cindex].post_pic,
             likes: userdata.posts[cindex].likes,
             id: userdata.posts[cindex].id,//passing post id here

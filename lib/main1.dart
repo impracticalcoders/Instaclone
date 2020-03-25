@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
                       message['notification']['body']
                           .toString()
                           .contains("update")) {
-                    _launchURL();
+                    _launchURL;
                     print("URL launch attempted");
                     
                   }
@@ -175,28 +175,33 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
               items: [
                 BottomNavigationBarItem(
                   icon:Icon(Icons.home, color: dynamiciconcolor, size: 30),
-                  title: Container()
+                  title: Container(),
+                  activeIcon:Icon(Icons.home, color: Colors.redAccent, size: 30),
                    ),
                 BottomNavigationBarItem(
                     icon:
                         Icon(FontAwesomeIcons.search, color: dynamiciconcolor),
-                    title: Container()
+                    title: Container(),
+                    activeIcon: Icon(FontAwesomeIcons.search,color: Colors.redAccent),
                     ),
                 BottomNavigationBarItem(
                     icon:
                         Icon(Icons.add_box, color: dynamiciconcolor, size: 30),
-                    title: Container()
+                    title: Container(),
+                    activeIcon: Icon(Icons.add_box, color: Colors.redAccent, size: 30),
 
                    ),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.favorite_border,
                         color: dynamiciconcolor, size: 30),
                         title: Container()
-
+                     ,activeIcon: Icon(Icons.favorite,
+                        color: Colors.redAccent, size: 30), 
                     ),
                 BottomNavigationBarItem(
                     icon: Icon(FontAwesomeIcons.user, color: dynamiciconcolor),
-                    title: Container()
+                    title: Container(),
+                    activeIcon: Icon(FontAwesomeIcons.userAlt, color: Colors.redAccent),
 
                     )
               ],

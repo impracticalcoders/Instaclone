@@ -17,23 +17,50 @@ _launchURL() async {
     throw 'Could not launch $url';
   }
 }
+_launchAPKdownload() async {
+  const url = 'https://bit.ly/instaclone1';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     String logourl=(isDarkMode)?'assets/TeamIC1.png':'assets/TeamIC2.png';
+    List<String> developers =["Suraj Kumar","Aakash Pothepalli","Vridhi Kamath","Soundarya","Sankalp Shanbhag"];
+    developers.shuffle();
+    String namelist="";
+    for(int i= 0;i<developers.length;i++){
+      namelist+="\n"+developers[i];
+    }
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicbgcolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Colors.black;
+        Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
     return new Scaffold(
       appBar: new AppBar(
           centerTitle: true,
           title:appBarTitle,
-          
+          backgroundColor: dynamicuicolor,
+          actions: <Widget>[
+            IconButton(
+                    onPressed:_launchAPKdownload,
+                    icon: Icon(Icons.system_update_alt,semanticLabel: "Update",),
+                    color: Colors.green,
+                    splashColor: Colors.white,
+                    //iconSize: 40,
+                    
+                    tooltip: "Download the latest apk",)
+          ],
       ),
       
       backgroundColor: dynamicbgcolor,
       //no need of appbar for this page
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: Center(
@@ -55,7 +82,7 @@ _launchURL() async {
                 ),
                 
                  Text(
-                  'Instaclone is a limited feature yet working remake of Instagram .',
+                  'Instaclone is a limited feature working remake of Instagram .',
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'Pacifico',
@@ -66,7 +93,7 @@ _launchURL() async {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  '\nDeveloped over a period of three days by\nteam Impractical Coders',
+                  '\nDeveloped in 10 days by\nteam Impractical Coders',
                   style: TextStyle(
                     fontSize: 17,
                     fontFamily: 'Pacifico',
@@ -77,7 +104,7 @@ _launchURL() async {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  '.\nSuraj Kumar\nAakash Pothepalli\nVridhi Kamath\nSoundarya\nSankalp Shanbhag\n.',
+                  '.${namelist}\n.',
                   style: TextStyle(
                     fontSize: 17,
                     fontFamily: 'Pacifico',
@@ -107,7 +134,7 @@ _launchURL() async {
                 ),
                 Row(
                   children: <Widget>[
-                    Expanded(child: Image.network("https://cdn.dribbble.com/users/17559/screenshots/6664357/figma.png",cacheWidth: 150,)),
+                    Expanded(child: Image.asset('assets/flutterlogo.png',width: 150,height: 100,)),
                     Expanded(child:Image.network("https://pluralsight.imgix.net/paths/path-icons/nodejs-601628d09d.png",cacheWidth: 150,))
                   ],
                 ),
@@ -144,7 +171,7 @@ _launchURL() async {
                 ),
                 Center(
                   child: Text(
-                    'We are looking for internships :)',
+                    'We are looking for internships\nSend us a mail at\ncodersimpractical@gmail.com\nor tap the button below',
                     style: TextStyle(
                       fontSize: 17,
                       fontFamily: 'Pacifico',
@@ -155,15 +182,23 @@ _launchURL() async {
                   ),
                 ),
               SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
              Center(
-                  child: RaisedButton(
+                  child: IconButton(
                     onPressed:_launchURL,
-                    child: Text("Email"),)
+                    icon: Icon(Icons.mail,semanticLabel: "Mail us",),
+                    color: Colors.green,
+                    splashColor: Colors.white,
+                    iconSize: 40,
+                    
+                    tooltip: "Send an email to Impractical Coders",)
                 ),
                 
-              
+                Divider(
+                  height: 25,
+                  color: Colors.red[600],
+                ),
                 Image(
                   image: AssetImage(logourl),
                   height: 150,
