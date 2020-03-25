@@ -94,9 +94,9 @@ class _ChatsPageState extends State<ChatsPage> {
           actions: <Widget>[
             // Icon(Icons.message),
             IconButton(
-              icon: Icon(Icons.info,),
+              icon: Icon(Icons.warning,color: dynamiciconcolor,),
               onPressed: (){
-                showSnack('DM will work only if both the users are online');
+                showSnack('Direct Messaging works only if both the users are online and have the chat opened.');
               },
               )
           ],

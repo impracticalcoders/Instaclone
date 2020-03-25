@@ -40,7 +40,7 @@ void initState() {
     final response = await http.post(url, headers: headers, body: json);
   
   if(response.statusCode==400){
-    print("fill in all the fields");
+    print("Fill in all the fields");
   }
   else if(response.statusCode==200){
     print("success");
@@ -147,14 +147,23 @@ void initState() {
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
+                      Text(
+                '* Please note that your account is public and your posts can be interacted with by all users of the app.',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.left,
+              ),
                     ]),
               ),
             ],
           ),
         ),
-      ),),
+      ),
+      ),
     );
   }
 }

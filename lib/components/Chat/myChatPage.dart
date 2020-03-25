@@ -102,7 +102,7 @@ var channel = IOWebSocketChannel.connect(
                 
                 messageContainerDecoration:BoxDecoration(
                   color: Colors.blue,
-
+                  
                   borderRadius: new BorderRadius.only(
                     topLeft: const Radius.circular(20.0),
                     topRight: const Radius.circular(20.0),
@@ -121,7 +121,7 @@ var channel = IOWebSocketChannel.connect(
                 inputToolbarPadding: EdgeInsets.only(left: 12),
                 inputContainerStyle: BoxDecoration(
                   border: Border.all(color: Colors.grey),
-                
+                  
                   //color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                 ),
