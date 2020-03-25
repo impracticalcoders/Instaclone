@@ -26,7 +26,7 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   void initState() { 
     _usersController = new StreamController();
-  
+    loadChats();
 
     super.initState();
     
@@ -54,19 +54,24 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
 
-  showSnack() {
+  showSnack(text) {
     return scaffoldKey.currentState.showSnackBar(
       SnackBar(
-        content: Text('New content loaded'),
+        content: Text(text),
       ),
     );
   }
   Future<Null> _handleRefresh() async {
     fetchUsers().then((res) async {
       _usersController.add(res);
-      showSnack();
+      showSnack('New content loaded');
       return null;
     });
+  }
+
+  Future<bool> _onPressBack() async {
+    this.channel.sink.close();
+    return true;
   }
 
 
@@ -78,70 +83,79 @@ class _ChatsPageState extends State<ChatsPage> {
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
-    return Scaffold(
-      
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text('Direct'),
-        backgroundColor: dynamicuicolor,
-        actions: <Widget>[
-          Icon(Icons.message)
-        ],
-      ),
-      body: StreamBuilder(
-        stream: _usersController.stream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // print('Has error: ${snapshot.hasError}');
-          // print('Has data: ${snapshot.hasData}');
-          // print('Snapshot Data ${snapshot.data}');
+    return WillPopScope(
+      onWillPop: _onPressBack,
+          child: Scaffold(
+        
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: Text('Direct'),
+          backgroundColor: dynamicuicolor,
+          actions: <Widget>[
+            // Icon(Icons.message),
+            IconButton(
+              icon: Icon(Icons.info,),
+              onPressed: (){
+                showSnack('DM will work only if both the users are online');
+              },
+              )
+          ],
+        ),
+        body: StreamBuilder(
+          stream: _usersController.stream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            // print('Has error: ${snapshot.hasError}');
+            // print('Has data: ${snapshot.hasData}');
+            // print('Snapshot Data ${snapshot.data}');
 
-          if (snapshot.hasError) {
-            return Text(snapshot.error);
-          }
+            if (snapshot.hasError) {
+              return Text(snapshot.error);
+            }
 
-          if (snapshot.hasData) {
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: Scrollbar(
-                    child: RefreshIndicator(
-                      onRefresh: _handleRefresh,
-                      child: ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          var user = snapshot.data[index];
-                          if(user['uid']!= widget.user.uid){
-                            return ChatWidget(
-                              profileName:user['profile_name'] ,
-                              profilePic: user['profile_pic'],
-                              subTitle: "Start a conversation",
-                              chatUserUid: user['uid'],
-                              user: widget.user,);
-                            }
-                          else return Container();
-                        
-                        },
+            if (snapshot.hasData) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Scrollbar(
+                      child: RefreshIndicator(
+                        onRefresh: _handleRefresh,
+                        child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            var user = snapshot.data[index];
+                            if(user['uid']!= widget.user.uid){
+                              return ChatWidget(
+                                profileName:user['profile_name'] ,
+                                profilePic: user['profile_pic'],
+                                subTitle: "Start a conversation",
+                                chatUserUid: user['uid'],
+                                user: widget.user,);
+                              }
+                            else return Container();
+                          
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          }
+                ],
+              );
+            }
 
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          if (!snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            return Text('No Posts');
-          }
-        },
-        ),
+            if (!snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
+              return Text('No Posts');
+            }
+          },
+          ),
+      ),
     );
   }
 }

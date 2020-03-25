@@ -141,67 +141,73 @@ class _MyFeedPageState extends State<MyFeedPage> {
         ),
       ),
     );*/
+    if (this.list.length==0) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+    else 
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-      appBar: AppBar(
-        backgroundColor: dynamicuicolor,
-        centerTitle: true,
-        title: Text("Instaclone",
-            style: TextStyle(
-                color: (!isDarkMode) ? Colors.black : Colors.white,
-                fontFamily: 'Billabong',
-                fontSize: 30)),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: new Icon(
-              Icons.refresh,
-              color: dynamiciconcolor,
-            ),
-            //onPressed: () => Scaffold.of(context).openDrawer(),
-            onPressed: () {
-              refresh();
-            },
-          ),
+        key: scaffoldKey,
+        backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+        appBar: AppBar(
+    backgroundColor: dynamicuicolor,
+    centerTitle: true,
+    title: Text("Instaclone",
+        style: TextStyle(
+            color: (!isDarkMode) ? Colors.black : Colors.white,
+            fontFamily: 'Billabong',
+            fontSize: 30)),
+    leading: Builder(
+      builder: (context) => IconButton(
+        icon: new Icon(
+          Icons.refresh,
+          color: dynamiciconcolor,
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(FontAwesomeIcons.paperPlane),
-            color: dynamiciconcolor,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => ChatsPage(this.user)));
-            },
-          ),
-        ],
+        //onPressed: () => Scaffold.of(context).openDrawer(),
+        onPressed: () {
+          refresh();
+        },
       ),
-      body: ListView.builder(
-      itemBuilder: (BuildContext context,int index){
-         if (index > list.length ) return null;
-         if(index==list.length){
-           return (!isDarkMode) ?Image(image:endthinglight,fit: BoxFit.scaleDown,)  : Image(image:endthingdark,fit: BoxFit.scaleDown,);
-           
-         }
-                return PostCard(
-                  profilename: list[index].profile_name,
-                  //profileimageurl: list[index].post_pic,
-                  postimageurl: list[index].post_pic,
-                  likes: list[index].likes,
-                  id: list[index].id,
-                  caption: list[index].caption,
-                  user:this.user,
-                  liked : list[index].liked,
-                  username: list[index].username,
-                  profileimageurl: list[index].profile_pic,
-                  scaffoldKey: this.scaffoldKey
-                );
-                
-      },
-      itemCount: list.length+1,
-      physics: BouncingScrollPhysics(),
-      )
-    );
+    ),
+    actions: <Widget>[
+      IconButton(
+        icon: Icon(FontAwesomeIcons.paperPlane),
+        color: dynamiciconcolor,
+        onPressed: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => ChatsPage(this.user)));
+        },
+      ),
+    ],
+        ),
+        body: ListView.builder(
+        itemBuilder: (BuildContext context,int index){
+     if (index > list.length ) return null;
+     if(index==list.length){
+       return (!isDarkMode) ?Image(image:endthinglight,fit: BoxFit.scaleDown,)  : Image(image:endthingdark,fit: BoxFit.scaleDown,);
+       
+     }
+            return PostCard(
+              profilename: list[index].profile_name,
+              //profileimageurl: list[index].post_pic,
+              postimageurl: list[index].post_pic,
+              likes: list[index].likes,
+              id: list[index].id,
+              caption: list[index].caption,
+              user:this.user,
+              liked : list[index].liked,
+              username: list[index].username,
+              profileimageurl: list[index].profile_pic,
+              scaffoldKey: this.scaffoldKey
+            );
+            
+        },
+        itemCount: list.length+1,
+        physics: BouncingScrollPhysics(),
+        )
+      );
     }
 }
