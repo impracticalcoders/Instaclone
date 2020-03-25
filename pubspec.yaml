@@ -36,11 +36,11 @@ dependencies:
   random_string: ^2.0.1
   font_awesome_flutter: ^8.7.0
   flare_flutter: ^2.0.1
-  flutter_socket_io: ^0.6.0
   cached_network_image: ^2.0.0
   flutter_cache_manager: ^1.1.3
   firebase_messaging: ^5.0.2
   firebase_core: ^0.4.0
+  websocket_manager: ^0.2.2
   url_launcher: ^5.4.2
 
 
