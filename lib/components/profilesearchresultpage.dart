@@ -82,7 +82,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
             crossAxisCount: 3, mainAxisSpacing: 4, crossAxisSpacing: 4),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            if (index > userdata.posts.length) return null;
+            if (index > userdata.posts.length??0) return Container();
             // if(list[index].profile_name!=user.displayName) return Container(child: null,);
             return Container(
                 child: Image(
@@ -90,7 +90,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
               fit: BoxFit.cover,
             ));
           },
-          childCount: userdata.posts.length,
+          childCount: userdata.posts.length??0,
         ),
       );
 
@@ -98,7 +98,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
     if (userdata != null)
       postlistview = new SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-          if (index > userdata.posts.length - 1) return null;
+          if (index > userdata.posts.length??0 -1 ) return Container();
           return PrivatePostCard(
             profilename: userdata.profile_name,
             //profileimageurl: userdata.posts[index].post_pic,
@@ -111,7 +111,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
             username: userdata.username,
             profileimageurl: userdata.profile_pic,
           );
-        }, childCount: userdata.posts.length),
+        }, childCount: userdata.posts.length??0),
       );
     if (userdata != null) {
       return Scaffold(
@@ -132,10 +132,10 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                    if (index > 1) return null;
+                    if (index > 1) return Container();
                     return UserProfilePage(
                         profilename: profilename,
-                        postcount: userdata.posts.length,
+                        postcount: userdata.posts.length??0,
                         bio: bio,
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
