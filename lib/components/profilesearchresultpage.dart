@@ -3,10 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:Instaclone/components/privatepostcardwidget.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'loginpage.dart';
-import 'Signup.dart';
-import 'credits.dart';
 import 'mainfeed.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -41,7 +37,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
         this.userdata =
             Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
         //.dynamic((data) => new Userdetails.fromJson(data))
-        ;
+        
         profilename = userdata.profile_name;
         bio = userdata.bio;
         // print(userdata.posts.length);

@@ -6,6 +6,7 @@ import 'package:Instaclone/main1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/io.dart';
 
 class ChatsPage extends StatefulWidget {
   FirebaseUser user;
@@ -19,15 +20,19 @@ class _ChatsPageState extends State<ChatsPage> {
   StreamController _usersController;
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  var channel = IOWebSocketChannel.connect(
+      'wss://aakash9518-instaclone-backend.glitch.me');
+
   @override
   void initState() { 
     _usersController = new StreamController();
-    loadChats();
-    
+  
+
     super.initState();
     
   }
 
+    
   fetchUsers() async {
     final response = await http.get('https://instacloneproduction.glitch.me/users');
     // var users = json.decode(response.body) ;
@@ -67,7 +72,8 @@ class _ChatsPageState extends State<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    
+          this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
+
      bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
