@@ -121,7 +121,7 @@ class _CreatePostState extends State<CreatePost> {
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
     return Scaffold(
-        
+        key: _scaffoldKey,
         backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
         appBar: AppBar(
     backgroundColor: dynamicuicolor,
