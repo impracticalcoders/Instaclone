@@ -1,9 +1,9 @@
-#Instaclone
+# Instaclone
 
 An limited feature working remake of the popular Instagram app.
 Bringing you closer to the people and things you love in these quarantined times.
 
-###Features :
+### Features :
 - Post moments from your everyday life and content that can bring a smile
 - Manage your posts and edit your profile
 - Like content that you find amusing with a simple double tap 
@@ -13,4 +13,4 @@ Bringing you closer to the people and things you love in these quarantined times
 
 A 10 day build by team Impractical Coders - Sankalp, Soundarya, Vridhi, Aakash & Suraj
 
-##Download the app from bit.ly/instaclone1 and share it with your peers .
+## Download the app from bit.ly/instaclone1 and share it with your peers .
