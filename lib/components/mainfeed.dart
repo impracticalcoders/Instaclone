@@ -68,6 +68,9 @@ class _MyFeedPageState extends State<MyFeedPage> {
 
   void refresh() {
     fetchPosts();
+    setState(() {
+     ; 
+    });
     print(list.length);
   }
   AssetImage endthingdark = new AssetImage('assets/enddark.png');
