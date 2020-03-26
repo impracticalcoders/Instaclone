@@ -126,8 +126,8 @@ class _ChatsPageState extends State<ChatsPage> {
                             var user = snapshot.data[index];
                             if(user['uid']!= widget.user.uid){
                               return ChatWidget(
-                                profileName:user['profile_name'] ,
-                                profilePic: user['profile_pic'],
+                                profileName:user['profile_name']??"Anonymous" ,
+                                profilePic: user['profile_pic']??"https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png",
                                 subTitle: "Start a conversation",
                                 chatUserUid: user['uid'],
                                 user: widget.user,);
