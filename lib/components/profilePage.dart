@@ -20,10 +20,11 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin {
-    @override
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
   bool get wantKeepAlive => true;
-  
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseUser user;
   int newlength;
@@ -36,8 +37,8 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
 
   Future<Void> fetchPosts() async {
     print("function called");
-    final response = await http
-        .get('https://instacloneproduction.glitch.me/user_details?uid=${user.uid}');
+    final response = await http.get(
+        'https://instacloneproduction.glitch.me/user_details?uid=${user.uid}');
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -46,9 +47,9 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         this.userdata =
             Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
         //.dynamic((data) => new Userdetails.fromJson(data))
-        
-        profilename = userdata.profile_name??"";
-        bio = userdata.bio??"";
+
+        profilename = userdata.profile_name ?? "";
+        bio = userdata.bio ?? "";
         // print(userdata.posts.length);
       });
     } else {
@@ -81,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         setState(() {
           this.user = user;
           print("State set");
-          profilename ="";
+          profilename = "";
           userdata = new Userdetails(
               'Loading...',
               'Instagrammer',
@@ -97,6 +98,95 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         });
       }
     });
+  }
+
+  _deletepostreq() async {
+    //https://insta-clone-backend.now.sh
+
+    // set up POST request arguments
+    String url = 'https://instacloneproduction.glitch.me/delete_post';
+
+    Map<String, String> headers = {"Content-type": "application/json"};
+    int i;
+    int intialpostcount = userdata.posts.length;
+    for (i = 0; i < userdata.posts.length; i++) {
+      print(
+          "Delete requested for post_id${userdata.posts[i].id} by Uid: ${user.uid}");
+      String json =
+          '{"post_id": "${userdata.posts[i].id}","uid" : "${user.uid}"}';
+      // make POST request
+      final response = await http.post(url, headers: headers, body: json);
+      // check the status code for the result
+      int statusCode = response.statusCode;
+      print("POST delete req response ${statusCode}");
+      if (response.statusCode == 200) {
+        print("Post deleted");
+      } else {
+        print("Post not deleted");
+        var snackbar = new SnackBar(
+            content: new Text("There was a problem deleting your posts"));
+        Scaffold.of(context).showSnackBar(snackbar);
+
+        break;
+      }
+    }
+    if (i == intialpostcount) {
+      await _deleteuserdata();
+      await deleteacc();
+    }
+  }
+
+    _deleteuserdata() async {
+    //https://insta-clone-backend.now.sh
+
+    // set up POST request arguments
+    String url = 'https://aakash9518-instaclone-backend.glitch.me/delete_user';
+
+    Map<String, String> headers = {"Content-type": "application/json"};
+    
+    
+      print(
+          "Delete requested for Uid: ${user.uid}");
+      String json =
+          '{"uid" : "${user.uid}"}';
+      // make POST request
+      final response = await http.post(url, headers: headers, body: json);
+      // check the status code for the result
+      int statusCode = response.statusCode;
+      print("Userdata delete req response ${statusCode}");
+      if (response.statusCode == 200) {
+        print("Userdata deleted");
+      } else {
+        print("Userdata not deleted");
+        var snackbar = new SnackBar(
+            content: new Text("There was a problem deleting your profile data"));
+        Scaffold.of(context).showSnackBar(snackbar);
+
+        
+      }
+    
+   
+  }
+
+  @override
+  Future<void> deleteacc() async {
+    FirebaseUser current = await auth.currentUser();
+
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    await current.reauthenticateWithCredential(credential);
+    await current.delete();
+    await auth.signOut();
+    await googleSignIn.signOut();
+  
+    print("User account deleted");
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   int _viewmode = 0;
@@ -115,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             if (index > userdata.posts.length) return null;
-            int cindex = userdata.posts.length-1-index;
+            int cindex = userdata.posts.length - 1 - index;
             // if(list[index].profile_name!=user.displayName) return Container(child: null,);
             return Container(
                 child: Image(
@@ -126,18 +216,18 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           childCount: userdata.posts.length,
         ),
       );
-      
+
     SliverList postlistview;
     if (userdata != null)
       postlistview = new SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           if (index > userdata.posts.length - 1) return null;
-          int cindex = userdata.posts.length-1-index;
-           return PrivatePostCard(
+          int cindex = userdata.posts.length - 1 - index;
+          return PrivatePostCard(
             profilename: userdata.profile_name,
             postimageurl: userdata.posts[cindex].post_pic,
             likes: userdata.posts[cindex].likes,
-            id: userdata.posts[cindex].id,//passing post id here
+            id: userdata.posts[cindex].id, //passing post id here
             caption: userdata.posts[cindex].caption,
             user: this.user,
 
@@ -167,31 +257,66 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                         icon: Icon(Icons.info),
                         color: dynamiciconcolor,
                         onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreditsPage()));
-                         
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreditsPage()));
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.exit_to_app),
                         color: dynamiciconcolor,
-                        onPressed: (){
-                         showCupertinoModalPopup(
+                        onPressed: () {
+                          showCupertinoModalPopup(
                               context: context,
                               builder: (BuildContext context) =>
                                   CupertinoActionSheet(
-                                    title: Text("Logout"),
-                                    message:
-                                        const Text('Do you want to proceed?'),
+                                    title: Text("Logout or Delete"),
+                                    message: const Text(
+                                        'Please tap on the desired action'),
                                     actions: <Widget>[
                                       CupertinoActionSheetAction(
-                                        isDestructiveAction: true,
-                                        child: const Text('Yes'),
+                                        isDestructiveAction: false,
+                                        child: const Text('Logout'),
                                         onPressed: () {
-                                         signOut();
+                                          signOut();
+                                        },
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
+                                        child: const Text('Delete account'),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          showCupertinoModalPopup(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  CupertinoActionSheet(
+                                                    title: Text(
+                                                        "Instaclone Account Deletion"),
+                                                    message: const Text(
+                                                        'This is a destructive action and cannot be reverted.\nAll your posts will be deleted.\nYou will be required to re-authenticate with your Google Account before deleting.\n'),
+                                                    actions: <Widget>[
+                                                      CupertinoActionSheetAction(
+                                                        isDestructiveAction:
+                                                            true,
+                                                        child: const Text(
+                                                            'Understood, proceed to delete'),
+                                                        onPressed: () {
+                                                          _deletepostreq();
+                                                        },
+                                                      ),
+                                                    ],
+                                                    cancelButton:
+                                                        CupertinoActionSheetAction(
+                                                      child:
+                                                          const Text('Cancel'),
+                                                      isDefaultAction: true,
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, 'Cancel');
+                                                      },
+                                                    ),
+                                                  ));
                                         },
                                       ),
                                     ],
@@ -203,8 +328,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                                       },
                                     ),
                                   ));
-                        }
-                       ,
+                        },
                       ),
                     ]),
                 SliverList(
@@ -214,8 +338,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                     return UserProfilePage(
                         profilename: profilename,
                         postcount: userdata.posts.length,
-                        bio: bio??"",
-
+                        bio: bio ?? "",
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
                             : userdata.profile_pic);
@@ -229,7 +352,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.grid_on,color: (_viewmode==0)?Colors.red :dynamiciconcolor ,),
+                          icon: Icon(
+                            Icons.grid_on,
+                            color: (_viewmode == 0)
+                                ? Colors.red
+                                : dynamiciconcolor,
+                          ),
                           onPressed: () {
                             setState(() {
                               _viewmode = 0;
@@ -237,7 +365,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.view_list,color: (_viewmode==1)?Colors.red :dynamiciconcolor ,),
+                          icon: Icon(
+                            Icons.view_list,
+                            color: (_viewmode == 1)
+                                ? Colors.red
+                                : dynamiciconcolor,
+                          ),
                           onPressed: () {
                             setState(() {
                               _viewmode = 1;
