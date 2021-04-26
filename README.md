@@ -16,4 +16,4 @@ Bringing you closer to the people and things you love in these quarantined times
 
 A 10 day build by team Impractical Coders - Sankalp, Soundarya, Vridhi, [Aakash P](https://github.com/aakashpothepalli) & Suraj
 
-### Download the app from [bit.ly/instaclone1](bit.ly/instaclone1) and share it with your peers .
+### Download the app from [bit.ly/instaclone1](https://bit.ly/instaclone1) and share it with your peers .
