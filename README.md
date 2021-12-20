@@ -1,7 +1,9 @@
 # Instaclone
 
-An limited feature working remake of the popular Instagram app.
-Bringing you closer to the people and things you love in these quarantined times.
+A limited feature working remake of the popular Instagram app.
+Bringing you closer to the people and things you love in these quarantined times!
+
+P.S: Instaclone is in the process of getting an upgrade!
 
 ***
 ### Features :
