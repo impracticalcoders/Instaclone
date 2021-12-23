@@ -36,7 +36,7 @@ class _SignupPageState extends State<SignupPage> {
   _updateProfileRequest() async {
     // set up POST request arguments
     Uri url =
-        Uri.parse('https://instacloneproduction.glitch.me/profile_update');
+        Uri.parse('https://instaclonebackendrit.herokuapp.com/profile_update');
     Map<String, String> headers = {"Content-type": "application/json"};
     String json =
         '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}","profile_pic":"${this.user.photoURL}"}';
@@ -158,7 +158,15 @@ class _SignupPageState extends State<SignupPage> {
                           ],
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 30,
+                        ),
+                        Text(
+                          '* Please note that your account is public and your posts can be interacted with by all users of the app.',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.left,
                         ),
                       ]),
                 ),

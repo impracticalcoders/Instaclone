@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<Void> fetchPosts() async {
     print("function called");
     final response = await http.get(Uri.parse(
-        'https://instacloneproduction.glitch.me/user_details?uid=${user.uid}'));
+        'https://instaclonebackendrit.herokuapp.com/user_details?uid=${user.uid}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -97,6 +97,90 @@ class _ProfilePageState extends State<ProfilePage>
         this.profilename = 'Instagrammer';
       });
     }
+  }
+
+  _deletepostreq() async {
+    //https://insta-clone-backend.now.sh
+
+    // set up POST request arguments
+    String url = 'https://instaclonebackendrit.herokuapp.com/delete_post';
+
+    Map<String, String> headers = {"Content-type": "application/json"};
+    int i;
+    int intialpostcount = userdata.posts.length;
+    for (i = 0; i < userdata.posts.length; i++) {
+      print(
+          "Delete requested for post_id${userdata.posts[i].id} by Uid: ${user.uid}");
+      String json =
+          '{"post_id": "${userdata.posts[i].id}","uid" : "${user.uid}"}';
+      // make POST request
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: json);
+      // check the status code for the result
+      int statusCode = response.statusCode;
+      print("POST delete req response ${statusCode}");
+      if (response.statusCode == 200) {
+        print("Post deleted");
+      } else {
+        print("Post not deleted");
+        var snackbar = new SnackBar(
+            content: new Text("There was a problem deleting your posts"));
+        Scaffold.of(context).showSnackBar(snackbar);
+
+        break;
+      }
+    }
+    if (i == intialpostcount) {
+      await _deleteuserdata();
+      await deleteacc();
+    }
+  }
+
+  _deleteuserdata() async {
+    //https://insta-clone-backend.now.sh
+
+    // set up POST request arguments
+    String url = 'https://instaclonebackendrit.herokuapp.com/delete_user';
+
+    Map<String, String> headers = {"Content-type": "application/json"};
+
+    print("Delete requested for Uid: ${user.uid}");
+    String json = '{"uid" : "${user.uid}"}';
+    // make POST request
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: json);
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    print("Userdata delete req response ${statusCode}");
+    if (response.statusCode == 200) {
+      print("Userdata deleted");
+    } else {
+      print("Userdata not deleted");
+      var snackbar = new SnackBar(
+          content: new Text("There was a problem deleting your profile data"));
+      Scaffold.of(context).showSnackBar(snackbar);
+    }
+  }
+
+  @override
+  Future<void> deleteacc() async {
+    User current = auth.currentUser;
+
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    await current.reauthenticateWithCredential(credential);
+    await current.delete();
+    await auth.signOut();
+    await googleSignIn.signOut();
+
+    print("User account deleted");
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   int _viewmode = 0;
@@ -181,15 +265,52 @@ class _ProfilePageState extends State<ProfilePage>
                               context: context,
                               builder: (BuildContext context) =>
                                   CupertinoActionSheet(
-                                    title: Text("Logout"),
-                                    message:
-                                        const Text('Do you want to proceed?'),
+                                    title: Text("Logout or Delete"),
+                                    message: const Text(
+                                        'Please tap on the desired action'),
                                     actions: <Widget>[
                                       CupertinoActionSheetAction(
-                                        isDestructiveAction: true,
-                                        child: const Text('Yes'),
+                                        isDestructiveAction: false,
+                                        child: const Text('Logout'),
                                         onPressed: () {
                                           signOut();
+                                        },
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
+                                        child: const Text('Delete account'),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          showCupertinoModalPopup(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  CupertinoActionSheet(
+                                                    title: Text(
+                                                        "Instaclone Account Deletion"),
+                                                    message: const Text(
+                                                        'This is a destructive action and cannot be reverted.\nAll your posts will be deleted.\nYou will be required to re-authenticate with your Google Account before deleting.\n'),
+                                                    actions: <Widget>[
+                                                      CupertinoActionSheetAction(
+                                                        isDestructiveAction:
+                                                            true,
+                                                        child: const Text(
+                                                            'Understood, proceed to delete'),
+                                                        onPressed: () {
+                                                          _deletepostreq();
+                                                        },
+                                                      ),
+                                                    ],
+                                                    cancelButton:
+                                                        CupertinoActionSheetAction(
+                                                      child:
+                                                          const Text('Cancel'),
+                                                      isDefaultAction: true,
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, 'Cancel');
+                                                      },
+                                                    ),
+                                                  ));
                                         },
                                       ),
                                     ],

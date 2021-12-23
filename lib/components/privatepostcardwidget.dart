@@ -52,7 +52,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('InstaClone ${widget.profilename}',
           'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text: 'Check out ${widget.profilename}\'s post on Instaclone');
+          text: 'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
     } catch (e) {
       print('error: $e');
     }

@@ -65,13 +65,13 @@ class _MyChatPageState extends State<MyChatPage> {
           stream: this.channel.stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data);
+              // print(snapshot.data);
               var data = json.decode(snapshot.data);
 
               if ((data['type'] == "message" && data['in_uid'] == widget.uid) ||
                   (data['type'] == "offline" &&
                       data['dest_uid'] == widget.uid)) {
-                print(snapshot.data);
+                // print(snapshot.data);
                 var message = data["message"];
                 this.messages.add(ChatMessage(
                       text: message,

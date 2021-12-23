@@ -33,7 +33,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
   fetchUsers() async {
     final response = await http
-        .get(Uri.parse('https://instacloneproduction.glitch.me/users'));
+        .get(Uri.parse('https://instaclonebackendrit.herokuapp.com/users'));
     // var users = json.decode(response.body) ;
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -94,7 +94,8 @@ class _ChatsPageState extends State<ChatsPage> {
                 Icons.info,
               ),
               onPressed: () {
-                showSnack('DM will work only if both the users are online');
+                showSnack(
+                    'Direct Messaging works only if both the users are online and have the chat opened.');
               },
             )
           ],

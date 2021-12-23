@@ -60,7 +60,7 @@ class _PostCardState extends State<PostCard> {
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('InstaClone ${widget.profilename}',
           'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text: 'Check out ${widget.profilename}\'s post on Instaclone');
+          text: 'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
     } catch (e) {
       print('error: $e');
     }
@@ -108,7 +108,7 @@ class _PostCardState extends State<PostCard> {
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return Card(
         color: (!isDarkMode) ? Colors.white : Colors.black,
-        elevation: 0.1,
+        elevation: 0.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -146,7 +146,10 @@ class _PostCardState extends State<PostCard> {
                   ),
                   new IconButton(
                     icon: Icon(Icons.more_vert),
-                    onPressed: null,
+                    onPressed:(){
+                      var snackbar = new SnackBar(content: new Text("There aren't any additional options for this post"));
+                          widget.scaffoldKey.currentState.showSnackBar(snackbar);
+                    },
                   )
                 ],
               ),
@@ -234,9 +237,15 @@ class _PostCardState extends State<PostCard> {
                           onPressed: () async => await _shareImageFromUrl()),
                     ],
                   ),
-                  new Icon(
-                    Icons.bookmark_border,
-                    size: 28,
+                  new IconButton(
+                    icon: Icon(
+                      Icons.bookmark_border,
+                    ),
+                    iconSize: 28,
+                    onPressed: (){
+                      var snackbar = new SnackBar(content: new Text("This feature isn't available in the current version of the app!"));
+                          widget.scaffoldKey.currentState.showSnackBar(snackbar);
+                    },
                   )
                 ],
               ),
