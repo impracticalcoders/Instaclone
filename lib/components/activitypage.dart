@@ -13,47 +13,45 @@ class MyActivityPage extends StatefulWidget {
 
 class _MyActivityPageState extends State<MyActivityPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-    var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   List<Like> list = List();
-  FirebaseUser user;
+  User user;
   @override
-  void initState ()  {
+  void initState() {
     super.initState();
-    
-   initialize();
- 
+
+    initialize();
   }
-  void initialize() async{
-  var user = await getUser();
-  
+
+  void initialize() async {
+    var user = await getUser();
+
     if (user != null) {
       setState(() {
         this.user = user;
-       
       });
       print('Accessing activity page as ' + user.displayName);
 
       fetchActivities();
-      
+
       print(list.length);
     } else {
       print("not logged in");
     }
   }
 
-  
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   Future<Void> fetchActivities() async {
-    final response = await http
-        .get('https://instacloneproduction.glitch.me/activity?uid=${user.uid}');
+    final response = await http.get(Uri.parse(
+        'https://instacloneproduction.glitch.me/activity?uid=${user.uid}'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      
+
       setState(() {
         this.list = (json.decode(response.body) as List)
             .map((data) => new Like.fromJson(data))
@@ -67,11 +65,9 @@ class _MyActivityPageState extends State<MyActivityPage> {
       throw Exception('Failed to load likes');
     }
   }
-  
-  
 
   /// the url should be https://insta-clone-backend.now.sh/activity?uid=${user.uid}
-  /// user.uid to be got from firebaseUser
+  /// user.uid to be got from User
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
@@ -80,36 +76,34 @@ class _MyActivityPageState extends State<MyActivityPage> {
     Color dynamictextcolor =
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
-      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
-    if(user!=null){
-    return Scaffold(
-      key:_scaffoldKey,
-      backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-        appBar: AppBar(
-    backgroundColor: dynamicuicolor,
-    centerTitle: true,
-    title: Text("Activity"),
-        ),
-          body:  ListView.builder(
-        itemBuilder: (BuildContext context,int index){
-          // if (index > this.list.length) return null;
-                if(this.list[index].uid==this.user.uid) return Container();
-                if(index==0) return Container();
-                return customcontainer(
-                  activity_text: this.list[index].activity_text,
-                  profileimageurl:this.list[index].profile_pic,
-                  postimageurl: this.list[index].post_pic,
-                  
-                );},
-               itemCount: this.list.length,
-        physics: BouncingScrollPhysics(),
-              
-            )
-    
-        );
-    }
-    else
-    return Scaffold(body: CircularProgressIndicator(),);
+        'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
+    if (user != null) {
+      return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+          appBar: AppBar(
+            backgroundColor: dynamicuicolor,
+            centerTitle: true,
+            title: Text("Activity"),
+          ),
+          body: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              // if (index > this.list.length) return null;
+              if (this.list[index].uid == this.user.uid) return Container();
+              if (index == 0) return Container();
+              return customcontainer(
+                activity_text: this.list[index].activity_text,
+                profileimageurl: this.list[index].profile_pic,
+                postimageurl: this.list[index].post_pic,
+              );
+            },
+            itemCount: this.list.length,
+            physics: BouncingScrollPhysics(),
+          ));
+    } else
+      return Scaffold(
+        body: CircularProgressIndicator(),
+      );
   }
 }
 
@@ -123,15 +117,15 @@ class customcontainer extends StatelessWidget {
     this.profileimageurl,
     this.postimageurl,
   });
-  
+
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-        child:ListTile(
-          leading:Container(
+        height: 60,
+        child: ListTile(
+          leading: Container(
             height: 40.0,
             width: 40.0,
             decoration: new BoxDecoration(
@@ -144,8 +138,8 @@ class customcontainer extends StatelessWidget {
             ),
           ),
           //contentPadding: EdgeInsets.all(16.0),
-          
-          trailing:  Container(
+
+          trailing: Container(
             height: 40.0,
             width: 40.0,
             decoration: new BoxDecoration(
@@ -157,8 +151,7 @@ class customcontainer extends StatelessWidget {
               ),
             ),
           ),
-        title: Text(activity_text),
-        )
-        );
+          title: Text(activity_text),
+        ));
   }
 }

@@ -16,41 +16,44 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  File _image;
+  XFile _image;
   String imageUrl = "";
   bool isImageUploading = false;
   bool isPosting = false;
   TextEditingController captionController = TextEditingController();
-  FirebaseUser user;
+  User user;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  Future<FirebaseUser> getUser() async {
-    return FirebaseAuth.instance.currentUser();
+  User getUser() {
+    return FirebaseAuth.instance.currentUser;
   }
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    getUser().then((user) =>setState((){this.user =user;}) );
-  }
-  Future getImage() async {
-    FirebaseUser user = await getUser();
-    if(user==null){
-      var snackbar = new SnackBar(content: new Text("Please Login/Signup before posting!"));
-        _scaffoldKey.currentState.showSnackBar(snackbar);
-        
-    }
-    else{
-    var image = await ImagePicker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 100,
-        maxHeight: 500,
-        maxWidth: 500);
-
+    var user = getUser();
     setState(() {
-      this._image = image;
+      this.user = user;
     });
-    _uploadImage();
+  }
+
+  Future getImage() async {
+    User user = getUser();
+    if (user == null) {
+      var snackbar = new SnackBar(
+          content: new Text("Please Login/Signup before posting!"));
+      _scaffoldKey.currentState.showSnackBar(snackbar);
+    } else {
+      var image = await ImagePicker().pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 100,
+          maxHeight: 500,
+          maxWidth: 500);
+
+      setState(() {
+        this._image = image;
+      });
+      _uploadImage();
     }
   }
 
@@ -61,7 +64,7 @@ class _CreatePostState extends State<CreatePost> {
       });
 //https://insta-clone-backend.now.sh
       final response = await http.post(
-          "https://instacloneproduction.glitch.me/feed" ,
+          Uri.parse("https://instaclonebackendrit.herokuapp.com/feed"),
           headers: {"Content-type": "application/json"},
           body:
               '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
@@ -69,11 +72,10 @@ class _CreatePostState extends State<CreatePost> {
       print("Status code ${response.statusCode}");
 
       if (response.statusCode == 200) {
-
         var snackbar = new SnackBar(content: new Text("Posted!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-        
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyHomePage()));
       } else if (response.statusCode == 400) {
         var snackbar =
             new SnackBar(content: new Text("Image/Caption not added"));
@@ -100,18 +102,18 @@ class _CreatePostState extends State<CreatePost> {
     });
     String randomString = randomAlphaNumeric(10);
 
-    StorageReference ref =
-        FirebaseStorage.instance.ref().child('images/' + randomString + '.png');
-    StorageUploadTask task = ref.putFile(this._image);
-    StorageTaskSnapshot downloadUrl = (await task.onComplete);
-    String url = (await downloadUrl.ref.getDownloadURL());
+    // StorageReference ref =
+    //     FirebaseStorage.instance.ref().child('images/' + randomString + '.png');
+    // StorageUploadTask task = ref.putFile(this._image);
+    // StorageTaskSnapshot downloadUrl = (await task.onComplete);
+    // String url = (await downloadUrl.ref.getDownloadURL());
 
-    setState(() {
-      this.imageUrl = url;
-      this.isImageUploading = false;
-    });
+    // setState(() {
+    //   this.imageUrl = url;
+    //   this.isImageUploading = false;
+    // });
 
-    print(url);
+    // print(url);
   }
 
   @override
@@ -121,62 +123,58 @@ class _CreatePostState extends State<CreatePost> {
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
     return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-        appBar: AppBar(
-    backgroundColor: dynamicuicolor,
-    centerTitle: true,
-    title: Text("New Post"),
-        ),
-        body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child:              
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: SingleChildScrollView(
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          child: _image == null
-                              ? FlatButton(
-                                  onPressed: getImage,
-                                  child: SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: Icon(Icons.add_a_photo),
-                                  ),
-                                )
-                              : Image.file(
-                                  _image,
-                                  height: 300,
-                                ),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: "Caption"),
-                          autocorrect: false,
-                          controller: captionController,
-                        ),
-                        SizedBox(
-                          height: 50,
-                        ),
-                        RaisedButton(
-                          child: Text("Post"),
-                          onPressed:
-                              this.isPosting ? () {} : _createPostRequest,
-                        ),
-                        Container(
-                          child: this.isPosting
-                              ? CircularProgressIndicator()
-                              : Text(""),
-                        )
-                      ],
+      key: _scaffoldKey,
+      backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+      appBar: AppBar(
+        backgroundColor: dynamicuicolor,
+        centerTitle: true,
+        title: Text("New Post"),
+      ),
+      body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: _image == null
+                          ? FlatButton(
+                              onPressed: getImage,
+                              child: SizedBox(
+                                height: 300,
+                                width: 300,
+                                child: Icon(Icons.add_a_photo),
+                              ),
+                            )
+                          : Image.file(
+                              File(_image.path),
+                              height: 300,
+                            ),
                     ),
-                  ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Caption"),
+                      autocorrect: false,
+                      controller: captionController,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    RaisedButton(
+                      child: Text("Post"),
+                      onPressed: this.isPosting ? () {} : _createPostRequest,
+                    ),
+                    Container(
+                      child: this.isPosting
+                          ? CircularProgressIndicator()
+                          : Text(""),
+                    )
+                  ],
                 ),
-              )
-            
-          ),
-        );
+              ),
+            ),
+          )),
+    );
   }
 }

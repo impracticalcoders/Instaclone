@@ -23,14 +23,15 @@ class _MyFeedPageState extends State<MyFeedPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseUser user;
+  User user;
 
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   Future<Void> fetchPosts() async {
-    final response = await http.get('https://instacloneproduction.glitch.me/feed?uid=${this.user.uid}');
+    final response = await http.get(Uri.parse(
+        'https://instacloneproduction.glitch.me/feed?uid=${this.user.uid}'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -50,26 +51,26 @@ class _MyFeedPageState extends State<MyFeedPage> {
   void initState() {
     super.initState();
 
-    getUser().then((user) {
-      if (user != null) {
-        setState(() {
-          this.user = user;
-        });
-        print('Accessing main feed as ' + user.displayName);
+    var user = getUser();
+    if (user != null) {
+      setState(() {
+        this.user = user;
+      });
+      print('Accessing main feed as ' + user.displayName);
 
-        fetchPosts();
+      fetchPosts();
 
-        print(list.length);
-      } else {
-        print("not logged in");
-      }
-    });
+      print(list.length);
+    } else {
+      print("not logged in");
+    }
   }
 
   void refresh() {
     fetchPosts();
     print(list.length);
   }
+
   AssetImage endthingdark = new AssetImage('assets/enddark.png');
   AssetImage endthinglight = new AssetImage('assets/endlight.jpg');
   @override
@@ -141,73 +142,76 @@ class _MyFeedPageState extends State<MyFeedPage> {
         ),
       ),
     );*/
-    if (this.list.length==0) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-    else 
-    return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-        appBar: AppBar(
-    backgroundColor: dynamicuicolor,
-    centerTitle: true,
-    title: Text("Instaclone",
-        style: TextStyle(
-            color: (!isDarkMode) ? Colors.black : Colors.white,
-            fontFamily: 'Billabong',
-            fontSize: 30)),
-    leading: Builder(
-      builder: (context) => IconButton(
-        icon: new Icon(
-          Icons.refresh,
-          color: dynamiciconcolor,
-        ),
-        //onPressed: () => Scaffold.of(context).openDrawer(),
-        onPressed: () {
-          refresh();
-        },
-      ),
-    ),
-    actions: <Widget>[
-      IconButton(
-        icon: Icon(FontAwesomeIcons.paperPlane),
-        color: dynamiciconcolor,
-        onPressed: () {
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => ChatsPage(this.user)));
-        },
-      ),
-    ],
-        ),
-        body: ListView.builder(
-        itemBuilder: (BuildContext context,int index){
-     if (index > list.length ) return null;
-     if(index==list.length){
-       return (!isDarkMode) ?Image(image:endthinglight,fit: BoxFit.scaleDown,)  : Image(image:endthingdark,fit: BoxFit.scaleDown,);
-       
-     }
-            return PostCard(
-              profilename: list[index].profile_name,
-              //profileimageurl: list[index].post_pic,
-              postimageurl: list[index].post_pic,
-              likes: list[index].likes,
-              id: list[index].id,
-              caption: list[index].caption,
-              user:this.user,
-              liked : list[index].liked,
-              username: list[index].username,
-              profileimageurl: list[index].profile_pic,
-              scaffoldKey: this.scaffoldKey
-            );
-            
-        },
-        itemCount: list.length+1,
-        physics: BouncingScrollPhysics(),
-        )
+    if (this.list.length == 0) {
+      return Center(
+        child: CircularProgressIndicator(),
       );
-    }
+    } else
+      return Scaffold(
+          key: scaffoldKey,
+          backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
+          appBar: AppBar(
+            backgroundColor: dynamicuicolor,
+            centerTitle: true,
+            title: Text("Instaclone",
+                style: TextStyle(
+                    color: (!isDarkMode) ? Colors.black : Colors.white,
+                    fontFamily: 'Billabong',
+                    fontSize: 30)),
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: new Icon(
+                  Icons.refresh,
+                  color: dynamiciconcolor,
+                ),
+                //onPressed: () => Scaffold.of(context).openDrawer(),
+                onPressed: () {
+                  refresh();
+                },
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(FontAwesomeIcons.paperPlane),
+                color: dynamiciconcolor,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => ChatsPage(this.user)));
+                },
+              ),
+            ],
+          ),
+          body: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              if (index > list.length) return null;
+              if (index == list.length) {
+                return (!isDarkMode)
+                    ? Image(
+                        image: endthinglight,
+                        fit: BoxFit.scaleDown,
+                      )
+                    : Image(
+                        image: endthingdark,
+                        fit: BoxFit.scaleDown,
+                      );
+              }
+              return PostCard(
+                  profilename: list[index].profile_name,
+                  //profileimageurl: list[index].post_pic,
+                  postimageurl: list[index].post_pic,
+                  likes: list[index].likes,
+                  id: list[index].id,
+                  caption: list[index].caption,
+                  user: this.user,
+                  liked: list[index].liked,
+                  username: list[index].username,
+                  profileimageurl: list[index].profile_pic,
+                  scaffoldKey: this.scaffoldKey);
+            },
+            itemCount: list.length + 1,
+            physics: BouncingScrollPhysics(),
+          ));
+  }
 }

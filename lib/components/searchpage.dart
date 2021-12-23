@@ -20,20 +20,21 @@ class _SearchPageState extends State<SearchPage> {
 
   TextEditingController searchController = new TextEditingController();
 
-
   _loadUsers() async {
-    final response = await http.get('https://instacloneproduction.glitch.me/users');
+    var url = Uri.parse('https://instacloneproduction.glitch.me/users');
+
+    final response = await http.get(url);
     List<String> usernames = (json.decode(response.body) as List)
         .map<String>((data) => data["username"])
         .toList();
     List<User> users;
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       setState(() {
-         this.users = (json.decode(response.body) as List)
-        .map((data) => new User.fromJson(data))
-        .toList();
+        this.users = (json.decode(response.body) as List)
+            .map((data) => new User.fromJson(data))
+            .toList();
       });
     } else {
       // If the server did not return a 200 OK response,
@@ -43,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       this.trieusername = new Trie.list(usernames);
     });
-    print(this.users.length??0);
+    print(this.users.length ?? 0);
   }
 
   _searchUsers(text) {
@@ -51,12 +52,14 @@ class _SearchPageState extends State<SearchPage> {
       this.usernames = this.trieusername.getAllWordsWithPrefix(text);
     });
   }
+
   @override
   void initState() {
     _loadUsers();
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -103,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 String resultuid;
-                for(int i=0;i<this.users.length??0;i++){
+                for (int i = 0; i < this.users.length ?? 0; i++) {
                   if (this.users[i].username == this.usernames[index]) {
                     print(this.users[i].uid);
                     resultuid = users[i].uid;
@@ -113,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
                   username: this.usernames[index],
                   uid: resultuid,
                 );
-              }, childCount: this.usernames.length??0),
+              }, childCount: this.usernames.length ?? 0),
             )
           ],
         ),
@@ -137,8 +140,12 @@ class customcontainer extends StatelessWidget {
         title: Text("@${this.username}"),
         onTap: () {
           print("Tapped , uid : ${this.uid}");
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileSearchResultPage(uidretrieve: this.uid,)));
-          
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileSearchResultPage(
+                        uidretrieve: this.uid,
+                      )));
         },
       ),
     );

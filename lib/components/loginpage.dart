@@ -21,15 +21,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    getUser().then((user) {
-      if (user != null) {
-        print('Already logged in as ' + user.displayName);
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-      } else {
-        print("Not logged in");
-      }
-    });
+    var user = getUser();
+    if (user != null) {
+      print('Already logged in as ' + user.displayName);
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MyHomePage()));
+    } else {
+      print("Not logged in");
+    }
 
     super.initState();
   }
@@ -41,20 +41,19 @@ class _LoginPageState extends State<LoginPage> {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final AuthResult authResult = await auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
+      final UserCredential authResult =
+          await auth.signInWithCredential(credential);
+      final User user = authResult.user;
 
       print('signed in as ' + user.displayName);
 
-//https://instacloneproduction.glitch.me/ DON'T REMOVE
-
       final response = await http.post(
-          "https://instacloneproduction.glitch.me/auth",
+          Uri.parse("https://instacloneproduction.glitch.me/auth"),
           headers: {"Content-type": "application/json"},
           body: '{"uid":"${user.uid}"}');
 
@@ -62,10 +61,12 @@ class _LoginPageState extends State<LoginPage> {
       print(status);
       //207 if the user login's for the first time
       //208 if its an existing user
-      if(response.statusCode==208)
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-      else if(response.statusCode==207)
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignupPage()));
+      if (response.statusCode == 208)
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      else if (response.statusCode == 207)
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => SignupPage()));
 
       //400 if the uid is empty
 
@@ -74,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   void showSnackbar(String text) {
@@ -89,13 +90,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    String logourl=(isDarkMode)?'assets/TeamIC1.png':'assets/TeamIC2.png';
+    String logourl = (isDarkMode) ? 'assets/TeamIC1.png' : 'assets/TeamIC2.png';
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
-    Color dynamicbgcolor =
-        (!isDarkMode) ? new Color(0xfff8faf8) : Colors.black;
-    
+    Color dynamicbgcolor = (!isDarkMode) ? new Color(0xfff8faf8) : Colors.black;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -121,15 +120,13 @@ class _LoginPageState extends State<LoginPage> {
                   height: 35,
                   color: Colors.red[600],
                 ),
-                
-                 Text(
+                Text(
                   'Hey there, welcome to Instaclone , a limited feature and working remake of Instagram .',
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'Pacifico',
                     fontWeight: FontWeight.w300,
                     color: dynamiciconcolor,
-                    
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -140,16 +137,17 @@ class _LoginPageState extends State<LoginPage> {
                     fontFamily: 'Pacifico',
                     fontWeight: FontWeight.w300,
                     color: dynamiciconcolor,
-                    
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 20,
                 ),
-               
                 FlatButton(
-                    child: Image(image: AssetImage('assets/signin.png'),height: 50,),
+                    child: Image(
+                      image: AssetImage('assets/signin.png'),
+                      height: 50,
+                    ),
                     onPressed: signIn
                     //HI AAKASH, WASH  UR  HANDS : SURE CAP! lol
 
@@ -165,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.w300,
                     color: dynamiciconcolor,
                   ),
-                   textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
                 ),
                 Image(
                   image: AssetImage(logourl),

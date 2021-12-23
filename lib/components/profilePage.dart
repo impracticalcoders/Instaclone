@@ -20,24 +20,25 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin {
-    @override
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
   bool get wantKeepAlive => true;
-  
+
   final FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseUser user;
+  User user;
   int newlength;
   Userdetails userdata;
   final GoogleSignIn googleSignIn = new GoogleSignIn(scopes: ['email']);
 
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   Future<Void> fetchPosts() async {
     print("function called");
-    final response = await http
-        .get('https://instacloneproduction.glitch.me/user_details?uid=${user.uid}');
+    final response = await http.get(Uri.parse(
+        'https://instacloneproduction.glitch.me/user_details?uid=${user.uid}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -46,9 +47,9 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         this.userdata =
             Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
         //.dynamic((data) => new Userdetails.fromJson(data))
-        
-        profilename = userdata.profile_name??"";
-        bio = userdata.bio??"";
+
+        profilename = userdata.profile_name ?? "";
+        bio = userdata.bio ?? "";
         // print(userdata.posts.length);
       });
     } else {
@@ -76,27 +77,26 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
   @override
   void initState() {
     super.initState();
-    getUser().then((user) {
-      if (user != null) {
-        setState(() {
-          this.user = user;
-          print("State set");
-          profilename ="";
-          userdata = new Userdetails(
-              'Loading...',
-              'Instagrammer',
-              'username',
-              "",
-              'uid',
-              [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
-        });
-        fetchPosts();
-      } else {
-        setState(() {
-          this.profilename = 'Instagrammer';
-        });
-      }
-    });
+    var user = getUser();
+    if (user != null) {
+      setState(() {
+        this.user = user;
+        print("State set");
+        profilename = "";
+        userdata = new Userdetails(
+            'Loading...',
+            'Instagrammer',
+            'username',
+            "",
+            'uid',
+            [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
+      });
+      fetchPosts();
+    } else {
+      setState(() {
+        this.profilename = 'Instagrammer';
+      });
+    }
   }
 
   int _viewmode = 0;
@@ -115,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             if (index > userdata.posts.length) return null;
-            int cindex = userdata.posts.length-1-index;
+            int cindex = userdata.posts.length - 1 - index;
             // if(list[index].profile_name!=user.displayName) return Container(child: null,);
             return Container(
                 child: Image(
@@ -126,18 +126,18 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           childCount: userdata.posts.length,
         ),
       );
-      
+
     SliverList postlistview;
     if (userdata != null)
       postlistview = new SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           if (index > userdata.posts.length - 1) return null;
-          int cindex = userdata.posts.length-1-index;
-           return PrivatePostCard(
+          int cindex = userdata.posts.length - 1 - index;
+          return PrivatePostCard(
             profilename: userdata.profile_name,
             postimageurl: userdata.posts[cindex].post_pic,
             likes: userdata.posts[cindex].likes,
-            id: userdata.posts[cindex].id,//passing post id here
+            id: userdata.posts[cindex].id, //passing post id here
             caption: userdata.posts[cindex].caption,
             user: this.user,
 
@@ -167,19 +167,17 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                         icon: Icon(Icons.info),
                         color: dynamiciconcolor,
                         onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreditsPage()));
-                         
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreditsPage()));
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.exit_to_app),
                         color: dynamiciconcolor,
-                        onPressed: (){
-                         showCupertinoModalPopup(
+                        onPressed: () {
+                          showCupertinoModalPopup(
                               context: context,
                               builder: (BuildContext context) =>
                                   CupertinoActionSheet(
@@ -191,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                                         isDestructiveAction: true,
                                         child: const Text('Yes'),
                                         onPressed: () {
-                                         signOut();
+                                          signOut();
                                         },
                                       ),
                                     ],
@@ -203,8 +201,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                                       },
                                     ),
                                   ));
-                        }
-                       ,
+                        },
                       ),
                     ]),
                 SliverList(
@@ -214,8 +211,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                     return UserProfilePage(
                         profilename: profilename,
                         postcount: userdata.posts.length,
-                        bio: bio??"",
-
+                        bio: bio ?? "",
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
                             : userdata.profile_pic);
@@ -229,7 +225,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.grid_on,color: (_viewmode==0)?Colors.red :dynamiciconcolor ,),
+                          icon: Icon(
+                            Icons.grid_on,
+                            color: (_viewmode == 0)
+                                ? Colors.red
+                                : dynamiciconcolor,
+                          ),
                           onPressed: () {
                             setState(() {
                               _viewmode = 0;
@@ -237,7 +238,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.view_list,color: (_viewmode==1)?Colors.red :dynamiciconcolor ,),
+                          icon: Icon(
+                            Icons.view_list,
+                            color: (_viewmode == 1)
+                                ? Colors.red
+                                : dynamiciconcolor,
+                          ),
                           onPressed: () {
                             setState(() {
                               _viewmode = 1;
