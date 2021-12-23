@@ -21,8 +21,9 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController searchController = new TextEditingController();
 
   _loadUsers() async {
-    final response =
-        await http.get('https://instacloneproduction.glitch.me/users');
+    var url = Uri.parse('https://instaclonebackendrit.herokuapp.com/users');
+
+    final response = await http.get(url);
     List<String> usernames = (json.decode(response.body) as List)
         .map<String>((data) => data["username"])
         .toList();
@@ -101,23 +102,22 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ]),
       body: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            String resultuid;
-            for (int i = 0; i < this.users.length ?? 0; i++) {
-              if (this.users[i].username == this.usernames[index]) {
-                print(this.users[i].uid);
-                resultuid = users[i].uid;
-              }
+        itemBuilder: (BuildContext context, int index) {
+          String resultuid;
+          for (int i = 0; i < this.users.length ?? 0; i++) {
+            if (this.users[i].username == this.usernames[index]) {
+              print(this.users[i].uid);
+              resultuid = users[i].uid;
             }
-            return customcontainer(
-              username: this.usernames[index],
-              uid: resultuid,
-            );
-          },
-          itemCount: this.usernames.length ?? 0,
-          physics: BouncingScrollPhysics(),
-          ),
-          
+          }
+          return customcontainer(
+            username: this.usernames[index],
+            uid: resultuid,
+          );
+        },
+        itemCount: this.usernames.length ?? 0,
+        physics: BouncingScrollPhysics(),
+      ),
     );
   }
 }

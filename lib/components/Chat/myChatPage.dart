@@ -20,24 +20,22 @@ class MyChatPage extends StatefulWidget {
 class _MyChatPageState extends State<MyChatPage> {
   int _counter = 0;
   List<ChatMessage> messages = [];
-var channel = IOWebSocketChannel.connect(
-      'wss://aakash9518-instaclone-backend.glitch.me');
+  var channel =
+      IOWebSocketChannel.connect('wss://instaclonebackendrit.herokuapp.com');
 
-  
   @override
   void initState() {
-   
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-      this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
+    this.channel.sink.add('{"uid":"${widget.user.uid}","type":"init"}');
 
-     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white;
-    Color dynamicuicolor =(!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(35, 35, 35, 1.0);
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -51,7 +49,9 @@ var channel = IOWebSocketChannel.connect(
                     backgroundImage: NetworkImage(widget.profilePic ??
                         "https://avatars3.githubusercontent.com/u/37346450?s=460&v=4")),
               ),
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               Text(
                 widget.profileName ?? "Suraj Kumar",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
@@ -61,35 +61,31 @@ var channel = IOWebSocketChannel.connect(
           backgroundColor: dynamicuicolor,
         ),
         backgroundColor: dynamicuicolor,
-    
-      body: StreamBuilder(
-        stream:this.channel.stream ,
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            print(snapshot.data);
+        body: StreamBuilder(
+          stream: this.channel.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              // print(snapshot.data);
               var data = json.decode(snapshot.data);
 
-            if((data['type']=="message" && data['in_uid']==widget.uid) || (data['type']=="offline"&& data['dest_uid']==widget.uid)){   
-
-              print(snapshot.data);
-              var message= data["message"];
-              this.messages.add(
-                ChatMessage(
-                  text: message,
-                  user:ChatUser(
-                    name: widget.profileName,
-                    uid:widget.uid,
-                    avatar:widget.profilePic,
-                    ),
-
-                  ));
-
+              if ((data['type'] == "message" && data['in_uid'] == widget.uid) ||
+                  (data['type'] == "offline" &&
+                      data['dest_uid'] == widget.uid)) {
+                // print(snapshot.data);
+                var message = data["message"];
+                this.messages.add(ChatMessage(
+                      text: message,
+                      user: ChatUser(
+                        name: widget.profileName,
+                        uid: widget.uid,
+                        avatar: widget.profilePic,
+                      ),
+                    ));
               }
-              
-          }
+            }
             return DashChat(
                 //showUserAvatar: true,
-                
+
                 messages: this.messages,
                 inputMaxLines: 5,
                 showAvatarForEveryMessage: false,
@@ -99,21 +95,18 @@ var channel = IOWebSocketChannel.connect(
 
                   this.messages.add(ChatMessage);
                 },
-                
-                messageContainerDecoration:BoxDecoration(
-                  color: Colors.blue,
-                  
-                  borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(20.0),
-                    topRight: const Radius.circular(20.0),
-                    bottomLeft: const Radius.circular(20.0),
-                    bottomRight: const Radius.circular(20.0),
-                  )
-                ) ,
-                                  
+                messageContainerDecoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20.0),
+                      topRight: const Radius.circular(20.0),
+                      bottomLeft: const Radius.circular(20.0),
+                      bottomRight: const Radius.circular(20.0),
+                    )),
                 timeFormat: DateFormat.Hm(),
                 //leading: <Widget>[Container(width: 20,)],
-                inputToolbarMargin: EdgeInsets.only(left:15,right: 15,bottom: 15),
+                inputToolbarMargin:
+                    EdgeInsets.only(left: 15, right: 15, bottom: 15),
                 user: ChatUser(
                     name: widget.user.displayName,
                     uid: widget.user.uid,
@@ -121,11 +114,11 @@ var channel = IOWebSocketChannel.connect(
                 inputToolbarPadding: EdgeInsets.only(left: 12),
                 inputContainerStyle: BoxDecoration(
                   border: Border.all(color: Colors.grey),
-                  
+
                   //color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                 ),
-                
+
                 //chatFooterBuilder: , //for the 'typing' message
                 inputTextStyle: TextStyle(fontSize: 15));
           },

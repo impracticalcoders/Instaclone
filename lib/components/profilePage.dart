@@ -26,19 +26,19 @@ class _ProfilePageState extends State<ProfilePage>
   bool get wantKeepAlive => true;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseUser user;
+  User user;
   int newlength;
   Userdetails userdata;
   final GoogleSignIn googleSignIn = new GoogleSignIn(scopes: ['email']);
 
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   Future<Void> fetchPosts() async {
     print("function called");
-    final response = await http.get(
-        'https://instacloneproduction.glitch.me/user_details?uid=${user.uid}');
+    final response = await http.get(Uri.parse(
+        'https://instaclonebackendrit.herokuapp.com/user_details?uid=${user.uid}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -77,34 +77,33 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    getUser().then((user) {
-      if (user != null) {
-        setState(() {
-          this.user = user;
-          print("State set");
-          profilename = "";
-          userdata = new Userdetails(
-              'Loading...',
-              'Instagrammer',
-              'username',
-              "",
-              'uid',
-              [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
-        });
-        fetchPosts();
-      } else {
-        setState(() {
-          this.profilename = 'Instagrammer';
-        });
-      }
-    });
+    var user = getUser();
+    if (user != null) {
+      setState(() {
+        this.user = user;
+        print("State set");
+        profilename = "";
+        userdata = new Userdetails(
+            'Loading...',
+            'Instagrammer',
+            'username',
+            "",
+            'uid',
+            [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
+      });
+      fetchPosts();
+    } else {
+      setState(() {
+        this.profilename = 'Instagrammer';
+      });
+    }
   }
 
   _deletepostreq() async {
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instacloneproduction.glitch.me/delete_post';
+    String url = 'https://instaclonebackendrit.herokuapp.com/delete_post';
 
     Map<String, String> headers = {"Content-type": "application/json"};
     int i;
@@ -115,7 +114,8 @@ class _ProfilePageState extends State<ProfilePage>
       String json =
           '{"post_id": "${userdata.posts[i].id}","uid" : "${user.uid}"}';
       // make POST request
-      final response = await http.post(url, headers: headers, body: json);
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: json);
       // check the status code for the result
       int statusCode = response.statusCode;
       print("POST delete req response ${statusCode}");
@@ -136,46 +136,40 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-    _deleteuserdata() async {
+  _deleteuserdata() async {
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://aakash9518-instaclone-backend.glitch.me/delete_user';
+    String url = 'https://instaclonebackendrit.herokuapp.com/delete_user';
 
     Map<String, String> headers = {"Content-type": "application/json"};
-    
-    
-      print(
-          "Delete requested for Uid: ${user.uid}");
-      String json =
-          '{"uid" : "${user.uid}"}';
-      // make POST request
-      final response = await http.post(url, headers: headers, body: json);
-      // check the status code for the result
-      int statusCode = response.statusCode;
-      print("Userdata delete req response ${statusCode}");
-      if (response.statusCode == 200) {
-        print("Userdata deleted");
-      } else {
-        print("Userdata not deleted");
-        var snackbar = new SnackBar(
-            content: new Text("There was a problem deleting your profile data"));
-        Scaffold.of(context).showSnackBar(snackbar);
 
-        
-      }
-    
-   
+    print("Delete requested for Uid: ${user.uid}");
+    String json = '{"uid" : "${user.uid}"}';
+    // make POST request
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: json);
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    print("Userdata delete req response ${statusCode}");
+    if (response.statusCode == 200) {
+      print("Userdata deleted");
+    } else {
+      print("Userdata not deleted");
+      var snackbar = new SnackBar(
+          content: new Text("There was a problem deleting your profile data"));
+      Scaffold.of(context).showSnackBar(snackbar);
+    }
   }
 
   @override
   Future<void> deleteacc() async {
-    FirebaseUser current = await auth.currentUser();
+    User current = auth.currentUser;
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
@@ -183,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage>
     await current.delete();
     await auth.signOut();
     await googleSignIn.signOut();
-  
+
     print("User account deleted");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));

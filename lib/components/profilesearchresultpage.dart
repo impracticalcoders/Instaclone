@@ -27,8 +27,8 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
 
   Future<Void> fetchPosts() async {
     print("function called");
-    final response = await http.get(
-        'https://instacloneproduction.glitch.me/user_details?uid=${this.widget.uidretrieve}');
+    final response = await http.get(Uri.parse(
+        'https://instaclonebackendrit.herokuapp.com/user_details?uid=${this.widget.uidretrieve}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -37,7 +37,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
         this.userdata =
             Userdetails.fromJson(jsonDecode(response.body)); //as Userdetails)
         //.dynamic((data) => new Userdetails.fromJson(data))
-        
+
         profilename = userdata.profile_name;
         bio = userdata.bio;
         // print(userdata.posts.length);
@@ -82,7 +82,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
             crossAxisCount: 3, mainAxisSpacing: 4, crossAxisSpacing: 4),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            if (index > userdata.posts.length??0) return Container();
+            if (index > userdata.posts.length ?? 0) return Container();
             // if(list[index].profile_name!=user.displayName) return Container(child: null,);
             return Container(
                 child: Image(
@@ -90,7 +90,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
               fit: BoxFit.cover,
             ));
           },
-          childCount: userdata.posts.length??0,
+          childCount: userdata.posts.length ?? 0,
         ),
       );
 
@@ -98,7 +98,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
     if (userdata != null)
       postlistview = new SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-          if (index > userdata.posts.length??0 -1 ) return Container();
+          if (index > userdata.posts.length ?? 0 - 1) return Container();
           return PrivatePostCard(
             profilename: userdata.profile_name,
             //profileimageurl: userdata.posts[index].post_pic,
@@ -111,7 +111,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
             username: userdata.username,
             profileimageurl: userdata.profile_pic,
           );
-        }, childCount: userdata.posts.length??0),
+        }, childCount: userdata.posts.length ?? 0),
       );
     if (userdata != null) {
       return Scaffold(
@@ -135,7 +135,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
                     if (index > 1) return Container();
                     return UserProfilePage(
                         profilename: profilename,
-                        postcount: userdata.posts.length??0,
+                        postcount: userdata.posts.length ?? 0,
                         bio: bio,
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
@@ -191,11 +191,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
             )),
       );
     } else
-      return Scaffold(
-        body: Center(
-          child:
-          CircularProgressIndicator())
-      );
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -294,7 +290,6 @@ class UserProfilePage extends StatelessWidget {
                 fontWeight: FontWeight.w400, backgroundColor: dynamicuicolor),
           ),
         ),
-        
       ],
     );
   }

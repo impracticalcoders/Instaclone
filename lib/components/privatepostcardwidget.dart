@@ -93,14 +93,15 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instacloneproduction.glitch.me/delete_post';
+    String url = 'https://instaclonebackendrit.herokuapp.com/delete_post';
     Map<String, String> headers = {"Content-type": "application/json"};
     print(
         "Delete requested for post_id${this.widget.id} by Uid: ${this.widget.user.uid}");
     String json =
         '{"post_id": "${this.widget.id}","uid" : "${this.widget.user.uid}"}';
     // make POST request
-    final response = await http.post(url, headers: headers, body: json);
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: json);
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST delete req response ${statusCode}");
@@ -262,7 +263,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
                     // set the default style for the children TextSpans
                     style: Theme.of(context)
                         .textTheme
-                        .subhead
+                        .subtitle1
                         .copyWith(fontSize: 15),
                     children: [
                   TextSpan(

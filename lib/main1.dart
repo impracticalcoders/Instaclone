@@ -21,23 +21,26 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMixin  {
+class _MyHomePageState extends State<MyHomePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  
-  final FirebaseMessaging _fcm = FirebaseMessaging();
-    List<Widget> pageList = List<Widget>();
+
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  List<Widget> pageList = List<Widget>();
 
   int _cIndex = 0;
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
-    pageList.addAll([ MyFeedPage(),
-    SearchPage(),
-    CreatePost(),
-    MyActivityPage(),
-    ProfilePage(),]);
+    pageList.addAll([
+      MyFeedPage(),
+      SearchPage(),
+      CreatePost(),
+      MyActivityPage(),
+      ProfilePage(),
+    ]);
   }
 
   _launchURL() async {
@@ -52,72 +55,70 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
   @override
   void initState() {
     super.initState();
-    getUser().then((user) {
-      if (user != null) {
-        setState(() {
-          this.user = user;
-        });
-      } else {
-        print("not logged in");
-      }
-    });
-    
-    _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message ");
+    var user = getUser();
+    if (user != null) {
+      setState(() {
+        this.user = user;
+      });
+    } else {
+      print("not logged in");
+    }
 
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0)),
-            title: Text(message['notification']['title']),
-            content: Text(message['notification']['body']),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  if (message['notification']['title']
-                          .toString()
-                          .contains("Update") ||
-                      message['notification']['body']
-                          .toString()
-                          .contains("Update") ||
-                      message['notification']['body']
-                          .toString()
-                          .contains("update")) {
-                    _launchURL;
-                    print("URL launch attempted");
-                    
-                  }
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        // TODO optional
-        if (message['notification']['title'].toString().contains("Update") ||
-            message['notification']['body'].toString().contains("Update") ||
-            message['notification']['body'].toString().contains("update")) {
-          _launchURL;
-          print("URL launch attempted");
-        }
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        // TODO optional
-        if (message['notification']['title'].toString().contains("Update") ||
-            message['notification']['body'].toString().contains("Update") ||
-            message['notification']['body'].toString().contains("update")) {
-          _launchURL;
-          print("URL launch attempted");
-        }
-      },
-    );
+    //   _fcm.configure(
+    //     FirebaseMessaging.onMessage: (Map<String, dynamic> message) async {
+    //       print("onMessage: $message ");
+
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           shape: RoundedRectangleBorder(
+    //               borderRadius: BorderRadius.circular(18.0)),
+    //           title: Text(message['notification']['title']),
+    //           content: Text(message['notification']['body']),
+    //           actions: <Widget>[
+    //             FlatButton(
+    //               child: Text('OK'),
+    //               onPressed: () {
+    //                 if (message['notification']['title']
+    //                         .toString()
+    //                         .contains("Update") ||
+    //                     message['notification']['body']
+    //                         .toString()
+    //                         .contains("Update") ||
+    //                     message['notification']['body']
+    //                         .toString()
+    //                         .contains("update")) {
+    //                   _launchURL;
+    //                   print("URL launch attempted");
+    //                 }
+    //                 Navigator.of(context).pop();
+    //               },
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //     onLaunch: (Map<String, dynamic> message) async {
+    //       print("onLaunch: $message");
+    //       // TODO optional
+    //       if (message['notification']['title'].toString().contains("Update") ||
+    //           message['notification']['body'].toString().contains("Update") ||
+    //           message['notification']['body'].toString().contains("update")) {
+    //         _launchURL;
+    //         print("URL launch attempted");
+    //       }
+    //     },
+    //     onResume: (Map<String, dynamic> message) async {
+    //       print("onResume: $message");
+    //       // TODO optional
+    //       if (message['notification']['title'].toString().contains("Update") ||
+    //           message['notification']['body'].toString().contains("Update") ||
+    //           message['notification']['body'].toString().contains("update")) {
+    //         _launchURL;
+    //         print("URL launch attempted");
+    //       }
+    //     },
+    //   );
   }
 
   @override
@@ -127,10 +128,10 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseUser user;
+  User user;
 
-  Future<FirebaseUser> getUser() async {
-    return auth.currentUser();
+  User getUser() {
+    return auth.currentUser;
   }
 
   final _pageOptions = [
@@ -162,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
           backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
           body: IndexedStack(
             index: _cIndex,
-            children:_pageOptions,),
+            children: _pageOptions,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: dynamicuicolor,
             // notchMargin: 8.0,
@@ -172,42 +174,41 @@ class _MyHomePageState extends State<MyHomePage>with AutomaticKeepAliveClientMix
             onTap: _incrementTab,
             // child: Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              items: [
-                BottomNavigationBarItem(
-                  icon:Icon(Icons.home, color: dynamiciconcolor, size: 30),
-                  title: Container(),
-                  activeIcon:Icon(Icons.home, color: Colors.redAccent, size: 30),
-                   ),
-                BottomNavigationBarItem(
-                    icon:
-                        Icon(FontAwesomeIcons.search, color: dynamiciconcolor),
-                    title: Container(),
-                    activeIcon: Icon(FontAwesomeIcons.search,color: Colors.redAccent),
-                    ),
-                BottomNavigationBarItem(
-                    icon:
-                        Icon(Icons.add_box, color: dynamiciconcolor, size: 30),
-                    title: Container(),
-                    activeIcon: Icon(Icons.add_box, color: Colors.redAccent, size: 30),
-
-                   ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite_border,
-                        color: dynamiciconcolor, size: 30),
-                        title: Container()
-                     ,activeIcon: Icon(Icons.favorite,
-                        color: Colors.redAccent, size: 30), 
-                    ),
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.user, color: dynamiciconcolor),
-                    title: Container(),
-                    activeIcon: Icon(FontAwesomeIcons.userAlt, color: Colors.redAccent),
-
-                    )
-              ],
-            ),
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home, color: dynamiciconcolor, size: 30),
+                title: Container(),
+                activeIcon: Icon(Icons.home, color: Colors.redAccent, size: 30),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.search, color: dynamiciconcolor),
+                title: Container(),
+                activeIcon:
+                    Icon(FontAwesomeIcons.search, color: Colors.redAccent),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add_box, color: dynamiciconcolor, size: 30),
+                title: Container(),
+                activeIcon:
+                    Icon(Icons.add_box, color: Colors.redAccent, size: 30),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_border,
+                    color: dynamiciconcolor, size: 30),
+                title: Container(),
+                activeIcon:
+                    Icon(Icons.favorite, color: Colors.redAccent, size: 30),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.user, color: dynamiciconcolor),
+                title: Container(),
+                activeIcon:
+                    Icon(FontAwesomeIcons.userAlt, color: Colors.redAccent),
+              )
+            ],
           ),
-          //drawer: Drawer(),
+        ),
+        //drawer: Drawer(),
         // ),
         ChatsPage(user),
       ],

@@ -82,11 +82,12 @@ class _PostCardState extends State<PostCard> {
 //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instacloneproduction.glitch.me/likes';
+    String url = 'https://instaclonebackendrit.herokuapp.com/likes';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"id": "${widget.id}","uid" : "${this.widget.user.uid}"}';
     // make POST request
-    final response = await http.post(url, headers: headers, body: json);
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: json);
     // check the status code for the result
     int statusCode = response.statusCode;
     print("POST req response ${statusCode}");
@@ -214,7 +215,9 @@ class _PostCardState extends State<PostCard> {
                             : Icon(Icons.favorite_border, size: 28),
                         color: widget.liked
                             ? Colors.red
-                            : (isDarkMode) ? Colors.white : Colors.black,
+                            : (isDarkMode)
+                                ? Colors.white
+                                : Colors.black,
                         onPressed: () {
                           _likepostreq();
                         },
@@ -258,7 +261,7 @@ class _PostCardState extends State<PostCard> {
                         // set the default style for the children TextSpans
                         style: Theme.of(context)
                             .textTheme
-                            .subhead
+                            .subtitle1
                             .copyWith(fontSize: 15),
                         children: [
                       TextSpan(
