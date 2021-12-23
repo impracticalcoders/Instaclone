@@ -31,7 +31,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
 
   Future<Void> fetchPosts() async {
     final response = await http.get(Uri.parse(
-        'https://instacloneproduction.glitch.me/feed?uid=${this.user.uid}'));
+        'https://instaclonebackendrit.herokuapp.com/feed?uid=${this.user.uid}'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -69,7 +69,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
   void refresh() {
     fetchPosts();
     setState(() {
-     ; 
+      ;
     });
     print(list.length);
   }

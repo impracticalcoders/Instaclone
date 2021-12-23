@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       print('signed in as ' + user.displayName);
 
       final response = await http.post(
-          Uri.parse("https://instacloneproduction.glitch.me/auth"),
+          Uri.parse("https://instaclonebackendrit.herokuapp.com/auth"),
           headers: {"Content-type": "application/json"},
           body: '{"uid":"${user.uid}"}');
 
