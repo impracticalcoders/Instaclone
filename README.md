@@ -16,6 +16,6 @@ P.S: Instaclone is in the process of getting an upgrade!
 
 ***
 
-A 10 day build by team Impractical Coders - Sankalp, Soundarya, Vridhi, [Aakash P](https://github.com/aakashpothepalli) & [Suraj](https://github.com/psk907)
+A 10 day build by team Impractical Coders - Sankalp, [Soundarya](http://github.com/soundarya03/), Vridhi, [Aakash P](https://github.com/aakashpothepalli) & [Suraj](https://github.com/psk907)
 
 ### Download the app from [bit.ly/instaclone1](https://bit.ly/instaclone1) and share it with your peers .
