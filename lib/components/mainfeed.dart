@@ -36,9 +36,10 @@ class _MyFeedPageState extends State<MyFeedPage> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       setState(() {
-        this.list = (json.decode(response.body) as List)
-            .map((data) => new Post.fromJson(data))
-            .toList();
+        this.list = (json.decode(response.body) as List).map((data) {
+          print(data);
+          return new Post.fromJson(data);
+        }).toList();
       });
     } else {
       // If the server did not return a 200 OK response,

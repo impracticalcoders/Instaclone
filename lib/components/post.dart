@@ -1,5 +1,3 @@
-
-
 class Post {
   final String post_pic;
   final String profile_name;
@@ -10,20 +8,28 @@ class Post {
   final String uid;
   bool liked;
   final String profile_pic;
-  Post({this.post_pic, this.profile_name, this.username,this.likes,this.id,this.caption,this.liked,this.profile_pic,this.uid});
+  Post(
+      {this.post_pic,
+      this.profile_name,
+      this.username,
+      this.likes,
+      this.id,
+      this.caption,
+      this.liked,
+      this.profile_pic,
+      this.uid});
 
-  factory Post.fromJson(Map<String,dynamic> json) {
+  factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      post_pic: json['post_pic'],
+      post_pic: json['image_url'],
       profile_name: json['profile_name'],
       username: json['username'],
       likes: json['likes'],
       caption: json['caption'],
-      liked: json['liked'],
-      profile_pic:json['profile_pic'],
+      liked: json['liked'] ?? false,
+      profile_pic: json['profile_pic'],
       uid: json['uid'],
-      
     );
   }
 }

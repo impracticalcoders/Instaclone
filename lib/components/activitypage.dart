@@ -25,7 +25,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
   }
 
   void initialize() async {
-    var user = await getUser();
+    var user = getUser();
 
     if (user != null) {
       setState(() {
@@ -45,9 +45,10 @@ class _MyActivityPageState extends State<MyActivityPage> {
     return auth.currentUser;
   }
 
-  Future<Void> fetchActivities() async {
+  Future<void> fetchActivities() async {
     final response = await http.get(Uri.parse(
         'https://instaclonebackendrit.herokuapp.com/activity?uid=${user.uid}'));
+    print(response.body);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -57,7 +58,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
             .map((data) => new Like.fromJson(data))
             .toList();
       });
-      print("${list.length}");
+      print("activity list length ${list.length}");
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -76,7 +77,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
     Color dynamictextcolor =
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
-        'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
+        'http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png';
     if (user != null) {
       return Scaffold(
           key: _scaffoldKey,
@@ -119,9 +120,10 @@ class customcontainer extends StatelessWidget {
   });
 
   final String profiledefault =
-      'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
+      'http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png';
   @override
   Widget build(BuildContext context) {
+    print("activity text is $activity_text");
     return Container(
         height: 60,
         child: ListTile(
