@@ -1,5 +1,5 @@
 class Post {
-  final String post_pic;
+  final String image_url;
   final String profile_name;
   final String username;
   final String caption;
@@ -9,7 +9,7 @@ class Post {
   bool liked;
   final String profile_pic;
   Post(
-      {this.post_pic,
+      {this.image_url,
       this.profile_name,
       this.username,
       this.likes,
@@ -21,8 +21,8 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'],
-      post_pic: json['image_url'],
+      id: json['pid'],
+      image_url: json['image_url'],
       profile_name: json['profile_name'],
       username: json['username'],
       likes: json['likes'],

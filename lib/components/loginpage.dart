@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Instaclone/components/mainfeed.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,7 +57,11 @@ class _LoginPageState extends State<LoginPage> {
       final response = await http.post(
           Uri.parse("https://instaclonebackendrit.herokuapp.com/auth"),
           headers: {"Content-type": "application/json"},
-          body: '{"uid":"${user.uid}"}');
+          body: jsonEncode({
+            'uid':user.uid,
+            'profile_name':user.displayName,
+            'profile_pic':user.photoURL,
+          }));
 
       int status = response.statusCode;
       print(status);

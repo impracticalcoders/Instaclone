@@ -204,7 +204,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
               return PostCard(
                   profilename: list[index].profile_name,
                   //profileimageurl: list[index].post_pic,
-                  postimageurl: list[index].post_pic,
+                  postimageurl: list[index].image_url,
                   likes: list[index].likes,
                   id: list[index].id,
                   caption: list[index].caption,

@@ -67,7 +67,7 @@ class _CreatePostState extends State<CreatePost> {
           Uri.parse("https://instaclonebackendrit.herokuapp.com/feed"),
           headers: {"Content-type": "application/json"},
           body:
-              '{"caption":"${captionController.text}","post_pic":"${this.imageUrl}","uid":"${this.user.uid}"}');
+              '{"caption":"${captionController.text}","image_url":"${this.imageUrl}","uid":"${this.user.uid}"}');
 
       print("Status code ${response.statusCode}");
 
