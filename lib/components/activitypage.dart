@@ -4,7 +4,6 @@ import 'likes.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:ffi';
 
 class MyActivityPage extends StatefulWidget {
   @override
@@ -15,7 +14,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<Like> list = List();
+  List<Like> list = [];
   User user;
   @override
   void initState() {
@@ -26,7 +25,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
 
   void initialize() async {
     var user = getUser();
-
+    print(user.uid);
     if (user != null) {
       setState(() {
         this.user = user;
@@ -54,9 +53,10 @@ class _MyActivityPageState extends State<MyActivityPage> {
       // then parse the JSON.
 
       setState(() {
-        this.list = (json.decode(response.body) as List)
-            .map((data) => new Like.fromJson(data))
-            .toList();
+        this.list = (json.decode(response.body) as List).map((data) {
+          print(data);
+          return new Like.fromJson(data);
+        }).toList();
       });
       print("activity list length ${list.length}");
     } else {
@@ -91,7 +91,6 @@ class _MyActivityPageState extends State<MyActivityPage> {
             itemBuilder: (BuildContext context, int index) {
               // if (index > this.list.length) return null;
               if (this.list[index].uid == this.user.uid) return Container();
-              if (index == 0) return Container();
               return customcontainer(
                 activity_text: this.list[index].activity_text,
                 profileimageurl: this.list[index].profile_pic,
