@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
+import 'package:instaclone/components/constants.dart';
 import 'package:instaclone/components/privatepostcardwidget.dart';
 
 import 'mainfeed.dart';
@@ -12,7 +11,7 @@ import 'privatepostcardwidget.dart';
 import 'userdetails.dart';
 
 class ProfileSearchResultPage extends StatefulWidget {
-  String uidretrieve;
+  final String uidretrieve;
   @override
   ProfileSearchResultPage({
     this.uidretrieve,
@@ -25,11 +24,27 @@ class ProfileSearchResultPage extends StatefulWidget {
 class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
   int newlength;
   Userdetails userdata;
+  Map<String, dynamic> followData;
+  Future<void> getFollowersDetails() async {
+    final response = await http.get(
+        Uri.parse(BASE_URL + '/follow/getDetails?uid=${widget.uidretrieve}'));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      setState(() {
+        followData = jsonDecode(response.body);
+      });
+    } else {
+      // If the server did not return a 200 OK response,
+      // then print error.
+      throw Exception('Failed to load follow data');
+    }
+  }
 
   Future<void> fetchPosts() async {
     print("function called");
-    final response = await http.get(Uri.parse(
-        'https://instaclonebackendrit.herokuapp.com/user_details?uid=${this.widget.uidretrieve}'));
+    final response = await http.get(
+        Uri.parse(BASE_URL + '/user_details?uid=${this.widget.uidretrieve}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -61,8 +76,8 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
   void initState() {
     super.initState();
 
+    getFollowersDetails();
     fetchPosts();
-
     setState(() {
       this.profilename = 'Instagrammer';
     });
@@ -138,6 +153,12 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
                         profilename: profilename,
                         postcount: userdata.posts.length ?? 0,
                         bio: bio,
+                        followers: (followData?.isEmpty ?? true)
+                            ? null
+                            : followData['followers'].length,
+                        following: (followData?.isEmpty ?? true)
+                            ? null
+                            : followData['follows'].length,
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
                             : userdata.profile_pic);
@@ -200,15 +221,17 @@ class UserProfilePage extends StatelessWidget {
   final String profileimageurl;
   final String profilename;
   final String bio;
-  final String followers = "169";
-  final String following = "269";
+  final int followers;
+  final int following;
   final int postcount;
 
   UserProfilePage(
       {@required this.profilename,
       this.profileimageurl,
       this.postcount,
-      this.bio});
+      this.bio,
+      this.followers,
+      this.following});
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
@@ -256,14 +279,14 @@ class UserProfilePage extends StatelessWidget {
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(followers,
+                    Text(followers.toString().padLeft(2, '0') ?? "--",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text("Followers"),
                   ]),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(following,
+                  Text(following.toString().padLeft(2, '0') ?? "--",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Following"),
                 ],

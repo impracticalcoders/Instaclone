@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:instaclone/components/privatepostcardwidget.dart';
 
 import 'Signup.dart';
+import 'constants.dart';
 import 'credits.dart';
 import 'loginpage.dart';
 import 'mainfeed.dart';
@@ -34,6 +35,23 @@ class _ProfilePageState extends State<ProfilePage>
 
   User getUser() {
     return auth.currentUser;
+  }
+
+  Map<String, dynamic> followData;
+  Future<void> getFollowersDetails() async {
+    final response = await http
+        .get(Uri.parse(BASE_URL + '/follow/getDetails?uid=${user.uid}'));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      setState(() {
+        followData = jsonDecode(response.body);
+      });
+    } else {
+      // If the server did not return a 200 OK response,
+      // then print error.
+      throw Exception('Failed to load follow data');
+    }
   }
 
   Future<void> fetchPosts() async {
@@ -93,6 +111,7 @@ class _ProfilePageState extends State<ProfilePage>
             [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
       });
       fetchPosts();
+      getFollowersDetails();
     } else {
       setState(() {
         this.profilename = 'Instagrammer';
@@ -334,6 +353,12 @@ class _ProfilePageState extends State<ProfilePage>
                         profilename: profilename,
                         postcount: userdata.posts.length,
                         bio: bio ?? "",
+                        followers: (followData?.isEmpty ?? true)
+                            ? null
+                            : followData['followers'].length,
+                        following: (followData?.isEmpty ?? true)
+                            ? null
+                            : followData['follows'].length,
                         profileimageurl: (userdata.profile_pic == null)
                             ? profiledefault
                             : userdata.profile_pic);
@@ -398,15 +423,17 @@ class UserProfilePage extends StatelessWidget {
   final String profileimageurl;
   final String profilename;
   final String bio;
-  final String followers = "169";
-  final String following = "269";
+  final int followers;
+  final int following;
   final int postcount;
 
   UserProfilePage(
       {@required this.profilename,
       this.profileimageurl,
       this.postcount,
-      this.bio});
+      this.bio,
+      this.followers,
+      this.following});
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
@@ -454,14 +481,14 @@ class UserProfilePage extends StatelessWidget {
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(followers,
+                    Text(followers.toString().padLeft(2, "0") ?? "--",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text("Followers"),
                   ]),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(following,
+                  Text(following.toString().padLeft(2, "0") ?? "--",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Following"),
                 ],
