@@ -1,4 +1,4 @@
-import 'package:Instaclone/components/createPost.dart';
+import 'package:instaclone/components/createPost.dart';
 import 'package:flutter/material.dart';
 import 'components/activitypage.dart';
 import 'components/mainfeed.dart';

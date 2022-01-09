@@ -1,14 +1,15 @@
-import 'dart:ffi'; //for future<void>
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
-import 'package:Instaclone/components/privatepostcardwidget.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
-import 'mainfeed.dart';
-import 'dart:convert';
-import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'userdetails.dart';
+import 'package:instaclone/components/privatepostcardwidget.dart';
+
+import 'mainfeed.dart';
 import 'privatepostcardwidget.dart';
+import 'userdetails.dart';
 
 class ProfileSearchResultPage extends StatefulWidget {
   String uidretrieve;
@@ -25,7 +26,7 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
   int newlength;
   Userdetails userdata;
 
-  Future<Void> fetchPosts() async {
+  Future<void> fetchPosts() async {
     print("function called");
     final response = await http.get(Uri.parse(
         'https://instaclonebackendrit.herokuapp.com/user_details?uid=${this.widget.uidretrieve}'));

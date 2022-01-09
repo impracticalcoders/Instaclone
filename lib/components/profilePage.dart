@@ -1,19 +1,20 @@
-import 'dart:ffi'; //for future<void>
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:Instaclone/components/privatepostcardwidget.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'loginpage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:instaclone/components/privatepostcardwidget.dart';
+
 import 'Signup.dart';
 import 'credits.dart';
+import 'loginpage.dart';
 import 'mainfeed.dart';
-import 'dart:convert';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'userdetails.dart';
 import 'privatepostcardwidget.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'userdetails.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
     return auth.currentUser;
   }
 
-  Future<Void> fetchPosts() async {
+  Future<void> fetchPosts() async {
     print("function called");
     final response = await http.get(Uri.parse(
         'https://instaclonebackendrit.herokuapp.com/user_details?uid=${user.uid}'));

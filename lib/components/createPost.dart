@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:random_string/random_string.dart';
-import 'package:Instaclone/main1.dart';
+import 'package:instaclone/main1.dart';
 
 import 'mainfeed.dart';
 

@@ -1,17 +1,14 @@
-import 'dart:ffi';
-
-import 'package:Instaclone/components/Chat/chatsPage.dart';
-import 'package:Instaclone/components/Chat/myChatPage.dart';
-import 'package:flutter/material.dart';
-import 'postcardwidget.dart';
-import 'package:http/http.dart' as http;
-import 'post.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'loginpage.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:instaclone/components/Chat/chatsPage.dart';
+
+import 'post.dart';
+import 'postcardwidget.dart';
 
 class MyFeedPage extends StatefulWidget {
   @override
@@ -29,7 +26,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
     return auth.currentUser;
   }
 
-  Future<Void> fetchPosts() async {
+  Future<void> fetchPosts() async {
     final response = await http.get(Uri.parse(
         'https://instaclonebackendrit.herokuapp.com/feed?uid=${this.user.uid}'));
     if (response.statusCode == 200) {
