@@ -1,4 +1,4 @@
-import 'package:Instaclone/components/profilePage.dart';
+import 'package:instaclone/components/profilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +52,8 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('InstaClone ${widget.profilename}',
           'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text: 'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
+          text:
+              'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
     } catch (e) {
       print('error: $e');
     }

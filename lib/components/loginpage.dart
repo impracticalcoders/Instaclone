@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:Instaclone/components/mainfeed.dart';
+import 'package:instaclone/components/mainfeed.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:Instaclone/main.dart';
+import 'package:instaclone/main.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:Instaclone/main1.dart';
+import 'package:instaclone/main1.dart';
 import 'Signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -58,9 +58,9 @@ class _LoginPageState extends State<LoginPage> {
           Uri.parse("https://instaclonebackendrit.herokuapp.com/auth"),
           headers: {"Content-type": "application/json"},
           body: jsonEncode({
-            'uid':user.uid,
-            'profile_name':user.displayName,
-            'profile_pic':user.photoURL,
+            'uid': user.uid,
+            'profile_name': user.displayName,
+            'profile_pic': user.photoURL,
           }));
 
       int status = response.statusCode;

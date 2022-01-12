@@ -1,19 +1,21 @@
-import 'dart:ffi'; //for future<void>
-import 'package:flutter/cupertino.dart';
-import 'package:Instaclone/components/privatepostcardwidget.dart';
-import "package:flutter/material.dart";
-import 'package:flutter/rendering.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'loginpage.dart';
-import 'Signup.dart';
-import 'credits.dart';
-import 'mainfeed.dart';
-import 'dart:convert';
 import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'userdetails.dart';
-import 'privatepostcardwidget.dart';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import "package:flutter/material.dart";
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:instaclone/components/folllowingPage.dart';
+import 'package:instaclone/components/privatepostcardwidget.dart';
+
+import 'Signup.dart';
+import 'constants.dart';
+import 'credits.dart';
+import 'loginpage.dart';
+import 'mainfeed.dart';
+import 'privatepostcardwidget.dart';
+import 'userdetails.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -27,15 +29,31 @@ class _ProfilePageState extends State<ProfilePage>
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   User user;
-  int newlength;
-  Userdetails userdata;
   final GoogleSignIn googleSignIn = new GoogleSignIn(scopes: ['email']);
 
+  Userdetails userdata;
   User getUser() {
     return auth.currentUser;
   }
 
-  Future<Void> fetchPosts() async {
+  Map<String, dynamic> followData;
+  Future<void> getFollowersDetails() async {
+    final response = await http
+        .get(Uri.parse(BASE_URL + '/follow/getDetails?uid=${user.uid}'));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      setState(() {
+        followData = jsonDecode(response.body);
+      });
+    } else {
+      // If the server did not return a 200 OK response,
+      // then print error.
+      throw Exception('Failed to load follow data');
+    }
+  }
+
+  Future<void> fetchPosts() async {
     print("function called");
     final response = await http.get(Uri.parse(
         'https://instaclonebackendrit.herokuapp.com/user_details?uid=${user.uid}'));
@@ -59,7 +77,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  @override
   Future<void> signOut() async {
     await auth.signOut();
     await googleSignIn.signOut();
@@ -74,6 +91,7 @@ class _ProfilePageState extends State<ProfilePage>
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   MyFeedPage obj = new MyFeedPage();
+
   @override
   void initState() {
     super.initState();
@@ -92,6 +110,7 @@ class _ProfilePageState extends State<ProfilePage>
             [Post(post_pic: profiledefault, likes: 0, caption: "loading")]);
       });
       fetchPosts();
+      getFollowersDetails();
     } else {
       setState(() {
         this.profilename = 'Instagrammer';
@@ -183,6 +202,18 @@ class _ProfilePageState extends State<ProfilePage>
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
+  onFollowDetailsTap() async {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => FollowingPage(
+          users: followData,
+          username: userdata.username,
+        ),
+      ),
+    );
+  }
+
   int _viewmode = 0;
 
   @override
@@ -241,11 +272,24 @@ class _ProfilePageState extends State<ProfilePage>
                     pinned: true,
                     backgroundColor: dynamicuicolor,
                     elevation: 3.0,
-                    title: Text("@${userdata.username}",
-                        //"Profile",
-                        style: TextStyle(
-                            color:
-                                (!isDarkMode) ? Colors.black : Colors.white)),
+                    title: Row(
+                      children: [
+                        Icon(
+                          Icons.lock_outline_rounded,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("${userdata.username}",
+                            //"Profile",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: (!isDarkMode)
+                                    ? Colors.black
+                                    : Colors.white)),
+                      ],
+                    ),
                     actions: <Widget>[
                       IconButton(
                         icon: Icon(Icons.info),
@@ -330,12 +374,20 @@ class _ProfilePageState extends State<ProfilePage>
                       (BuildContext context, int index) {
                     if (index > 1) return null;
                     return UserProfilePage(
-                        profilename: profilename,
-                        postcount: userdata.posts.length,
-                        bio: bio ?? "",
-                        profileimageurl: (userdata.profile_pic == null)
-                            ? profiledefault
-                            : userdata.profile_pic);
+                      profilename: profilename,
+                      postcount: userdata.posts.length,
+                      bio: bio ?? "",
+                      followers: (followData?.isEmpty ?? true)
+                          ? null
+                          : followData['followers'].length,
+                      following: (followData?.isEmpty ?? true)
+                          ? null
+                          : followData['follows'].length,
+                      profileimageurl: (userdata.profile_pic == null)
+                          ? profiledefault
+                          : userdata.profile_pic,
+                      onFollowDetailsTap: onFollowDetailsTap,
+                    );
                   }, childCount: 1),
                 ),
                 SliverToBoxAdapter(
@@ -377,7 +429,7 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 SliverToBoxAdapter(
                     child: Divider(
-                  height: 0,
+                  height: 2,
                 )),
                 if (_viewmode == 0)
                   condensedview
@@ -397,15 +449,19 @@ class UserProfilePage extends StatelessWidget {
   final String profileimageurl;
   final String profilename;
   final String bio;
-  final String followers = "169";
-  final String following = "269";
+  final int followers;
+  final int following;
   final int postcount;
+  final Function onFollowDetailsTap;
 
   UserProfilePage(
       {@required this.profilename,
       this.profileimageurl,
       this.postcount,
-      this.bio});
+      this.bio,
+      this.followers,
+      this.following,
+      @required this.onFollowDetailsTap});
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
@@ -450,20 +506,26 @@ class UserProfilePage extends StatelessWidget {
                   Text("Posts"),
                 ],
               ),
-              Column(
+              TextButton(
+                onPressed: onFollowDetailsTap,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(followers.toString().padLeft(2, "0") ?? "--",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text("Followers"),
+                    ]),
+              ),
+              TextButton(
+                onPressed: onFollowDetailsTap,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(followers,
+                    Text(following.toString().padLeft(2, "0") ?? "--",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Followers"),
-                  ]),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(following,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Following"),
-                ],
+                    Text("Following"),
+                  ],
+                ),
               ),
             ],
           ),
@@ -491,20 +553,41 @@ class UserProfilePage extends StatelessWidget {
         Container(
           color: dynamicuicolor,
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 16.0, bottom: 10),
-          child: RaisedButton(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width / 1.15,
-              child: Text(
-                "Edit Profile",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w600),
+          padding: EdgeInsets.only(top: 16.0, bottom: 10, left: 20, right: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      // color: Colors.lightBlue,
+                      border: Border.all(),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Edit Profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignupPage()));
+                  },
+                ),
               ),
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignupPage()));
-            },
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    // color: Colors.lightBlue,
+                    border: Border.all()),
+                padding: const EdgeInsets.all(4.0),
+                margin: const EdgeInsets.only(left: 10),
+                // width: MediaQuery.of(context).size.width / 3.15,
+                child: Icon(Icons.keyboard_arrow_down_sharp),
+              ),
+            ],
           ),
         ),
       ],

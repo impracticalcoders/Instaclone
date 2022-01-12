@@ -15,6 +15,107 @@
       },
       "oauth_client": [
         {
+          "client_id": "432668878923-4e2a6o9u7q681ee3fdko7rc1mcouonlr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "666688c2c3fe26a0c85863bbe744e5bab0e6c8b0"
+          }
+        },
+        {
+          "client_id": "432668878923-c4o60pumhn563c6ts4ssn1654ubd3ve0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "a0e37457d9f37588612b8acc123729b45a1438e0"
+          }
+        },
+        {
+          "client_id": "432668878923-nbh7vmkdqee19r3octjmn8n28irme7l6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "87ae684093c7e0ba7796b694f30915605ad691b0"
+          }
+        },
+        {
+          "client_id": "432668878923-oi0qndcld9fhuanef5p4nhnlmq6r0k1i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "ac6f387c8e7edb922fbe43c90b5480a7ee643936"
+          }
+        },
+        {
+          "client_id": "432668878923-r41td3v1k47n8ujgsrvdhda5d4h0o8l7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "12f40af5f20252963694cacae95c89493162d598"
+          }
+        },
+        {
+          "client_id": "432668878923-t87833mghobke2o02cesio1h6tlbi2fd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "3bf62f2a590f546c5e9a13f4becf396747bdab21"
+          }
+        },
+        {
+          "client_id": "432668878923-tjgeab12i5q14ka8ebf7qp9lqdknoc96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "ed7abdf541ac29cf828896dab089ad4dc1e9c23d"
+          }
+        },
+        {
+          "client_id": "432668878923-vs8ui4l48c1ugh7vg7855f7ql68sq6sa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.InstaClone",
+            "certificate_hash": "e108d2ac9130c240c23bedb84f33324f0c12e04b"
+          }
+        },
+        {
+          "client_id": "432668878923-001sqne4c0djnc3adjsn6i5cfp5lir7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfivwPmzTdsXX_i2qVQQS-3sfDogrhLLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432668878923-001sqne4c0djnc3adjsn6i5cfp5lir7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432668878923:android:9cac0e33b9014382e585ce",
+        "android_client_info": {
+          "package_name": "com.impracticalcoders.instaclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432668878923-hpp43tg3s04vbik43dsb6f0tqjltqklo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.impracticalcoders.instaclone",
+            "certificate_hash": "e3456e2188878d69b8b474397903bde4811b778b"
+          }
+        },
+        {
           "client_id": "432668878923-001sqne4c0djnc3adjsn6i5cfp5lir7q.apps.googleusercontent.com",
           "client_type": 3
         }

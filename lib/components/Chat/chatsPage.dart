@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:Instaclone/components/Chat/myChatPage.dart';
-import 'package:Instaclone/components/mainfeed.dart';
-import 'package:Instaclone/main1.dart';
+import 'package:instaclone/components/Chat/myChatPage.dart';
+import 'package:instaclone/components/mainfeed.dart';
+import 'package:instaclone/main1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
