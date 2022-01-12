@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instaclone/components/constants.dart';
+import 'package:instaclone/components/profilesearchresultpage.dart';
 import 'likes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -17,6 +19,8 @@ class _MyActivityPageState extends State<MyActivityPage> {
 
   List<Like> list = [];
   User user;
+
+  Map<String, dynamic> followData;
   @override
   void initState() {
     super.initState();
@@ -34,7 +38,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
       print('Accessing activity page as ' + user.displayName);
 
       fetchActivities();
-
+      getFollowersDetails();
       print(list.length);
     } else {
       print("not logged in");
@@ -43,6 +47,22 @@ class _MyActivityPageState extends State<MyActivityPage> {
 
   User getUser() {
     return auth.currentUser;
+  }
+
+  Future<void> getFollowersDetails() async {
+    final response = await http
+        .get(Uri.parse(BASE_URL + '/follow/getDetails?uid=${user.uid}'));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      setState(() {
+        followData = jsonDecode(response.body);
+      });
+    } else {
+      // If the server did not return a 200 OK response,
+      // then print error.
+      throw Exception('Failed to load follow data');
+    }
   }
 
   Future<void> fetchActivities() async {
@@ -68,6 +88,25 @@ class _MyActivityPageState extends State<MyActivityPage> {
     }
   }
 
+  onAcceptTap(String requestId) async {
+    setState(() {
+      followData = null;
+    });
+    final response = await http.post(
+      Uri.parse(BASE_URL + '/follow/acceptRequest'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(
+        {
+          'followId': requestId,
+        },
+      ),
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      getFollowersDetails();
+    }
+  }
+
   /// the url should be https://insta-clone-backend.now.sh/activity?uid=${user.uid}
   /// user.uid to be got from User
   Widget build(BuildContext context) {
@@ -79,6 +118,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
         (!isDarkMode) ? Color.fromRGBO(35, 35, 35, 1.0) : new Color(0xfff8faf8);
     final String profiledefault =
         'http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png';
+    var titleTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
     if (user != null) {
       return Scaffold(
           key: _scaffoldKey,
@@ -91,18 +131,104 @@ class _MyActivityPageState extends State<MyActivityPage> {
             ),
             elevation: 0,
           ),
-          body: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              // if (index > this.list.length) return null;
-              if (this.list[index].uid == this.user.uid) return Container();
-              return customcontainer(
-                activity_text: this.list[index].activity_text,
-                profileimageurl: this.list[index].profile_pic,
-                postimageurl: this.list[index].post_pic,
-              );
-            },
-            itemCount: this.list.length,
-            physics: BouncingScrollPhysics(),
+          body: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  "Follow Requests (${followData != null ? followData['follow_reqs'].length : "--"})",
+                  style: titleTextStyle,
+                ),
+                const SizedBox(height: 10),
+                followData == null
+                    ? Text("Loading..")
+                    : Expanded(
+                        child: ListView.builder(
+                            itemCount: followData['follow_reqs'].length,
+                            itemBuilder: (context, index) {
+                              var item = followData['follow_reqs'][index];
+                              return ListTile(
+                                title: Text(item['username']),
+                                subtitle: Text(
+                                  item['profile_name'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                                leading: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 0.2),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: CircleAvatar(
+                                    radius: 22,
+                                    child: CachedNetworkImage(
+                                      imageUrl: item['profile_pic'],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                trailing: InkWell(
+                                  onTap: () {
+                                    onAcceptTap(item['requestId']);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.lightBlue,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 18.0),
+                                    child: Text(
+                                      "Accept",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSearchResultPage(
+                                                uidretrieve: item['user_uid'],
+                                              )));
+                                },
+                              );
+                            }),
+                      ),
+                const SizedBox(height: 10),
+                Text(
+                  "Likes",
+                  style: titleTextStyle,
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  flex: 2,
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, int index) {
+                      // if (index > this.list.length) return null;
+                      if (this.list[index].uid == this.user.uid)
+                        return Container();
+                      return customcontainer(
+                        activity_text: this.list[index].activity_text,
+                        profileimageurl: this.list[index].profile_pic,
+                        postimageurl: this.list[index].post_pic,
+                      );
+                    },
+                    itemCount: this.list.length,
+                    physics: BouncingScrollPhysics(),
+                  ),
+                ),
+              ],
+            ),
           ));
     } else
       return Scaffold(
