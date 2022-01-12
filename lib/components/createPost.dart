@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io' as Io;
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +69,7 @@ class _CreatePostState extends State<CreatePost> {
           Uri.parse("https://instaclonebackendrit.herokuapp.com/feed"),
           headers: {"Content-type": "application/json"},
           body:
-              '{"caption":"${captionController.text}","image_url":"${this.imageUrl}","uid":"${this.user.uid}"}');
+              '{"caption":"${captionController.text}","image_url":"${this.imageUrl}","owner_uid":"${this.user.uid}"}');
 
       print("Status code ${response.statusCode}");
 
@@ -101,17 +103,38 @@ class _CreatePostState extends State<CreatePost> {
       this.isImageUploading = true;
     });
     String randomString = randomAlphaNumeric(10);
+    //  f6f4c9003c1ef684fdbbacf5a9f5a2ec API
+    final bytes = await this._image.readAsBytes();
 
+    final b64String = base64.encode(bytes);
+    print(b64String);
+
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://api.imgbb.com/1/upload?expiration=15552000&key=f6f4c9003c1ef684fdbbacf5a9f5a2ec'));
+
+    request.fields.addAll({'image': b64String});
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String data = (await response.stream.bytesToString());
+      var jsonData = jsonDecode(data);
+      print(jsonData);
+
+      setState(() {
+        this.imageUrl = jsonData['data']['image']['url'];
+        this.isImageUploading = false;
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
     // StorageReference ref =
     //     FirebaseStorage.instance.ref().child('images/' + randomString + '.png');
     // StorageUploadTask task = ref.putFile(this._image);
     // StorageTaskSnapshot downloadUrl = (await task.onComplete);
     // String url = (await downloadUrl.ref.getDownloadURL());
-
-    // setState(() {
-    //   this.imageUrl = url;
-    //   this.isImageUploading = false;
-    // });
 
     // print(url);
   }

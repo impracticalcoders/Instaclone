@@ -60,7 +60,8 @@ class _PostCardState extends State<PostCard> {
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       await Share.file('InstaClone ${widget.profilename}',
           'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text: 'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
+          text:
+              'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
     } catch (e) {
       print('error: $e');
     }
@@ -139,16 +140,18 @@ class _PostCardState extends State<PostCard> {
                         width: 10.0,
                       ),
                       new Text(
-                        widget.profilename,
+                        widget.profilename ?? " No profile name",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
                   new IconButton(
                     icon: Icon(Icons.more_vert),
-                    onPressed:(){
-                      var snackbar = new SnackBar(content: new Text("There aren't any additional options for this post"));
-                          widget.scaffoldKey.currentState.showSnackBar(snackbar);
+                    onPressed: () {
+                      var snackbar = new SnackBar(
+                          content: new Text(
+                              "There aren't any additional options for this post"));
+                      widget.scaffoldKey.currentState.showSnackBar(snackbar);
                     },
                   )
                 ],
@@ -242,9 +245,11 @@ class _PostCardState extends State<PostCard> {
                       Icons.bookmark_border,
                     ),
                     iconSize: 28,
-                    onPressed: (){
-                      var snackbar = new SnackBar(content: new Text("This feature isn't available in the current version of the app!"));
-                          widget.scaffoldKey.currentState.showSnackBar(snackbar);
+                    onPressed: () {
+                      var snackbar = new SnackBar(
+                          content: new Text(
+                              "This feature isn't available in the current version of the app!"));
+                      widget.scaffoldKey.currentState.showSnackBar(snackbar);
                     },
                   )
                 ],
