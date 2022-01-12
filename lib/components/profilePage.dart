@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:instaclone/components/folllowingPage.dart';
 import 'package:instaclone/components/privatepostcardwidget.dart';
 
 import 'Signup.dart';
@@ -201,6 +202,18 @@ class _ProfilePageState extends State<ProfilePage>
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
+  onFollowDetailsTap() async {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => FollowingPage(
+          users: followData,
+          username: userdata.username,
+        ),
+      ),
+    );
+  }
+
   int _viewmode = 0;
 
   @override
@@ -361,18 +374,20 @@ class _ProfilePageState extends State<ProfilePage>
                       (BuildContext context, int index) {
                     if (index > 1) return null;
                     return UserProfilePage(
-                        profilename: profilename,
-                        postcount: userdata.posts.length,
-                        bio: bio ?? "",
-                        followers: (followData?.isEmpty ?? true)
-                            ? null
-                            : followData['followers'].length,
-                        following: (followData?.isEmpty ?? true)
-                            ? null
-                            : followData['follows'].length,
-                        profileimageurl: (userdata.profile_pic == null)
-                            ? profiledefault
-                            : userdata.profile_pic);
+                      profilename: profilename,
+                      postcount: userdata.posts.length,
+                      bio: bio ?? "",
+                      followers: (followData?.isEmpty ?? true)
+                          ? null
+                          : followData['followers'].length,
+                      following: (followData?.isEmpty ?? true)
+                          ? null
+                          : followData['follows'].length,
+                      profileimageurl: (userdata.profile_pic == null)
+                          ? profiledefault
+                          : userdata.profile_pic,
+                      onFollowDetailsTap: onFollowDetailsTap,
+                    );
                   }, childCount: 1),
                 ),
                 SliverToBoxAdapter(
@@ -437,6 +452,7 @@ class UserProfilePage extends StatelessWidget {
   final int followers;
   final int following;
   final int postcount;
+  final Function onFollowDetailsTap;
 
   UserProfilePage(
       {@required this.profilename,
@@ -444,7 +460,8 @@ class UserProfilePage extends StatelessWidget {
       this.postcount,
       this.bio,
       this.followers,
-      this.following});
+      this.following,
+      @required this.onFollowDetailsTap});
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   @override
@@ -489,20 +506,26 @@ class UserProfilePage extends StatelessWidget {
                   Text("Posts"),
                 ],
               ),
-              Column(
+              TextButton(
+                onPressed: onFollowDetailsTap,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(followers.toString().padLeft(2, "0") ?? "--",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text("Followers"),
+                    ]),
+              ),
+              TextButton(
+                onPressed: onFollowDetailsTap,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(followers.toString().padLeft(2, "0") ?? "--",
+                    Text(following.toString().padLeft(2, "0") ?? "--",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Followers"),
-                  ]),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(following.toString().padLeft(2, "0") ?? "--",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Following"),
-                ],
+                    Text("Following"),
+                  ],
+                ),
               ),
             ],
           ),

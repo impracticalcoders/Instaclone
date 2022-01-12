@@ -130,6 +130,9 @@ class _ProfileSearchResultPageState extends State<ProfileSearchResultPage> {
         'toUid': widget.uidretrieve,
       });
     }
+    setState(() {
+      isRequestSent = true;
+    });
   }
 
   initializeSelf() async {
@@ -404,7 +407,7 @@ class _UserProfileHeaderState extends State<UserProfileHeader> {
           color: dynamicuicolor,
           padding: EdgeInsets.only(left: 16.0, bottom: 10),
           child: Text(
-            "${widget.userdetails.bio}",
+            "${widget.userdetails.profile_name}",
             style: TextStyle(
                 backgroundColor: dynamicuicolor, fontWeight: FontWeight.bold),
           ),

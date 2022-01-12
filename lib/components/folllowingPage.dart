@@ -43,12 +43,13 @@ class _FollowingPageState extends State<FollowingPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18.0),
               child: Text(
-                "Followers",
+                "Followers (${widget.users["followers"].length.toString()})",
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18.0),
-              child: Text("Following"),
+              child: Text(
+                  "Following (${widget.users["follows"].length.toString()})"),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18.0),
@@ -57,9 +58,15 @@ class _FollowingPageState extends State<FollowingPage>
           ]),
           Flexible(
             child: TabBarView(controller: tabController, children: [
-              _ListView(data: widget.users['followers']),
-              _ListView(data: widget.users['follows']),
-              _ListView(data: []),
+              _ListView(
+                data: widget.users['followers'],
+              ),
+              _ListView(
+                data: widget.users['follows'],
+              ),
+              _ListView(
+                data: [],
+              ),
             ]),
           ),
         ],
