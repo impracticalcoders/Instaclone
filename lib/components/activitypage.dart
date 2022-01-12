@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instaclone/components/constants.dart';
 import 'likes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -84,8 +85,11 @@ class _MyActivityPageState extends State<MyActivityPage> {
           backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
           appBar: AppBar(
             backgroundColor: dynamicuicolor,
-            centerTitle: true,
-            title: Text("Activity"),
+            title: Text(
+              "Activity",
+              style: appBarTitleTextStyle,
+            ),
+            elevation: 0,
           ),
           body: ListView.builder(
             itemBuilder: (BuildContext context, int index) {

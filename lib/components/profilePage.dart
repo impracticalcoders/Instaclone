@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
-import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:instaclone/components/privatepostcardwidget.dart';
@@ -29,10 +28,9 @@ class _ProfilePageState extends State<ProfilePage>
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   User user;
-  int newlength;
-  Userdetails userdata;
   final GoogleSignIn googleSignIn = new GoogleSignIn(scopes: ['email']);
 
+  Userdetails userdata;
   User getUser() {
     return auth.currentUser;
   }
@@ -78,7 +76,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  @override
   Future<void> signOut() async {
     await auth.signOut();
     await googleSignIn.signOut();
@@ -93,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage>
   final String profiledefault =
       'https://firebasestorage.googleapis.com/v0/b/instaclone-63929.appspot.com/o/Deafult-Profile-Picture.png?alt=media&token=9a731929-a94c-4ce9-b77c-db317fa6148e';
   MyFeedPage obj = new MyFeedPage();
+
   @override
   void initState() {
     super.initState();
@@ -261,11 +259,24 @@ class _ProfilePageState extends State<ProfilePage>
                     pinned: true,
                     backgroundColor: dynamicuicolor,
                     elevation: 3.0,
-                    title: Text("@${userdata.username}",
-                        //"Profile",
-                        style: TextStyle(
-                            color:
-                                (!isDarkMode) ? Colors.black : Colors.white)),
+                    title: Row(
+                      children: [
+                        Icon(
+                          Icons.lock_outline_rounded,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("${userdata.username}",
+                            //"Profile",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: (!isDarkMode)
+                                    ? Colors.black
+                                    : Colors.white)),
+                      ],
+                    ),
                     actions: <Widget>[
                       IconButton(
                         icon: Icon(Icons.info),
@@ -403,7 +414,7 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 SliverToBoxAdapter(
                     child: Divider(
-                  height: 0,
+                  height: 2,
                 )),
                 if (_viewmode == 0)
                   condensedview
@@ -519,20 +530,41 @@ class UserProfilePage extends StatelessWidget {
         Container(
           color: dynamicuicolor,
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 16.0, bottom: 10),
-          child: RaisedButton(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width / 1.15,
-              child: Text(
-                "Edit Profile",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w600),
+          padding: EdgeInsets.only(top: 16.0, bottom: 10, left: 20, right: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      // color: Colors.lightBlue,
+                      border: Border.all(),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Edit Profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignupPage()));
+                  },
+                ),
               ),
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignupPage()));
-            },
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    // color: Colors.lightBlue,
+                    border: Border.all()),
+                padding: const EdgeInsets.all(4.0),
+                margin: const EdgeInsets.only(left: 10),
+                // width: MediaQuery.of(context).size.width / 3.15,
+                child: Icon(Icons.keyboard_arrow_down_sharp),
+              ),
+            ],
           ),
         ),
       ],
