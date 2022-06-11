@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instaclone/services/api.dart';
 import 'package:random_string/random_string.dart';
 import 'package:instaclone/main1.dart';
 
@@ -65,8 +66,7 @@ class _CreatePostState extends State<CreatePost> {
         this.isPosting = true;
       });
 //https://insta-clone-backend.now.sh
-      final response = await http.post(
-          Uri.parse("https://instaclonebackendrit.herokuapp.com/feed"),
+      final response = await http.post(Uri.parse("${api_url}/feed"),
           headers: {"Content-type": "application/json"},
           body:
               '{"caption":"${captionController.text}","image_url":"${this.imageUrl}","owner_uid":"${this.user.uid}"}');

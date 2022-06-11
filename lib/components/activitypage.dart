@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instaclone/components/constants.dart';
 import 'package:instaclone/components/profilesearchresultpage.dart';
+import 'package:instaclone/services/api.dart';
 import 'likes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -66,8 +67,8 @@ class _MyActivityPageState extends State<MyActivityPage> {
   }
 
   Future<void> fetchActivities() async {
-    final response = await http.get(Uri.parse(
-        'https://instaclonebackendrit.herokuapp.com/activity?uid=${user.uid}'));
+    final response =
+        await http.get(Uri.parse('${api_url}/activity?uid=${user.uid}'));
     print(response.body);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

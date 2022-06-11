@@ -7,9 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-//import 'package:flare_flutter/flare_actor.dart';
+// import 'package:share_plus/share_plus.dart';
+
+// import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:instaclone/services/api.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:typed_data';
@@ -50,10 +52,10 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
           await HttpClient().getUrl(Uri.parse('${widget.postimageurl}'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('InstaClone ${widget.profilename}',
-          'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text:
-              'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
+      // await Share.file('InstaClone ${widget.profilename}',
+      // 'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
+      // text:
+      // 'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
     } catch (e) {
       print('error: $e');
     }
@@ -94,7 +96,7 @@ class _PrivatePostCardState extends State<PrivatePostCard> {
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instaclonebackendrit.herokuapp.com/delete_post';
+    String url = '${api_url}/delete_post';
     Map<String, String> headers = {"Content-type": "application/json"};
     print(
         "Delete requested for post_id${this.widget.id} by Uid: ${this.widget.user.uid}");

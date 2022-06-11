@@ -6,6 +6,7 @@ import 'package:instaclone/main1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:instaclone/services/api.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ChatsPage extends StatefulWidget {
@@ -32,8 +33,7 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   fetchUsers() async {
-    final response = await http
-        .get(Uri.parse('https://instaclonebackendrit.herokuapp.com/users'));
+    final response = await http.get(Uri.parse('${api_url}/users'));
     // var users = json.decode(response.body) ;
     if (response.statusCode == 200) {
       return json.decode(response.body);

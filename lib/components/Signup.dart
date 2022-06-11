@@ -2,6 +2,7 @@ import 'package:instaclone/main1.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instaclone/services/api.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -35,8 +36,7 @@ class _SignupPageState extends State<SignupPage> {
 
   _updateProfileRequest() async {
     // set up POST request arguments
-    Uri url =
-        Uri.parse('https://instaclonebackendrit.herokuapp.com/profile_update');
+    Uri url = Uri.parse('${api_url}/profile_update');
     Map<String, String> headers = {"Content-type": "application/json"};
     String json =
         '{"uid": "${this.user.uid}","profile_name":"${this.profileNameController.text}","username":"${this.usernameController.text}","bio":"${this.bioController.text}","profile_pic":"${this.user.photoURL}"}';

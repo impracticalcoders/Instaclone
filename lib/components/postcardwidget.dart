@@ -7,7 +7,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:instaclone/services/api.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:typed_data';
@@ -45,8 +46,8 @@ class _PostCardState extends State<PostCard> {
   @override
   Future<void> _shareText() async {
     try {
-      Share.text('my text title',
-          'This is my text to share with other applications.', 'text/plain');
+      // Share.share('my text title',
+      // subject: 'This is my text to share with other applications.');
     } catch (e) {
       print('error: $e');
     }
@@ -58,10 +59,13 @@ class _PostCardState extends State<PostCard> {
           await HttpClient().getUrl(Uri.parse('${widget.postimageurl}'));
       var response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
-      await Share.file('InstaClone ${widget.profilename}',
-          'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
-          text:
-              'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
+      // await Share.shareFiles('InstaClone ${widget.profilename}',
+      // 'instaclone_post_${widget.profilename}.jpg', bytes, 'image/jpg',
+      // text:
+      //     'Check out ${widget.profilename}\'s post on Instaclone.\n\nYou can also join by installing the app from bit.ly/instaclone1');
+
+      // Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
+
     } catch (e) {
       print('error: $e');
     }
@@ -83,7 +87,7 @@ class _PostCardState extends State<PostCard> {
 //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instaclonebackendrit.herokuapp.com/likes';
+    String url = '${api_url}/likes';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"id": "${widget.id}","uid" : "${this.widget.user.uid}"}';
     // make POST request
