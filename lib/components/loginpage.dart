@@ -9,6 +9,7 @@ import 'package:instaclone/main.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:instaclone/main1.dart';
+import 'package:instaclone/services/api.dart';
 import 'Signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,8 +55,7 @@ class _LoginPageState extends State<LoginPage> {
 
       print('signed in as ' + user.displayName);
 
-      final response = await http.post(
-          Uri.parse("https://instaclonebackendrit.herokuapp.com/auth"),
+      final response = await http.post(Uri.parse("${api_url}/auth"),
           headers: {"Content-type": "application/json"},
           body: jsonEncode({
             'uid': user.uid,

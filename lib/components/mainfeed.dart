@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:instaclone/components/Chat/chatsPage.dart';
+import 'package:instaclone/services/api.dart';
 
 import 'post.dart';
 import 'postcardwidget.dart';
@@ -27,8 +28,8 @@ class _MyFeedPageState extends State<MyFeedPage> {
   }
 
   Future<void> fetchPosts() async {
-    final response = await http.get(Uri.parse(
-        'https://instaclonebackendrit.herokuapp.com/feed?uid=${this.user.uid}'));
+    final response =
+        await http.get(Uri.parse('${api_url}/feed?uid=${this.user.uid}'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

@@ -176,32 +176,33 @@ class _MyHomePageState extends State<MyHomePage>
             //   mainAxisAlignment: MainAxisAlignment.spaceAround,
             items: [
               BottomNavigationBarItem(
+                label: "",
                 icon: Icon(Icons.home, color: dynamiciconcolor, size: 30),
-                title: Container(),
                 activeIcon: Icon(Icons.home, color: Colors.redAccent, size: 30),
               ),
               BottomNavigationBarItem(
+                label: "",
+
                 icon: Icon(FontAwesomeIcons.search, color: dynamiciconcolor),
-                title: Container(),
                 activeIcon:
                     Icon(FontAwesomeIcons.search, color: Colors.redAccent),
               ),
               BottomNavigationBarItem(
+                label: "",
                 icon: Icon(Icons.add_box, color: dynamiciconcolor, size: 30),
-                title: Container(),
                 activeIcon:
                     Icon(Icons.add_box, color: Colors.redAccent, size: 30),
               ),
               BottomNavigationBarItem(
+                label: "",
                 icon: Icon(Icons.favorite_border,
                     color: dynamiciconcolor, size: 30),
-                title: Container(),
                 activeIcon:
                     Icon(Icons.favorite, color: Colors.redAccent, size: 30),
               ),
               BottomNavigationBarItem(
+                label: "",
                 icon: Icon(FontAwesomeIcons.user, color: dynamiciconcolor),
-                title: Container(),
                 activeIcon:
                     Icon(FontAwesomeIcons.userAlt, color: Colors.redAccent),
               )

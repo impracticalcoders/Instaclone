@@ -47,10 +47,7 @@ dependencies:
   flare_flutter: ^3.0.2
   font_awesome_flutter: ^9.2.0
   random_string: ^2.3.1
-  esys_flutter_share:
-    git:
-      url: https://github.com/cihadturhan/esys-flutter-share.git
-      ref: nullsafety+embedding-2
+  share_plus: ^4.0.7
   trie: ^1.0.2
   dash_chat: ^1.1.16
   web_socket_channel: ^2.1.0

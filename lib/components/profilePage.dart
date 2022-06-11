@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:instaclone/components/folllowingPage.dart';
 import 'package:instaclone/components/privatepostcardwidget.dart';
+import 'package:instaclone/services/api.dart';
 
 import 'Signup.dart';
 import 'constants.dart';
@@ -55,8 +56,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> fetchPosts() async {
     print("function called");
-    final response = await http.get(Uri.parse(
-        'https://instaclonebackendrit.herokuapp.com/user_details?uid=${user.uid}'));
+    final response =
+        await http.get(Uri.parse('${api_url}/user_details?uid=${user.uid}'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -122,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage>
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instaclonebackendrit.herokuapp.com/delete_post';
+    String url = '${api_url}/delete_post';
 
     Map<String, String> headers = {"Content-type": "application/json"};
     int i;
@@ -159,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage>
     //https://insta-clone-backend.now.sh
 
     // set up POST request arguments
-    String url = 'https://instaclonebackendrit.herokuapp.com/delete_user';
+    String url = '${api_url}/delete_user';
 
     Map<String, String> headers = {"Content-type": "application/json"};
 

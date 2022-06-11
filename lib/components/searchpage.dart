@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:instaclone/services/api.dart';
+
 import 'users.dart';
 import 'package:flutter/material.dart';
 import 'package:trie/trie.dart';
@@ -21,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController searchController = new TextEditingController();
 
   _loadUsers() async {
-    var url = Uri.parse('https://instaclonebackendrit.herokuapp.com/users');
+    var url = Uri.parse('${api_url}/users');
 
     final response = await http.get(url);
     List<String> usernames = (json.decode(response.body) as List)
