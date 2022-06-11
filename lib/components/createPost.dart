@@ -65,7 +65,7 @@ class _CreatePostState extends State<CreatePost> {
       setState(() {
         this.isPosting = true;
       });
-//https://insta-clone-backend.now.sh
+
       final response = await http.post(Uri.parse("${api_url}/feed"),
           headers: {"Content-type": "application/json"},
           body:

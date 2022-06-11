@@ -216,8 +216,6 @@ class _MyActivityPageState extends State<MyActivityPage> {
                   child: ListView.builder(
                     itemBuilder: (BuildContext context, int index) {
                       // if (index > this.list.length) return null;
-                      if (this.list[index].uid == this.user.uid)
-                        return Container();
                       return customcontainer(
                         activity_text: this.list[index].activity_text,
                         profileimageurl: this.list[index].profile_pic,
