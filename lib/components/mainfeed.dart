@@ -66,7 +66,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
   }
 
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -76,11 +76,6 @@ class _MyFeedPageState extends State<MyFeedPage> {
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-
-    if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
 
@@ -100,169 +95,106 @@ class _MyFeedPageState extends State<MyFeedPage> {
     Color dynamiciconcolor = (!isDarkMode) ? Colors.black54 : Colors.white70;
     Color dynamicuicolor =
         (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
-/*
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-      body: Container(
-        //backgroundcolor
-        //color: (!isDarkMode) ? Colors.white : Colors.black,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: dynamicuicolor,
-              elevation: 3.0,
-              centerTitle: true,
-              title: Text("Instaclone",
-                  style: TextStyle(
-                      color: (!isDarkMode) ? Colors.black : Colors.white,
-                      fontFamily: 'Billabong',
-                      fontSize: 30)),
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: new Icon(
-                    Icons.refresh,
-                    color: dynamiciconcolor,
-                  ),
-                  //onPressed: () => Scaffold.of(context).openDrawer(),
-                  onPressed: () {
-                    refresh();
-                  },
-                ),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon:  Icon(FontAwesomeIcons.paperPlane),
-                  color: dynamiciconcolor,
-                  onPressed: () {Navigator.push(context, new MaterialPageRoute(builder: (context)=>
-                  ChatsPage(this.user)));},
-                ),
-                
-
-              ],
+      appBar: AppBar(
+        backgroundColor: dynamicuicolor,
+        centerTitle: true,
+        title: Text("Instaclone",
+            style: TextStyle(
+                color: (!isDarkMode) ? Colors.black : Colors.white,
+                fontFamily: 'Billabong',
+                fontSize: 30)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: new Icon(
+              Icons.refresh,
+              color: dynamiciconcolor,
             ),
-            SliverList(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                if (index > list.length - 1) return null;
-                return PostCard(
+            //onPressed: () => Scaffold.of(context).openDrawer(),
+            onPressed: () {
+              refresh();
+            },
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(FontAwesomeIcons.paperPlane),
+            color: dynamiciconcolor,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => ChatsPage(this.user)));
+            },
+          ),
+        ],
+      ),
+      body: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          header: WaterDropHeader(
+            waterDropColor: dynamicuicolor,
+          ),
+          footer: CustomFooter(
+            builder: (BuildContext context, LoadStatus mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("pull up load");
+              } else if (mode == LoadStatus.loading) {
+                body = CircularProgressIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("Load Failed!Click retry!");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("release to load more");
+              } else {
+                body = Text("No more Data");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
+            },
+          ),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              if (index > list.length) return null;
+              if(list.length==0){
+                return Center(
+                  child: Text("No posts from your followees yet"),
+                );
+              }
+              if (index == list.length) {
+                return (!isDarkMode)
+                    ? Image(
+                        image: endthinglight,
+                        fit: BoxFit.scaleDown,
+                      )
+                    : Image(
+                        image: endthingdark,
+                        fit: BoxFit.scaleDown,
+                      );
+              }
+              return PostCard(
                   profilename: list[index].profile_name,
                   //profileimageurl: list[index].post_pic,
-                  postimageurl: list[index].post_pic,
+                  postimageurl: list[index].image_url,
                   likes: list[index].likes,
                   id: list[index].id,
                   caption: list[index].caption,
-                  user:this.user,
-                  liked : list[index].liked,
+                  user: this.user,
+                  liked: list[index].liked,
                   username: list[index].username,
                   profileimageurl: list[index].profile_pic,
-                );
-              }, childCount: list.length),
-            )
-          ],
-        ),
-      ),
-    );*/
-    if (this.list.length == 0) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else
-      return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: (!isDarkMode) ? Colors.white : Colors.black,
-        appBar: AppBar(
-          backgroundColor: dynamicuicolor,
-          centerTitle: true,
-          title: Text("Instaclone",
-              style: TextStyle(
-                  color: (!isDarkMode) ? Colors.black : Colors.white,
-                  fontFamily: 'Billabong',
-                  fontSize: 30)),
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: new Icon(
-                Icons.refresh,
-                color: dynamiciconcolor,
-              ),
-              //onPressed: () => Scaffold.of(context).openDrawer(),
-              onPressed: () {
-                refresh();
-              },
-            ),
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(FontAwesomeIcons.paperPlane),
-              color: dynamiciconcolor,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => ChatsPage(this.user)));
-              },
-            ),
-          ],
-        ),
-        body: SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: false,
-            header: WaterDropHeader(
-              waterDropColor: dynamicuicolor,
-            ),
-            footer: CustomFooter(
-              builder: (BuildContext context, LoadStatus mode) {
-                Widget body;
-                if (mode == LoadStatus.idle) {
-                  body = Text("pull up load");
-                } else if (mode == LoadStatus.loading) {
-                  body = CircularProgressIndicator();
-                } else if (mode == LoadStatus.failed) {
-                  body = Text("Load Failed!Click retry!");
-                } else if (mode == LoadStatus.canLoading) {
-                  body = Text("release to load more");
-                } else {
-                  body = Text("No more Data");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child: body),
-                );
-              },
-            ),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
-            onLoading: _onLoading,
-            child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                if (index > list.length) return null;
-                if (index == list.length) {
-                  return (!isDarkMode)
-                      ? Image(
-                          image: endthinglight,
-                          fit: BoxFit.scaleDown,
-                        )
-                      : Image(
-                          image: endthingdark,
-                          fit: BoxFit.scaleDown,
-                        );
-                }
-                return PostCard(
-                    profilename: list[index].profile_name,
-                    //profileimageurl: list[index].post_pic,
-                    postimageurl: list[index].image_url,
-                    likes: list[index].likes,
-                    id: list[index].id,
-                    caption: list[index].caption,
-                    user: this.user,
-                    liked: list[index].liked,
-                    username: list[index].username,
-                    profileimageurl: list[index].profile_pic,
-                    scaffoldKey: this.scaffoldKey);
-              },
-              itemCount: list.length + 1,
-              physics: BouncingScrollPhysics(),
-            )),
-      );
+                  scaffoldKey: this.scaffoldKey);
+            },
+            itemCount: list.length + 1,
+            physics: BouncingScrollPhysics(),
+          )),
+    );
   }
 }

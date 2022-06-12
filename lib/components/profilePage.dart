@@ -81,6 +81,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<void> signOut() async {
     await auth.signOut();
     await googleSignIn.signOut();
+    while (Navigator.canPop(context)) Navigator.pop(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
