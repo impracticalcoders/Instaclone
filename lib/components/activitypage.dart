@@ -139,9 +139,19 @@ class _MyActivityPageState extends State<MyActivityPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                Text(
-                  "Follow Requests (${followData != null ? followData['follow_reqs'].length : "--"})",
-                  style: titleTextStyle,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Follow Requests (${followData != null ? followData['follow_reqs'].length : "--"})",
+                      style: titleTextStyle,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          getFollowersDetails();
+                        },
+                        icon: Icon(Icons.refresh))
+                  ],
                 ),
                 const SizedBox(height: 10),
                 followData == null
@@ -206,9 +216,19 @@ class _MyActivityPageState extends State<MyActivityPage> {
                             }),
                       ),
                 const SizedBox(height: 10),
-                Text(
-                  "Likes",
-                  style: titleTextStyle,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Likes",
+                      style: titleTextStyle,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          fetchActivities();
+                        },
+                        icon: Icon(Icons.refresh))
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Expanded(

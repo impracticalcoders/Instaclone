@@ -49,6 +49,7 @@ dependencies:
   random_string: ^2.3.1
   share_plus: ^4.0.7
   trie: ^1.0.2
+  pull_to_refresh: ^2.0.0
   dash_chat: ^1.1.16
   web_socket_channel: ^2.1.0
   path_provider: ^2.0.8
